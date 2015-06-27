@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Fluint</string>
+    <string name="title_activity_login_or_sign_up">LoginOrSignUpActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string-array name="tabs">
+        <item>NEW USER</item>
+        <item>EXISTING USER</item>
+    </string-array>
+</resources>

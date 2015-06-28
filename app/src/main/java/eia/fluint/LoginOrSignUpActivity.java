@@ -163,15 +163,21 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
             return newUserFragment;
         }
 
+
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
+            // TODO: Check if user is already logged in
+            // If so, send user to the MainActivity with an Intent
+
         }
 
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View layout = inflater.inflate(R.layout.new_user_fragment, container, false);
+
             etName = (EditText) layout.findViewById(R.id.etName);
             etEmailText = (EditText) layout.findViewById(R.id.etEmailText);
             etPasswordText = (EditText) layout.findViewById(R.id.etPasswordText);

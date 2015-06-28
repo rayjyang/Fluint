@@ -34,6 +34,13 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login_or_sign_up);
 
         // TODO: Parse authentication
+        // Check if user is already logged in
+        // If true, send the user to the MainActivity with an intent
+        // And make sure that when the back button is pressed from the MainActivity
+        // that quits the application for the user; does not send back to login page
+
+
+        // TODO: get reference to the toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
 
         // Tell Android we aren't using ActionBar
@@ -168,8 +175,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            // TODO: Check if user is already logged in
-            // If so, send user to the MainActivity with an Intent
+
 
         }
 

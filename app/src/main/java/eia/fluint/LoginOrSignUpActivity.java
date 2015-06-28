@@ -19,6 +19,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
+
 
 public class LoginOrSignUpActivity extends AppCompatActivity {
 
@@ -26,12 +29,21 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
     private ViewPager mPager;
     private SlidingTabLayout mTabs;
 
+    private static final String APPLICATION_ID = "ClUIw0Dh2ja21S5sH0vjTrJ6a9nL9g1vH2b9EfMg";
+    private static final String CLIENT_KEY = "I9qGl0kinVIKh0Ld76aehXrA4O7EcXu10Ojnt6ze";
+
     protected static final String POSITION_TAG = "position";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_or_sign_up);
+
+        // TODO: Parse initialization
+        // Enable Local Datastore.
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this, APPLICATION_ID, CLIENT_KEY);
+
 
         // TODO: Parse authentication
         // Check if user is already logged in
@@ -171,14 +183,6 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         }
 
 
-        @Override
-        public void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-
-
-        }
-
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -198,6 +202,23 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
             return layout;
         }
 
+        @Override
+        public void onResume() {
+            super.onResume();
+
+            ibContinue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getActivity(), "Continue clicked", Toast.LENGTH_SHORT).show();
+
+                    // TODO: Parse signup
+                    // 1) Check if the email is already in the Parse database
+                    //    If so, display a Dialog
+                    // 2) Make sure to have users verify their email by having a boolean value
+                    //    called hasVerifiedEmail to check if user has clicked on the link in their email
+                }
+            });
+        }
     }
 
     public static class ExistingUserFragment extends Fragment {

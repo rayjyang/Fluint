@@ -1,6 +1,8 @@
 package eia.fluint;
 
 import android.content.Context;
+import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,9 +23,12 @@ import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 
 public class LoginOrSignUpActivity extends AppCompatActivity {
+
+    static final String TAG = "LoginOrSignUp";
 
     private Toolbar toolbar;
     private ViewPager mPager;
@@ -51,6 +56,16 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         // And make sure that when the back button is pressed from the MainActivity
         // that quits the application for the user; does not send back to login page
 
+        // WARNING: THIS MAY CAUSE CRASHES
+        if (ParseUser.getCurrentUser() != null) {
+
+            // TODO: Create an intent to send user to the MainActivity
+            Intent intent = new Intent(this, MainFeedActivity.class);
+            // TODO: Add necessary flags with intent.addFlags();
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            // TODO: startActivity(intent);
+            startActivity(intent);
+        }
 
         // TODO: get reference to the toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -165,6 +180,8 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
     public static class NewUserFragment extends Fragment {
 
+        private static final String TAG_NEW = "NewLoginOrSignup";
+
         protected EditText etName;
         protected EditText etEmailText;
         protected EditText etPasswordText;
@@ -186,6 +203,9 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+            Log.d(TAG_NEW, "Getting references to widgets in newUserFragment's onCreateView!");
+
             View layout = inflater.inflate(R.layout.new_user_fragment, container, false);
 
             etName = (EditText) layout.findViewById(R.id.etName);
@@ -194,6 +214,41 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
             ibContinue = (ImageButton) layout.findViewById(R.id.ibContinue);
             ibFacebook = (ImageButton) layout.findViewById(R.id.ibFacebook);
             ibGoogle = (ImageButton) layout.findViewById(R.id.ibGoogle);
+
+            ibContinue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Toast.makeText(getActivity(), "Continue clicked", Toast.LENGTH_SHORT).show();
+
+                    // TODO: Parse signup
+                    // 1) Check if the email is already in the Parse database
+                    //    Dialog: An accout with that email already exists. Refer to UX forums to
+                    //    see what users should be asked next to solve this issue
+                    //    If so, display a Dialog, with the question: "Would you like to login?"
+                    //    The answers are "No" and "Yes", with "Yes" sending the user to the other
+                    //    PageView to login
+                    // 2) Make sure to have users verify their email by having a boolean value
+                    //    called hasVerifiedEmail to check if user has clicked on the link in their email
+
+
+
+                }
+            });
+
+            ibFacebook.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getActivity(), "ibFacebook clicked!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            ibGoogle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
 
             Bundle bundle = getArguments();
             if (bundle != null) {
@@ -206,24 +261,21 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         public void onResume() {
             super.onResume();
 
-            ibContinue.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getActivity(), "Continue clicked", Toast.LENGTH_SHORT).show();
+            Log.d(TAG_NEW, "Entered new user onResume!");
 
-                    // TODO: Parse signup
-                    // 1) Check if the email is already in the Parse database
-                    //    If so, display a Dialog
-                    // 2) Make sure to have users verify their email by having a boolean value
-                    //    called hasVerifiedEmail to check if user has clicked on the link in their email
-                }
-            });
         }
     }
 
     public static class ExistingUserFragment extends Fragment {
 
+        private static final String TAG_EXISTING = "ExistingLoginOrSignup";
+
         // TODO: create class variables for our Views
+        protected EditText etLoginEmail;
+        protected EditText etLoginPassword;
+        protected ImageButton ibLoginButton;
+        protected ImageButton ibLoginFacebook;
+        protected ImageButton ibLoginGoogle;
 
         public static ExistingUserFragment getInstance(int position) {
             ExistingUserFragment newUserFragment = new ExistingUserFragment();
@@ -237,10 +289,33 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View layout = inflater.inflate(R.layout.new_user_fragment, container, false);
+
+            Log.d(TAG_EXISTING, "Getting references to widgets in ExistingUserFragment's onCreateView!");
+
+            View layout = inflater.inflate(R.layout.existing_user_fragment, container, false);
 
             // TODO: get references to the different Views
+            etLoginEmail = (EditText) layout.findViewById(R.id.etLoginEmail);
+            etLoginPassword = (EditText) layout.findViewById(R.id.etLoginPassword);
+            ibLoginButton = (ImageButton) layout.findViewById(R.id.ibLoginButton);
+            ibLoginFacebook = (ImageButton) layout.findViewById(R.id.ibLoginFacebook);
+            ibLoginGoogle = (ImageButton)layout.findViewById(R.id.ibLoginGoogle);
 
+            ibLoginButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getActivity(), "Login button pressed!", Toast.LENGTH_SHORT).show();
+
+                    // TODO: set ProgressBar's visibility to View.VISIBLE
+
+                    // Get the email and password from the user-inputted fields
+                    String email = etLoginEmail.getText().toString();
+                    String password = etLoginPassword.getText().toString();
+
+                    // TODO: verify. If Parse verified, create a new ParseUser and save to device
+
+                }
+            });
 
             Bundle bundle = getArguments();
             if (bundle != null) {
@@ -250,6 +325,15 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
             return layout;
         }
 
+        @Override
+        public void onResume() {
+            super.onResume();
+
+            Log.d(TAG_EXISTING, "Entered ExistingUserFragment's onResume!");
+
+
+
+        }
     }
 
 }

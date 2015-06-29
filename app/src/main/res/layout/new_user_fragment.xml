@@ -47,67 +47,30 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
+        <EditText
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:id="@+id/signUpNameHolder"
-            android:layout_marginBottom="8dp">
+            android:id="@+id/etName"
+            android:hint="@string/name"
+            android:layout_marginBottom="8dp" />
 
-            <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/etName"
-                android:hint="@string/name" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
+        <EditText
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/signUpEmailHolder"
-            android:layout_weight="1"
-            android:layout_marginBottom="8dp">
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/etEmailText"
+            android:hint="@string/email"
+            android:layout_marginBottom="8dp" />
 
-            <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:ems="10"
-                android:id="@+id/etEmailText"
-                android:hint="@string/email" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
+        <EditText
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/passwordHolder">
-
-            <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:id="@+id/etPasswordText"
-                android:hint="@string/password" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_weight="1.25"
-        android:gravity="center"
-        android:id="@+id/signUpContinueContainer"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp">
-
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/etPasswordText"
+            android:hint="@string/password"
+            android:layout_marginBottom="8dp" />
 
         <ImageButton
             android:layout_width="fill_parent"

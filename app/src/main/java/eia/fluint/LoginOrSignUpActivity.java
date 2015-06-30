@@ -313,7 +313,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                     String password = etLoginPassword.getText().toString();
 
                     // TODO: verify. If Parse verified, create a new ParseUser and save to device
-                    
+
 
                 }
             });

@@ -185,6 +185,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
     public static class NewUserFragment extends Fragment {
 
         private static final String TAG_NEW = "NewLoginOrSignup";
+        private static final String USER_DATA = "user_data";
 
         protected EditText etName;
         protected EditText etEmailText;
@@ -241,7 +242,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                     String email = etEmailText.getText().toString();
                     String password = etPasswordText.getText().toString();
 
-                    String[] userData = new String[10];
+                    final String[] userData = new String[10];
                     userData[0] = name;
                     userData[1] = email;
                     userData[2] = password;
@@ -254,10 +255,12 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
-//                                Intent intent = new Intent(this, MainFeedActivity.class);
-//                                startActivity(intent);
+                                Intent intent = new Intent(getActivity(), MainFeedActivity.class);
+                                intent.putExtra(USER_DATA, userData);
+                                startActivity(intent);
+
                             } else {
-//                                Toast.makeText(this, "Sign up failed!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Sign up failed!", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -328,7 +331,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
             etLoginPassword = (EditText) layout.findViewById(R.id.etLoginPassword);
             ibLoginButton = (ImageButton) layout.findViewById(R.id.ibLoginButton);
             ibLoginFacebook = (ImageButton) layout.findViewById(R.id.ibLoginFacebook);
-            ibLoginGoogle = (ImageButton)layout.findViewById(R.id.ibLoginGoogle);
+            ibLoginGoogle = (ImageButton) layout.findViewById(R.id.ibLoginGoogle);
 
             ibLoginButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -360,7 +363,6 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
             super.onResume();
 
             Log.d(TAG_EXISTING, "Entered ExistingUserFragment's onResume!");
-
 
 
         }

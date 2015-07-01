@@ -22,8 +22,10 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 
 public class LoginOrSignUpActivity extends AppCompatActivity {
@@ -57,7 +59,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         // that quits the application for the user; does not send back to login page
 
         // WARNING: THIS MAY CAUSE CRASHES
-        if (ParseUser.getCurrentUser() != null) {
+        if (false) {
 
             // TODO: Create an intent to send user to the MainActivity
             Intent intent = new Intent(this, MainFeedActivity.class);
@@ -76,6 +78,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // Set logo with getSupportActionBar().setLogo();
+        getSupportActionBar().setLogo(R.drawable.fluint_android_white);
 
         mPager = (ViewPager) findViewById(R.id.loginPager);
         mPager.setAdapter(new LoginPagerAdapter(getSupportFragmentManager()));
@@ -110,6 +113,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
             }
         });
         mTabs.setViewPager(mPager);
+
 
     }
 
@@ -231,7 +235,32 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                     // 2) Make sure to have users verify their email by having a boolean value
                     //    called hasVerifiedEmail to check if user has clicked on the link in their email
 
+                    Log.d(TAG_NEW, "User wants to continue signing up!");
 
+                    String name = etName.getText().toString();
+                    String email = etEmailText.getText().toString();
+                    String password = etPasswordText.getText().toString();
+
+                    String[] userData = new String[10];
+                    userData[0] = name;
+                    userData[1] = email;
+                    userData[2] = password;
+
+                    ParseUser user = new ParseUser();
+                    user.setUsername(email);
+                    user.setPassword(password);
+
+                    user.signUpInBackground(new SignUpCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+//                                Intent intent = new Intent(this, MainFeedActivity.class);
+//                                startActivity(intent);
+                            } else {
+//                                Toast.makeText(this, "Sign up failed!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
 
                 }
             });

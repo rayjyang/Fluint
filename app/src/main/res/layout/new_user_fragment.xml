@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/nameEmailContainer"
-        android:layout_weight="0.9"
+        android:layout_weight="0.75"
         android:gravity="center"
         android:paddingLeft="8dp"
         android:paddingRight="8dp">

@@ -2,9 +2,13 @@ package eia.fluint;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 
 public class ContinueSignUpActivity extends AppCompatActivity {
+
+    private static final String TAG = "CONTINUE_SIGNUP";
+    protected String[] userData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -13,7 +17,8 @@ public class ContinueSignUpActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String[] userData = extras.getStringArray("user_data");
+            Log.d(TAG, "Got the user's data!");
+            userData = extras.getStringArray("user_data");
         }
 
     }

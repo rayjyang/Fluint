@@ -1,8 +1,10 @@
 package eia.fluint;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,11 +23,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import java.util.List;
 
 
 public class LoginOrSignUpActivity extends AppCompatActivity {
@@ -33,7 +38,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
     static final String TAG = "LoginOrSignUp";
 
     private Toolbar toolbar;
-    private ViewPager mPager;
+    public static ViewPager mPager;
     private SlidingTabLayout mTabs;
 
     private static final String APPLICATION_ID = "ClUIw0Dh2ja21S5sH0vjTrJ6a9nL9g1vH2b9EfMg";
@@ -78,7 +83,9 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // Set logo with getSupportActionBar().setLogo();
-        getSupportActionBar().setLogo(R.drawable.fluint_android_white);
+//        getSupportActionBar().setLogo(R.drawable.fluint_android_white);
+
+        // TODO: Adjust logo size
 
         mPager = (ViewPager) findViewById(R.id.loginPager);
         mPager.setAdapter(new LoginPagerAdapter(getSupportFragmentManager()));
@@ -228,7 +235,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
                     // TODO: Parse signup
                     // 1) Check if the email is already in the Parse database
-                    //    Dialog: An accout with that email already exists. Refer to UX forums to
+                    //    Dialog: An account with that email already exists. Refer to UX forums to
                     //    see what users should be asked next to solve this issue
                     //    If so, display a Dialog, with the question: "Would you like to login?"
                     //    The answers are "No" and "Yes", with "Yes" sending the user to the other
@@ -238,33 +245,83 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
                     Log.d(TAG_NEW, "User wants to continue signing up!");
 
+
                     String name = etName.getText().toString();
                     String email = etEmailText.getText().toString();
                     String password = etPasswordText.getText().toString();
+
+                    if (name.equals("") || email.equals("") || password.equals("")) {
+                        if (name.equals("") && email.equals("") && password.equals("")) {
+                            etName.setError("Name cannot be left blank");
+                            etEmailText.setError("Email cannot be left blank");
+                            etPasswordText.setError("Password cannot be left blank");
+                            return;
+                        } else if (name.equals("") && email.equals("")) {
+                            etName.setError("Name cannot be left blank");
+                            etEmailText.setError("Email cannot be left blank");
+                            return;
+                        } else if (email.equals("") && password.equals("")) {
+                            etEmailText.setError("Email cannot be left blank");
+                            etPasswordText.setError("Password cannot be left blank");
+                            return;
+                        } else if (name.equals("") && password.equals("")) {
+                            etName.setError("Name cannot be left blank");
+                            etPasswordText.setError("Password cannot be left blank");
+                            return;
+                        } else if (name.equals("")) {
+                            etName.setError("Name cannot be left blank");
+                            return;
+                        } else if (email.equals("")) {
+                            etEmailText.setError("Email cannot be left blank");
+                            return;
+                        } else if (password.equals("")) {
+                            etPasswordText.setError("Password cannot be left blank");
+                            return;
+                        }
+                    }
 
                     final String[] userData = new String[10];
                     userData[0] = name;
                     userData[1] = email;
                     userData[2] = password;
 
-                    ParseUser user = new ParseUser();
-                    user.setUsername(email);
-                    user.setPassword(password);
-
-                    user.signUpInBackground(new SignUpCallback() {
+                    ParseQuery<ParseUser> query = ParseUser.getQuery();
+                    query.whereEqualTo("email", email);
+                    query.findInBackground(new FindCallback<ParseUser>() {
                         @Override
-                        public void done(ParseException e) {
+                        public void done(List<ParseUser> list, ParseException e) {
                             if (e == null) {
-                                Intent intent = new Intent(getActivity(), MainFeedActivity.class);
-                                intent.putExtra(USER_DATA, userData);
-                                startActivity(intent);
+                                // TODO: email is already taken. Show a dialog
+                                android.support.v7.app.AlertDialog.Builder builder = new
+                                        android.support.v7.app.AlertDialog.Builder(getActivity(),
+                                        R.style.AppCompatAlertDialogStyle);
+                                builder.setTitle("Dialog");
+                                builder.setMessage("A user with that email already exists. Would you like to login?");
+                                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // TODO: Take user to ExistingUserFragment
+                                        mPager.setCurrentItem(1, true);
+                                    }
+                                });
+                                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (which == Dialog.BUTTON_NEGATIVE) {
+                                            dialog.dismiss();
+                                        }
+                                    }
+                                });
+                                builder.show();
 
                             } else {
-                                Toast.makeText(getActivity(), "Sign up failed!", Toast.LENGTH_SHORT).show();
+                                // TODO: Email is not taken. Allow user to continue
+                                Intent intent = new Intent(getActivity(), ContinueSignUpActivity.class);
+                                intent.putExtra(USER_DATA, userData);
+                                startActivity(intent);
                             }
                         }
                     });
-
                 }
             });
 

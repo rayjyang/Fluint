@@ -12,4 +12,10 @@
         <item name="colorAccent">@color/accentColor</item>
     </style>
 
+    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert" >
+        <item name="colorAccent">@color/whiteColor</item>
+        <item name="android:textColorPrimary">@color/whiteColor</item>
+        <item name="android:background">@color/primaryColorDark</item>
+    </style>
+
 </resources>

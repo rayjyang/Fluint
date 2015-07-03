@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -82,7 +84,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        // Set logo with getSupportActionBar().setLogo();
+        // TODO: Set logo with getSupportActionBar().setLogo();
 //        getSupportActionBar().setLogo(R.drawable.fluint_android_white);
 
         // TODO: Adjust logo size
@@ -365,6 +367,8 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         protected ImageButton ibLoginButton;
         protected ImageButton ibLoginFacebook;
         protected ImageButton ibLoginGoogle;
+        protected ConnectionDetector cd;
+        protected boolean isInternetPresent;
 
         public static ExistingUserFragment getInstance(int position) {
             ExistingUserFragment newUserFragment = new ExistingUserFragment();
@@ -389,11 +393,11 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
             ibLoginButton = (ImageButton) layout.findViewById(R.id.ibLoginButton);
             ibLoginFacebook = (ImageButton) layout.findViewById(R.id.ibLoginFacebook);
             ibLoginGoogle = (ImageButton) layout.findViewById(R.id.ibLoginGoogle);
+            cd = new ConnectionDetector(getActivity());
 
             ibLoginButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getActivity(), "Login button pressed!", Toast.LENGTH_SHORT).show();
 
                     // TODO: set ProgressBar's visibility to View.VISIBLE
 
@@ -401,7 +405,66 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                     String email = etLoginEmail.getText().toString();
                     String password = etLoginPassword.getText().toString();
 
+
+                    if (email.equals("") || password.equals("")) {
+                        if (email.equals("") && password.equals("")) {
+                            etLoginEmail.setError("Email cannot be left blank");
+                            etLoginPassword.setError("Password cannot be left blank");
+                            return;
+                        } else if (email.equals("")) {
+                            etLoginEmail.setError("Email cannot be left blank");
+                            return;
+                        } else if (password.equals("")) {
+                            etLoginPassword.setError("Password cannot be left blank");
+                            return;
+                        }
+                    }
                     // TODO: verify. If Parse verified, create a new ParseUser and save to device
+                    isInternetPresent = cd.isConnectingToInternet();
+                    if (isInternetPresent) {
+                        Toast.makeText(getActivity(), "Internet present", Toast.LENGTH_SHORT).show();
+                        ParseUser.logInInBackground(email, password, new LogInCallback() {
+                            @Override
+                            public void done(ParseUser parseUser, ParseException e) {
+                                if (e == null) {
+                                    Intent intent = new Intent(getActivity(), MainFeedActivity.class);
+                                    startActivity(intent);
+                                } else {
+                                    android.support.v7.app.AlertDialog.Builder dialogBuilder = new
+                                            android.support.v7.app.AlertDialog.Builder(getActivity(),
+                                            R.style.AppCompatAlertDialogStyle);
+                                    dialogBuilder.setTitle("Login");
+                                    dialogBuilder.setMessage("Username or password is invalid");
+                                    dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    dialogBuilder.show();
+                                }
+                            }
+                        });
+                    } else {
+                        android.support.v7.app.AlertDialog.Builder builderDialog = new
+                                android.support.v7.app.AlertDialog.Builder(getActivity(),
+                                R.style.AppCompatAlertDialogStyle);
+                        builderDialog.setTitle("No Internet Connection");
+                        builderDialog.setMessage("You are not connected to the internet.\nDo you want to check your Wifi settings?");
+                        builderDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                            }
+                        });
+                        builderDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        builderDialog.show();
+                    }
 
 
                 }

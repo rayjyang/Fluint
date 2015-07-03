@@ -202,6 +202,8 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         protected ImageButton ibContinue;
         protected ImageButton ibFacebook;
         protected ImageButton ibGoogle;
+        protected ConnectionDetector cd;
+        protected boolean isInternetPresentNew;
 
 
         public static NewUserFragment getInstance(int position) {
@@ -228,12 +230,11 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
             ibContinue = (ImageButton) layout.findViewById(R.id.ibContinue);
             ibFacebook = (ImageButton) layout.findViewById(R.id.ibFacebook);
             ibGoogle = (ImageButton) layout.findViewById(R.id.ibGoogle);
+            cd = new ConnectionDetector(getActivity());
 
             ibContinue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Toast.makeText(getActivity(), "Continue clicked", Toast.LENGTH_SHORT).show();
 
                     // TODO: Parse signup
                     // 1) Check if the email is already in the Parse database
@@ -282,48 +283,70 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                         }
                     }
 
-                    final String[] userData = new String[10];
-                    userData[0] = name;
-                    userData[1] = email;
-                    userData[2] = password;
+                    isInternetPresentNew = cd.isConnectingToInternet();
+                    if (isInternetPresentNew) {
+                        // TODO: Sign user up!
+                        final String[] userData = new String[10];
+                        userData[0] = name;
+                        userData[1] = email;
+                        userData[2] = password;
 
-                    ParseQuery<ParseUser> query = ParseUser.getQuery();
-                    query.whereEqualTo("email", email);
-                    query.findInBackground(new FindCallback<ParseUser>() {
-                        @Override
-                        public void done(List<ParseUser> list, ParseException e) {
-                            if (e == null) {
-                                // TODO: email is already taken. Show a dialog
-                                android.support.v7.app.AlertDialog.Builder builder = new
-                                        android.support.v7.app.AlertDialog.Builder(getActivity(),
-                                        R.style.AppCompatAlertDialogStyle);
-                                builder.setTitle("Dialog");
-                                builder.setMessage("A user with that email already exists. Would you like to login?");
-                                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // TODO: Take user to ExistingUserFragment
-                                        mPager.setCurrentItem(1, true);
-                                    }
-                                });
-                                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (which == Dialog.BUTTON_NEGATIVE) {
-                                            dialog.dismiss();
+                        ParseQuery<ParseUser> query = ParseUser.getQuery();
+                        query.whereEqualTo("email", email);
+                        query.findInBackground(new FindCallback<ParseUser>() {
+                            @Override
+                            public void done(List<ParseUser> list, ParseException e) {
+                                if (e == null) {
+                                    // TODO: email is already taken. Show a dialog
+                                    android.support.v7.app.AlertDialog.Builder builder = new
+                                            android.support.v7.app.AlertDialog.Builder(getActivity(),
+                                            R.style.AppCompatAlertDialogStyle);
+                                    builder.setTitle("Sign Up");
+                                    builder.setMessage("This email is already registered. Want to login or recover your password?");
+                                    builder.setPositiveButton("LOGIN", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // TODO: Take user to ExistingUserFragment
+                                            mPager.setCurrentItem(1, true);
                                         }
-                                    }
-                                });
-                                builder.show();
+                                    });
+                                    builder.setNegativeButton("GET PASSWORD", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // TODO: Retrieve user password
 
-                            } else {
-                                // TODO: Email is not taken. Allow user to continue
-                                Intent intent = new Intent(getActivity(), ContinueSignUpActivity.class);
-                                intent.putExtra(USER_DATA, userData);
-                                startActivity(intent);
+                                        }
+                                    });
+                                    builder.show();
+
+                                } else {
+                                    // TODO: Email is not taken. Allow user to continue
+                                    Intent intent = new Intent(getActivity(), ContinueSignUpActivity.class);
+                                    intent.putExtra(USER_DATA, userData);
+                                    startActivity(intent);
+                                }
                             }
-                        }
-                    });
+                        });
+                    } else {
+                        android.support.v7.app.AlertDialog.Builder builder2 = new
+                                android.support.v7.app.AlertDialog.Builder(getActivity(),
+                                R.style.AppCompatAlertDialogStyle);
+                        builder2.setTitle("No Internet Connection");
+                        builder2.setMessage("You are not connected to the internet.\nDo you want to check your Wifi settings?");
+                        builder2.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                            }
+                        });
+                        builder2.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        builder2.show();
+                    }
                 }
             });
 
@@ -331,6 +354,12 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(getActivity(), "ibFacebook clicked!", Toast.LENGTH_SHORT).show();
+                    isInternetPresentNew = cd.isConnectingToInternet();
+                    if (isInternetPresentNew) {
+
+                    } else {
+
+                    }
                 }
             });
 
@@ -434,7 +463,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                                             android.support.v7.app.AlertDialog.Builder(getActivity(),
                                             R.style.AppCompatAlertDialogStyle);
                                     dialogBuilder.setTitle("Login");
-                                    dialogBuilder.setMessage("Username or password is invalid");
+                                    dialogBuilder.setMessage("The email and password do not match.");
                                     dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {

@@ -1,7 +1,5 @@
 package eia.fluint;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -84,7 +84,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        // TODO: Set logo with getSupportActionBar().setLogo();
+        // TODO: Set logo
 //        getSupportActionBar().setLogo(R.drawable.fluint_android_white);
 
         // TODO: Adjust logo size
@@ -208,10 +208,6 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
         public static NewUserFragment getInstance(int position) {
             NewUserFragment newUserFragment = new NewUserFragment();
-
-            Bundle args = new Bundle();
-            args.putInt(POSITION_TAG, position);
-            newUserFragment.setArguments(args);
             return newUserFragment;
         }
 
@@ -296,13 +292,14 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                         query.findInBackground(new FindCallback<ParseUser>() {
                             @Override
                             public void done(List<ParseUser> list, ParseException e) {
-                                if (e == null) {
+                                if (e == null && list.size() > 0) {
                                     // TODO: email is already taken. Show a dialog
+                                    // should also check if list.size() > 0 ?
                                     android.support.v7.app.AlertDialog.Builder builder = new
                                             android.support.v7.app.AlertDialog.Builder(getActivity(),
                                             R.style.AppCompatAlertDialogStyle);
                                     builder.setTitle("Sign Up");
-                                    builder.setMessage("This email is already registered. Want to login or recover your password?");
+                                    builder.setMessage("This email is already registered. Want to login?");
                                     builder.setPositiveButton("LOGIN", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -310,17 +307,19 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                                             mPager.setCurrentItem(1, true);
                                         }
                                     });
-                                    builder.setNegativeButton("GET PASSWORD", new DialogInterface.OnClickListener() {
+                                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             // TODO: Retrieve user password
-
+                                            dialog.dismiss();
                                         }
                                     });
                                     builder.show();
 
                                 } else {
                                     // TODO: Email is not taken. Allow user to continue
+                                    // Or sign user up
+
                                     Intent intent = new Intent(getActivity(), ContinueSignUpActivity.class);
                                     intent.putExtra(USER_DATA, userData);
                                     startActivity(intent);
@@ -370,10 +369,6 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                 }
             });
 
-            Bundle bundle = getArguments();
-            if (bundle != null) {
-                // TODO: not sure
-            }
             return layout;
         }
 
@@ -396,16 +391,21 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         protected ImageButton ibLoginButton;
         protected ImageButton ibLoginFacebook;
         protected ImageButton ibLoginGoogle;
+        protected TextView forgotPassword;
         protected ConnectionDetector cd;
         protected boolean isInternetPresent;
 
+        protected int failedLoginCount;
+
         public static ExistingUserFragment getInstance(int position) {
             ExistingUserFragment newUserFragment = new ExistingUserFragment();
-
-            Bundle args = new Bundle();
-            args.putInt(POSITION_TAG, position);
-            newUserFragment.setArguments(args);
             return newUserFragment;
+        }
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            failedLoginCount = 0;
         }
 
         @Nullable
@@ -422,6 +422,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
             ibLoginButton = (ImageButton) layout.findViewById(R.id.ibLoginButton);
             ibLoginFacebook = (ImageButton) layout.findViewById(R.id.ibLoginFacebook);
             ibLoginGoogle = (ImageButton) layout.findViewById(R.id.ibLoginGoogle);
+            forgotPassword = (TextView) layout.findViewById(R.id.forgotPassword);
             cd = new ConnectionDetector(getActivity());
 
             ibLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -455,14 +456,15 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                         ParseUser.logInInBackground(email, password, new LogInCallback() {
                             @Override
                             public void done(ParseUser parseUser, ParseException e) {
-                                if (e == null) {
+                                if (e == null && parseUser != null) {
                                     Intent intent = new Intent(getActivity(), MainFeedActivity.class);
                                     startActivity(intent);
-                                } else {
+                                } else if (parseUser == null) {
+                                    failedLoginCount++;
                                     android.support.v7.app.AlertDialog.Builder dialogBuilder = new
                                             android.support.v7.app.AlertDialog.Builder(getActivity(),
                                             R.style.AppCompatAlertDialogStyle);
-                                    dialogBuilder.setTitle("Login");
+                                    dialogBuilder.setTitle("Invalid Login");
                                     dialogBuilder.setMessage("The email and password do not match.");
                                     dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         @Override
@@ -471,6 +473,10 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                                         }
                                     });
                                     dialogBuilder.show();
+                                } else {
+                                    // TODO: something else went wrong somewhere
+                                    Toast.makeText(getActivity(), "An error occurred. Please try again later.",
+                                            Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
@@ -499,11 +505,28 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                 }
             });
 
-            Bundle bundle = getArguments();
-            if (bundle != null) {
-                // TODO: don't know what to do
+            ibLoginFacebook.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            }
+                }
+            });
+
+            ibLoginGoogle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+            forgotPassword.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO: start a new activity to ask for email?
+
+                }
+            });
+
             return layout;
         }
 

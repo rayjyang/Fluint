@@ -3,6 +3,7 @@ package eia.fluint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 
 public class ContinueSignUpActivity extends AppCompatActivity {
@@ -19,7 +20,12 @@ public class ContinueSignUpActivity extends AppCompatActivity {
         if (extras != null) {
             Log.d(TAG, "Got the user's data!");
             userData = extras.getStringArray("user_data");
+        } else {
+            Toast.makeText(ContinueSignUpActivity.this, "No extras", Toast.LENGTH_SHORT).show();
         }
+
+
+
 
     }
 

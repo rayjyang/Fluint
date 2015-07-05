@@ -20,8 +20,6 @@ public class ContinueSignUpActivity extends AppCompatActivity {
         if (extras != null) {
             Log.d(TAG, "Got the user's data!");
             userData = extras.getStringArray("user_data");
-        } else {
-            Toast.makeText(ContinueSignUpActivity.this, "No extras", Toast.LENGTH_SHORT).show();
         }
 
 

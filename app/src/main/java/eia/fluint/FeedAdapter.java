@@ -7,13 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Raymond on 6/29/2015.
  */
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.DataViewHolder> {
 
-    private String[] mDataset;
+    private List<Transaction> transactions = new ArrayList<>();
     private LayoutInflater inflater;
 
     public static class DataViewHolder extends RecyclerView.ViewHolder {
@@ -23,9 +24,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.DataViewHolder
         }
     }
 
-    public FeedAdapter(String[] dataset) {
-        mDataset = dataset;
-    }
 
     public FeedAdapter(Context c, ArrayList<Integer> imgs) {
         inflater = LayoutInflater.from(c);

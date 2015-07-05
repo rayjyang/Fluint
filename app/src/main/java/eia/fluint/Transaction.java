@@ -1,5 +1,7 @@
 package eia.fluint;
 
+import android.location.Location;
+
 /**
  * Created by Raymond on 6/29/2015.
  */
@@ -10,6 +12,7 @@ public class Transaction {
     private double lon;
     private double err;
     private long time;
+    private Location location;
     private String buyOrSell;
     private String userName;
     private String currency;
@@ -42,6 +45,10 @@ public class Transaction {
 
     public long getTime() {
         return time;
+    }
+
+    public Location getLocation() {
+        return location;
     }
 
     public String getBuyOrSell() {

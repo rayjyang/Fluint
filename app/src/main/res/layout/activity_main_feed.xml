@@ -5,6 +5,10 @@
     android:orientation="vertical"
     tools:context="eia.fluint.MainFeedActivity">
 
+    <include
+        android:id="@+id/toolBarFeed"
+        layout="@layout/toolbar_main_feed" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"

@@ -14,6 +14,7 @@
     <string name="returning">Back at it.</string>
     <string name="login_with">Login with:</string>
     <string name="forgot_password">Lost password?</string>
+    <string name="facebook_app_id">390666267810624</string>
 
 
     <string-array name="tabs">
@@ -22,4 +23,5 @@
     </string-array>
     <string name="title_activity_main_feed">MainFeedActivity</string>
     <string name="title_activity_continue_sign_up">ContinueSignUpActivity</string>
+    <string name="title_activity_user_preferences">UserPreferencesActivity</string>
 </resources>

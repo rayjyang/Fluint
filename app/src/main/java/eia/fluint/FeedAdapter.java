@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,20 +13,65 @@ import java.util.List;
  */
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.DataViewHolder> {
 
-    private List<Transaction> transactions = new ArrayList<>();
-    private LayoutInflater inflater;
+    private List<Transaction> transactions;
+    private Context mContext;
+    private ClickListener clickListener;
 
-    public static class DataViewHolder extends RecyclerView.ViewHolder {
+    /**
+     * Viewholder for our cards
+     */
+    class DataViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        // TODO: references to views in a card
 
         public DataViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            // TODO: Handle on item click
+            if (clickListener != null) {
+                clickListener.itemClicked(v, getPosition());
+            }
         }
     }
 
+    public interface ClickListener {
 
-    public FeedAdapter(Context c, ArrayList<Integer> imgs) {
-        inflater = LayoutInflater.from(c);
+        // 1) Make an interface 2) implement that interface with a fragment 3) Override itemClicked method
+        // in fragment 4) Make variable reference to the interface just created in the adapter class
+        // 5) Define a method in the adapter class that allows you to set an object that implements
+        // that interface (in this case the fragment itself, which is why mAdapter.setClickListener(this)
+        // is called
+
+        void itemClicked(View view, int position);
     }
+
+    /**
+     * Public constructor for FeedAdapter
+     * @param context
+     * @param list
+     */
+    public FeedAdapter(Context context, List<Transaction> list) {
+        mContext = context;
+        transactions = list;
+    }
+
+    private void initializeData() {
+        // Get data about users and their posts
+    }
+
+    public void add(Transaction trans) {
+        transactions.add(trans);
+        notifyDataSetChanged();
+    }
+
+    public void setClickListener(ClickListener cl) {
+        clickListener = cl;
+    }
+
 
     @Override
     public DataViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -41,11 +85,15 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.DataViewHolder
 
     @Override
     public void onBindViewHolder(DataViewHolder holder, int position) {
+        Transaction transaction = transactions.get(position);
+
+        // TODO: dynamically set the views according to data in the Transaction object
+        // holder.VIEW.setText()
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return transactions.size();
     }
 }

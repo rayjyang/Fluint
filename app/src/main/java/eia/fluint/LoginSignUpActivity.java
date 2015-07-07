@@ -24,18 +24,21 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.internal.CollectionMapper;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import java.util.Collection;
 import java.util.List;
 
 
-public class LoginOrSignUpActivity extends AppCompatActivity {
+public class LoginSignUpActivity extends AppCompatActivity {
 
     static final String TAG = "LoginOrSignUp";
 
@@ -51,7 +54,6 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_or_sign_up);
 
         // TODO: Parse initialization
         // Enable Local Datastore.
@@ -59,13 +61,15 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         Parse.initialize(this, APPLICATION_ID, CLIENT_KEY);
 
 
+        ParseFacebookUtils.initialize(getApplicationContext());
+
         // TODO: Parse authentication
         // Check if user is already logged in
         // If true, send the user to the MainActivity with an intent
         // And make sure that when the back button is pressed from the MainActivity
         // that quits the application for the user; does not send back to login page
 
-        // WARNING: THIS MAY CAUSE CRASHES
+        ParseUser currentUser = ParseUser.getCurrentUser();
         if (false) {
 
             // TODO: Create an intent to send user to the MainActivity
@@ -75,6 +79,8 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
             // TODO: startActivity(intent);
             startActivity(intent);
         }
+
+        setContentView(R.layout.activity_login_or_sign_up);
 
         // TODO: get reference to the toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -161,13 +167,6 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-
-//            Drawable drawable = getDrawable(icons[position]);
-//            drawable.setBounds(0, 0, 36, 36);
-//            ImageSpan imageSpan = new ImageSpan(drawable);
-//            SpannableString spannableString = new SpannableString(tabs[position]);
-//            spannableString.setSpan(imageSpan, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
             return tabs[position];
         }
 
@@ -204,6 +203,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         protected ImageButton ibGoogle;
         protected ConnectionDetector cd;
         protected boolean isInternetPresentNew;
+        protected Collection<String> permissions;
 
 
         public static NewUserFragment getInstance(int position) {
@@ -242,12 +242,9 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                     // 2) Make sure to have users verify their email by having a boolean value
                     //    called hasVerifiedEmail to check if user has clicked on the link in their email
 
-                    Log.d(TAG_NEW, "User wants to continue signing up!");
-
-
-                    String name = etName.getText().toString();
-                    String email = etEmailText.getText().toString();
-                    String password = etPasswordText.getText().toString();
+                    final String name = etName.getText().toString();
+                    final String email = etEmailText.getText().toString();
+                    final String password = etPasswordText.getText().toString();
 
                     if (name.equals("") || email.equals("") || password.equals("")) {
                         if (name.equals("") && email.equals("") && password.equals("")) {
@@ -281,7 +278,7 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
 
                     isInternetPresentNew = cd.isConnectingToInternet();
                     if (isInternetPresentNew) {
-                        // TODO: Sign user up!
+                        // TODO: Sign user up
                         final String[] userData = new String[10];
                         userData[0] = name;
                         userData[1] = email;
@@ -317,10 +314,21 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
                                     builder.show();
 
                                 } else {
-                                    // TODO: Email is not taken. Allow user to continue
-                                    // Or sign user up
+                                    // Email is not taken. Allow user to continue
 
-                                    Intent intent = new Intent(getActivity(), ContinueSignUpActivity.class);
+                                    // TODO: Decision. Sign user up or send him to ContinueSignUpActivity?
+                                    ParseUser user = new ParseUser();
+                                    user.setUsername(email);
+                                    user.setPassword(password);
+                                    user.put("name", name);
+                                    user.signUpInBackground(new SignUpCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            // Sign up and store current user
+                                        }
+                                    });
+
+                                    Intent intent = new Intent(getActivity(), MainFeedActivity.class);
                                     intent.putExtra(USER_DATA, userData);
                                     startActivity(intent);
                                 }
@@ -352,10 +360,25 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
             ibFacebook.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getActivity(), "ibFacebook clicked!", Toast.LENGTH_SHORT).show();
                     isInternetPresentNew = cd.isConnectingToInternet();
                     if (isInternetPresentNew) {
-
+                        ParseFacebookUtils.logInWithReadPermissionsInBackground(NewUserFragment.this, permissions, new LogInCallback() {
+                            @Override
+                            public void done(ParseUser parseUser, ParseException e) {
+                                if (parseUser == null) {
+                                    // User cancelled the Facebook login. Do nothing
+                                } else if (parseUser.isNew()) {
+                                    // User just signed up and logged in through Facebook
+                                    // If Parse doesn't automatically do it, link the fb account and ParseUser
+                                    Intent intent = new Intent(getActivity(), MainFeedActivity.class);
+                                    startActivity(intent);
+                                } else {
+                                    // User just logged in through Facebook
+                                    Intent intent = new Intent(getActivity(), MainFeedActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        });
                     } else {
 
                     }
@@ -396,6 +419,9 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
         protected boolean isInternetPresent;
 
         protected int failedLoginCount;
+
+        // TODO: Update Facebook permissions
+        protected Collection<String> permissions;
 
         public static ExistingUserFragment getInstance(int position) {
             ExistingUserFragment newUserFragment = new ExistingUserFragment();
@@ -508,6 +534,44 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
             ibLoginFacebook.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    boolean internet = cd.isConnectingToInternet();
+                    if (internet) {
+                        ParseFacebookUtils.logInWithReadPermissionsInBackground(ExistingUserFragment.this, permissions, new LogInCallback() {
+                            @Override
+                            public void done(ParseUser parseUser, ParseException e) {
+                                if (parseUser == null) {
+                                    // User canelled the Facebook login. Do nothing
+                                } else if (parseUser.isNew()) {
+                                    // User just signed up and logged in through Facebook
+                                    // If Parse doesn't automatically do it, link the fb account and ParseUser
+
+                                } else {
+                                    // User just logged in through Facebook
+                                    Intent intent = new Intent(getActivity(), MainFeedActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        });
+                    } else {
+                        android.support.v7.app.AlertDialog.Builder builderDialog = new
+                                android.support.v7.app.AlertDialog.Builder(getActivity(),
+                                R.style.AppCompatAlertDialogStyle);
+                        builderDialog.setTitle("No Internet Connection");
+                        builderDialog.setMessage("You are not connected to the internet.\nDo you want to check your Wifi settings?");
+                        builderDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                            }
+                        });
+                        builderDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        builderDialog.show();
+                    }
 
                 }
             });
@@ -537,6 +601,12 @@ public class LoginOrSignUpActivity extends AppCompatActivity {
             Log.d(TAG_EXISTING, "Entered ExistingUserFragment's onResume!");
 
 
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
         }
     }
 

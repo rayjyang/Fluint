@@ -22,6 +22,10 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
@@ -29,4 +33,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
     compile 'com.android.support:cardview-v7:21.0.+'
     compile 'com.android.support:recyclerview-v7:21.0.+'
+    compile 'com.google.android.gms:play-services:7.5.0'
+    compile project(':facebook')
+    compile files('libs/ParseFacebookUtilsV4-1.9.2.jar')
+    compile 'com.android.support:support-v4:22.2.0'
 }

@@ -70,7 +70,7 @@ public class LoginSignUpActivity extends AppCompatActivity {
         // that quits the application for the user; does not send back to login page
 
         ParseUser currentUser = ParseUser.getCurrentUser();
-        if (false) {
+        if (true) {
 
             // TODO: Create an intent to send user to the MainActivity
             Intent intent = new Intent(this, MainFeedActivity.class);

@@ -18,6 +18,8 @@ public class Transaction {
     private String currency;
     private String country;
 
+    public static final String TAG = "Transaction";
+
 
     public Transaction() {
         time = System.currentTimeMillis();

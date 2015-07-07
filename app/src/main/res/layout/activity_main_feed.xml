@@ -9,18 +9,9 @@
         android:id="@+id/toolBarFeed"
         layout="@layout/toolbar_main_feed" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/feedSwipeRefresh"
+    <FrameLayout
+        android:id="@+id/feedFragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </android.support.v7.widget.RecyclerView>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

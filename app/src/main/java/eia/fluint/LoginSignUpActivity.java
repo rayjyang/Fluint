@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,6 +14,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -46,41 +49,14 @@ public class LoginSignUpActivity extends AppCompatActivity {
     public static ViewPager mPager;
     private SlidingTabLayout mTabs;
 
-    private static final String APPLICATION_ID = "ClUIw0Dh2ja21S5sH0vjTrJ6a9nL9g1vH2b9EfMg";
-    private static final String CLIENT_KEY = "I9qGl0kinVIKh0Ld76aehXrA4O7EcXu10Ojnt6ze";
-
     protected static final String POSITION_TAG = "position";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // TODO: Parse initialization
-        // Enable Local Datastore.
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(this, APPLICATION_ID, CLIENT_KEY);
-
-
-        ParseFacebookUtils.initialize(getApplicationContext());
-
-        // TODO: Parse authentication
-        // Check if user is already logged in
-        // If true, send the user to the MainActivity with an intent
-        // And make sure that when the back button is pressed from the MainActivity
-        // that quits the application for the user; does not send back to login page
-
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        if (true) {
-
-            // TODO: Create an intent to send user to the MainActivity
-            Intent intent = new Intent(this, MainFeedActivity.class);
-            // TODO: Add necessary flags with intent.addFlags();
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            // TODO: startActivity(intent);
-            startActivity(intent);
-        }
-
         setContentView(R.layout.activity_login_or_sign_up);
+
+        // TODO: REPLACE ALL TOASTS WITH SNACKBARS
 
         // TODO: get reference to the toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -205,6 +181,10 @@ public class LoginSignUpActivity extends AppCompatActivity {
         protected boolean isInternetPresentNew;
         protected Collection<String> permissions;
 
+        private TextInputLayout tilSignupName;
+        private TextInputLayout tilSignupEmail;
+        private TextInputLayout tilSignupPassword;
+
 
         public static NewUserFragment getInstance(int position) {
             NewUserFragment newUserFragment = new NewUserFragment();
@@ -226,7 +206,67 @@ public class LoginSignUpActivity extends AppCompatActivity {
             ibContinue = (ImageButton) layout.findViewById(R.id.ibContinue);
             ibFacebook = (ImageButton) layout.findViewById(R.id.ibFacebook);
             ibGoogle = (ImageButton) layout.findViewById(R.id.ibGoogle);
+            tilSignupName = (TextInputLayout) layout.findViewById(R.id.tilSignupName);
+            tilSignupEmail = (TextInputLayout) layout.findViewById(R.id.tilSignupEmail);
+            tilSignupPassword = (TextInputLayout) layout.findViewById(R.id.tilSignupPassword);
             cd = new ConnectionDetector(getActivity());
+
+            etName.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (etName.getText().length() > 0) {
+                        tilSignupName.setError(null);
+                    }
+                }
+            });
+
+            etEmailText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (etEmailText.getText().length() > 0) {
+                        tilSignupEmail.setError(null);
+                    }
+                }
+            });
+
+            etPasswordText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (etPasswordText.getText().length() > 0) {
+                        tilSignupPassword.setError(null);
+                    }
+                }
+            });
 
             ibContinue.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -248,30 +288,30 @@ public class LoginSignUpActivity extends AppCompatActivity {
 
                     if (name.equals("") || email.equals("") || password.equals("")) {
                         if (name.equals("") && email.equals("") && password.equals("")) {
-                            etName.setError("Name cannot be left blank");
-                            etEmailText.setError("Email cannot be left blank");
-                            etPasswordText.setError("Password cannot be left blank");
+                            tilSignupName.setError("Name cannot be left blank");
+                            tilSignupEmail.setError("Email cannot be left blank");
+                            tilSignupPassword.setError("Password cannot be left blank");
                             return;
                         } else if (name.equals("") && email.equals("")) {
-                            etName.setError("Name cannot be left blank");
-                            etEmailText.setError("Email cannot be left blank");
+                            tilSignupName.setError("Name cannot be left blank");
+                            tilSignupEmail.setError("Email cannot be left blank");
                             return;
                         } else if (email.equals("") && password.equals("")) {
-                            etEmailText.setError("Email cannot be left blank");
-                            etPasswordText.setError("Password cannot be left blank");
+                            tilSignupEmail.setError("Email cannot be left blank");
+                            tilSignupPassword.setError("Password cannot be left blank");
                             return;
                         } else if (name.equals("") && password.equals("")) {
-                            etName.setError("Name cannot be left blank");
-                            etPasswordText.setError("Password cannot be left blank");
+                            tilSignupName.setError("Name cannot be left blank");
+                            tilSignupPassword.setError("Password cannot be left blank");
                             return;
                         } else if (name.equals("")) {
-                            etName.setError("Name cannot be left blank");
+                            tilSignupName.setError("Name cannot be left blank");
                             return;
                         } else if (email.equals("")) {
-                            etEmailText.setError("Email cannot be left blank");
+                            tilSignupEmail.setError("Email cannot be left blank");
                             return;
                         } else if (password.equals("")) {
-                            etPasswordText.setError("Password cannot be left blank");
+                            tilSignupPassword.setError("Password cannot be left blank");
                             return;
                         }
                     }
@@ -331,6 +371,7 @@ public class LoginSignUpActivity extends AppCompatActivity {
                                     Intent intent = new Intent(getActivity(), MainFeedActivity.class);
                                     intent.putExtra(USER_DATA, userData);
                                     startActivity(intent);
+                                    getActivity().finish();
                                 }
                             }
                         });
@@ -372,10 +413,12 @@ public class LoginSignUpActivity extends AppCompatActivity {
                                     // If Parse doesn't automatically do it, link the fb account and ParseUser
                                     Intent intent = new Intent(getActivity(), MainFeedActivity.class);
                                     startActivity(intent);
+                                    getActivity().finish();
                                 } else {
                                     // User just logged in through Facebook
                                     Intent intent = new Intent(getActivity(), MainFeedActivity.class);
                                     startActivity(intent);
+                                    getActivity().finish();
                                 }
                             }
                         });
@@ -423,6 +466,9 @@ public class LoginSignUpActivity extends AppCompatActivity {
         // TODO: Update Facebook permissions
         protected Collection<String> permissions;
 
+        private TextInputLayout tilLoginEmail;
+        private TextInputLayout tilLoginPassword;
+
         public static ExistingUserFragment getInstance(int position) {
             ExistingUserFragment newUserFragment = new ExistingUserFragment();
             return newUserFragment;
@@ -449,7 +495,48 @@ public class LoginSignUpActivity extends AppCompatActivity {
             ibLoginFacebook = (ImageButton) layout.findViewById(R.id.ibLoginFacebook);
             ibLoginGoogle = (ImageButton) layout.findViewById(R.id.ibLoginGoogle);
             forgotPassword = (TextView) layout.findViewById(R.id.forgotPassword);
+            tilLoginEmail = (TextInputLayout) layout.findViewById(R.id.tilLoginEmail);
+            tilLoginPassword = (TextInputLayout) layout.findViewById(R.id.tilLoginPassword);
             cd = new ConnectionDetector(getActivity());
+
+            etLoginEmail.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (etLoginEmail.getText().length() > 0) {
+                        tilLoginEmail.setError(null);
+                    }
+                }
+            });
+
+            etLoginPassword.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (etLoginPassword.getText().length() > 0) {
+                        tilLoginPassword.setError(null);
+                    }
+                }
+            });
+
 
             ibLoginButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -464,17 +551,18 @@ public class LoginSignUpActivity extends AppCompatActivity {
 
                     if (email.equals("") || password.equals("")) {
                         if (email.equals("") && password.equals("")) {
-                            etLoginEmail.setError("Email cannot be left blank");
-                            etLoginPassword.setError("Password cannot be left blank");
+                            tilLoginEmail.setError("Email cannot be left blank");
+                            tilLoginPassword.setError("Password cannot be left blank");
                             return;
                         } else if (email.equals("")) {
-                            etLoginEmail.setError("Email cannot be left blank");
+                            tilLoginEmail.setError("Email cannot be left blank");
                             return;
                         } else if (password.equals("")) {
-                            etLoginPassword.setError("Password cannot be left blank");
+                            tilLoginPassword.setError("Password cannot be left blank");
                             return;
                         }
                     }
+
                     // TODO: verify. If Parse verified, create a new ParseUser and save to device
                     isInternetPresent = cd.isConnectingToInternet();
                     if (isInternetPresent) {
@@ -485,6 +573,7 @@ public class LoginSignUpActivity extends AppCompatActivity {
                                 if (e == null && parseUser != null) {
                                     Intent intent = new Intent(getActivity(), MainFeedActivity.class);
                                     startActivity(intent);
+                                    getActivity().finish();
                                 } else if (parseUser == null) {
                                     failedLoginCount++;
                                     android.support.v7.app.AlertDialog.Builder dialogBuilder = new
@@ -549,6 +638,7 @@ public class LoginSignUpActivity extends AppCompatActivity {
                                     // User just logged in through Facebook
                                     Intent intent = new Intent(getActivity(), MainFeedActivity.class);
                                     startActivity(intent);
+                                    getActivity().finish();
                                 }
                             }
                         });

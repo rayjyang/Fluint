@@ -37,4 +37,5 @@ dependencies {
     compile project(':facebook')
     compile files('libs/ParseFacebookUtilsV4-1.9.2.jar')
     compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:design:22.2.0'
 }

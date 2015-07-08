@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/navBuy"
+            android:checked="false"
+            android:icon="@drawable/lorem_ipsum_photo"
+            android:title="@string/nav_buy" />
+
+        <item
+            android:id="@+id/navSell"
+            android:checked="false"
+            android:icon="@drawable/lorem_ipsum_photo"
+            android:title="@string/nav_sell" />
+
+        <item
+            android:id="@+id/navProfile"
+            android:checked="false"
+            android:icon="@drawable/lorem_ipsum_photo"
+            android:title="@string/nav_profile" />
+
+        <item
+            android:id="@+id/navSettings"
+            android:checked="false"
+            android:icon="@drawable/lorem_ipsum_photo"
+            android:title="@string/nav_settings" />
+
+
+    </group>
+</menu>

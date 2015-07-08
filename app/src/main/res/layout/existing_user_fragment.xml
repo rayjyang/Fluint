@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -13,73 +14,59 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/returningTextContainer"
-        android:layout_weight="1"
-        android:gravity="center">
+        android:id="@+id/loginEmailPwContainer"
+        android:layout_weight=".7"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="32dp">
 
-        <TextView
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tilLoginEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/returning"
-            android:id="@+id/returningWelcomeText"
-            android:gravity="center"
-            android:textSize="55sp"
-            android:textStyle="bold" />
+            app:hintTextAppearance="@android:style/TextAppearance.Medium"
+            android:layout_marginBottom="8dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:ems="10"
+                android:id="@+id/etLoginEmail"
+                android:hint="@string/email" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tilLoginPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@android:style/TextAppearance.Medium">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/etLoginPassword"
+                android:hint="@string/password" />
+
+        </android.support.design.widget.TextInputLayout>
+
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/loginEmailPwContainer"
-        android:layout_weight="1"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:gravity="center|center_horizontal">
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:ems="10"
-            android:id="@+id/etLoginEmail"
-            android:hint="@string/email"
-            android:layout_marginBottom="8dp"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/etLoginPassword"
-            android:hint="@string/password"
-            android:layout_marginBottom="8dp"/>
+        android:layout_weight="1.15"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:id="@+id/loginButtonHolder">
 
         <ImageButton
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ibLoginButton" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1.25"
-        android:gravity="center"
-        android:id="@+id/orLoginContainer"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp">
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/or"
-            android:id="@+id/orLoginText"
-            android:textSize="20sp"
-            android:gravity="center_horizontal"
-            android:layout_weight="1" />
 
     </LinearLayout>
 
@@ -90,8 +77,8 @@
         android:id="@+id/loginFGContainer"
         android:layout_weight="1"
         android:gravity="center"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp">
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
         <TextView
             android:layout_width="fill_parent"
@@ -129,7 +116,9 @@
         android:layout_height="match_parent"
         android:layout_weight="1.25"
         android:gravity="center_vertical|right"
-        android:id="@+id/forgotPWHolder">
+        android:id="@+id/forgotPWHolder"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -138,4 +127,5 @@
             android:id="@+id/forgotPassword"
             android:textSize="16sp" />
     </LinearLayout>
+
 </LinearLayout>

@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -41,7 +43,8 @@ public class BuyFeedFragment extends Fragment implements FeedAdapter.ClickListen
     private FeedAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private SwipeRefreshLayout feedSwipeRefresh;
-    private List<Transaction> mRefreshData;
+    private ProgressBar mProgressBar;
+    private FloatingActionButton fabBuyFeed;
 
     /**
      * Use this factory method to create a new instance of
@@ -62,7 +65,7 @@ public class BuyFeedFragment extends Fragment implements FeedAdapter.ClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_feed, container, false);
+        View view = inflater.inflate(R.layout.fragment_buy_feed, container, false);
         view.setTag(TAG);
 
         // TODO: Get references to the layout views
@@ -72,7 +75,8 @@ public class BuyFeedFragment extends Fragment implements FeedAdapter.ClickListen
             @Override
             public void onRefresh() {
                 // TODO: refresh content and update location
-
+                getUserLocation();
+                getLatestPosts();
             }
         });
 
@@ -85,16 +89,20 @@ public class BuyFeedFragment extends Fragment implements FeedAdapter.ClickListen
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(mLayoutManager);
 
-//        // TODO: specify an Adapter
-//        // Create a new instance of FeedAdapter passing in a dataset
-//        mAdapter = new FeedAdapter(getActivity(), mRefreshData);
-//        // TODO: setClickListener on the adapter
-//        mAdapter.setClickListener(this);
-//        // TODO: recyclerView.setAdapter(mAdapter);
-//        recyclerView.setAdapter(mAdapter);
+        // TODO: get reference to ProgressBar
+        mProgressBar = (ProgressBar) view.findViewById(R.id.buyFeedProgressBar);
+
+        fabBuyFeed = (FloatingActionButton) view.findViewById(R.id.fabBuyFeed);
+
+        // TODO: XML: wrap FAB in a CoordinatorLayout
+
+        // TODO: Change color of fab with setBackgroundTintList(ColorStateList)
+
+        // TODO: Display icon in fab with setImageDrawable(Drawable)
 
         return view;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -118,11 +126,7 @@ public class BuyFeedFragment extends Fragment implements FeedAdapter.ClickListen
     public void onResume() {
         super.onResume();
 
-        // TODO: get user's location
         getUserLocation();
-
-        // TODO: call Parse server, get recent transaction posts in background.
-        // store in a List<Transaction> dataset, mRefreshData
         getLatestPosts();
 
     }
@@ -137,26 +141,33 @@ public class BuyFeedFragment extends Fragment implements FeedAdapter.ClickListen
 
     public void getLatestPosts() {
         // TODO: get latest posts
+        mProgressBar.setVisibility(View.VISIBLE);
+
         ParseQuery query = new ParseQuery(Transaction.TAG);
         query.setLimit(100);
-        query.orderByDescending("createAt");
+        query.orderByDescending("createdAt");
         query.findInBackground(new FindCallback() {
             @Override
             public void done(List list, ParseException e) {
-                ArrayList<Transaction> latestData = new ArrayList<>();
-                for (Object o : list) {
-                    Transaction trans = new Transaction();
-                    ParseObject po = (ParseObject) o;
-                    latestData.add(trans);
+                mProgressBar.setVisibility(View.INVISIBLE);
+                if (e == null) {
+                    ArrayList<Transaction> latestData = new ArrayList<>();
+                    for (Object o : list) {
+                        Transaction trans = new Transaction();
+                        ParseObject po = (ParseObject) o;
+                        latestData.add(trans);
 
+                    }
+                    FeedAdapter adapter = new FeedAdapter(getActivity(), latestData);
+                    adapter.setClickListener(BuyFeedFragment.this);
+                    recyclerView.setAdapter(adapter);
+                } else {
+                    // Exception caught
                 }
-                FeedAdapter adapter = new FeedAdapter(getActivity(), latestData);
-                adapter.setClickListener(BuyFeedFragment.this);
-                recyclerView.setAdapter(adapter);
             }
 
             @Override
-        public void done(Object o, Throwable t) {
+            public void done(Object o, Throwable t) {
 
             }
         });

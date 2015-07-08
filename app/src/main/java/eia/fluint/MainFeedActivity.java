@@ -1,5 +1,6 @@
 package eia.fluint;
 
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -15,7 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-public class MainFeedActivity extends AppCompatActivity implements BuyFeedFragment.OnFragmentInteractionListener {
+public class MainFeedActivity extends AppCompatActivity implements BuyFeedFragment.OnFragmentInteractionListener,
+        SellFeedFragment.OnFragmentInteractionListener {
 
     private static final String NAV_ITEM_ID = "navItemId";
 
@@ -54,20 +56,36 @@ public class MainFeedActivity extends AppCompatActivity implements BuyFeedFragme
                 mNavItemId = menuItem.getItemId();
                 drawerLayout.closeDrawers();
 
+                Fragment fragment;
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
                 switch (mNavItemId) {
                     case R.id.navSell:
-                        Toast.makeText(getApplicationContext(), "Sell selected", Toast.LENGTH_SHORT).show();
+                        toolbar.setTitle("Sell");
+                        toolbar.setTitleTextColor(getResources().getColor(R.color.whiteColor));
+
+                        fragment = new SellFeedFragment();
+                        fragmentTransaction.replace(R.id.feedFragmentContainer, fragment);
+                        fragmentTransaction.commit();
                         return true;
                     case R.id.navProfile:
+                        toolbar.setTitle("Profile");
+                        toolbar.setTitleTextColor(getResources().getColor(R.color.whiteColor));
                         Toast.makeText(getApplicationContext(), "Profile selected", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.navSettings:
-                        Toast.makeText(getApplicationContext(), "Settings selected", Toast.LENGTH_SHORT).show();
+                        toolbar.setTitle("Settings");
+                        toolbar.setTitleTextColor(getResources().getColor(R.color.whiteColor));
+
+                        fragment = new SettingsFragment();
+                        fragmentTransaction.replace(R.id.feedFragmentContainer, fragment);
+                        fragmentTransaction.commit();
                         return true;
                     default:
-                        BuyFeedFragment fragment = new BuyFeedFragment();
-                        FragmentTransaction fragmentTransaction =
-                                getFragmentManager().beginTransaction();
+                        toolbar.setTitle("Buy");
+                        toolbar.setTitleTextColor(getResources().getColor(R.color.whiteColor));
+
+                        fragment = new BuyFeedFragment();
                         fragmentTransaction.replace(R.id.feedFragmentContainer, fragment);
                         fragmentTransaction.commit();
                         return true;
@@ -79,6 +97,7 @@ public class MainFeedActivity extends AppCompatActivity implements BuyFeedFragme
         mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer);
         drawerLayout.setDrawerListener(mDrawerToggle);
 
+        toolbar.setTitle("Buy");
         BuyFeedFragment buyFeedFragment = new BuyFeedFragment();
         getFragmentManager().beginTransaction().add(R.id.feedFragmentContainer, buyFeedFragment).commit();
 

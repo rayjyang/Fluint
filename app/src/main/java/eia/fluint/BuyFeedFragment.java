@@ -1,9 +1,11 @@
 package eia.fluint;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -46,6 +49,8 @@ public class BuyFeedFragment extends Fragment implements FeedAdapter.ClickListen
     private ProgressBar mProgressBar;
     private FloatingActionButton fabBuyFeed;
 
+    private String buyPreference = "None";
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -76,7 +81,7 @@ public class BuyFeedFragment extends Fragment implements FeedAdapter.ClickListen
             public void onRefresh() {
                 // TODO: refresh content and update location
                 getUserLocation();
-                getLatestPosts();
+                getLatestPosts(buyPreference);
             }
         });
 
@@ -126,8 +131,13 @@ public class BuyFeedFragment extends Fragment implements FeedAdapter.ClickListen
     public void onResume() {
         super.onResume();
 
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        buyPreference = sp.getString(getResources().getString(R.string.buy_preference), "None");
+
+        Toast.makeText(getActivity(), buyPreference, Toast.LENGTH_SHORT).show();
+
         getUserLocation();
-        getLatestPosts();
+        getLatestPosts(buyPreference);
 
     }
 
@@ -139,9 +149,16 @@ public class BuyFeedFragment extends Fragment implements FeedAdapter.ClickListen
     }
 
 
-    public void getLatestPosts() {
+    public void getLatestPosts(String buy) {
         // TODO: get latest posts
         mProgressBar.setVisibility(View.VISIBLE);
+
+        if (buy.equals("None")) {
+            // TODO: query all buy posts within X miles of user
+
+        } else {
+
+        }
 
         ParseQuery query = new ParseQuery(Transaction.TAG);
         query.setLimit(100);
@@ -168,7 +185,7 @@ public class BuyFeedFragment extends Fragment implements FeedAdapter.ClickListen
 
             @Override
             public void done(Object o, Throwable t) {
-
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
         });
 

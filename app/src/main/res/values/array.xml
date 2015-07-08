@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="CurrencyCodes">
+        <item>None</item>
+        <item>United States Dollar (USD)</item>
+        <item>Euro (EUR)</item>
+        <item>Japan Yen (JPY)</item>
+        <item>United Kingdom Pound (GBP)</item>
+        <item>Albania Lek (ALL)</item>
+        <item>Afghanistan Afghani (AFN)</item>
+        <item>Argentina Peso (ARS)</item>
+        <item>Aruba Guilder (AWG)</item>
+        <item>Australia Dollar (AUD)</item>
+        <item>Azerbaijan New Manat (AZN)</item>
+        <item>Bahamas Dollar (BSD)</item>
+        <item>Barbados Dollar (BBD)</item>
+        <item>Belarus Ruble (BYR)</item>
+        <item>Belize Dollar (BZD)</item>
+        <item>Bermuda Dollar (BMD)</item>
+        <item>Bolivia Boliviano (BOB)</item>
+
+
+    </string-array>
+
+    <string-array name="CurrencyCodesValues">
+        <item>None</item>
+        <item>USD</item>
+        <item>EUR</item>
+        <item>JPY</item>
+        <item>GBP</item>
+        <item>ALL</item>
+        <item>AFN</item>
+        <item>ARS</item>
+        <item>AWG</item>
+        <item>AUD</item>
+        <item>AZN</item>
+        <item>BSD</item>
+        <item>BBD</item>
+        <item>BYR</item>
+        <item>BZD</item>
+        <item>BMD</item>
+        <item>BOB</item>
+    </string-array>
+</resources>

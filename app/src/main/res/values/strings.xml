@@ -35,4 +35,10 @@
     <string name="nav_settings">Settings</string>
     <string name="openDrawer">Open navigation drawer</string>
     <string name="closeDrawer">Close navigation drawer</string>
+    <string name="buy">Buy</string>
+    <string name="settings">Settings</string>
+    <string name="log_out_button">Log Out Button</string>
+    <string name="logout">Log out</string>
+    <string name="buy_preference">Buy preference</string>
+    <string name="sell_preference">Sell preference</string>
 </resources>

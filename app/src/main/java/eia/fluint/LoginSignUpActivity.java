@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -65,6 +66,10 @@ public class LoginSignUpActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+//        toolbar.setTitleTextColor(getResources().getColor(R.color.whiteColor));
 
         // TODO: Set logo
 //        getSupportActionBar().setLogo(R.drawable.fluint_android_white);
@@ -196,9 +201,7 @@ public class LoginSignUpActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-            Log.d(TAG_NEW, "Getting references to widgets in newUserFragment's onCreateView!");
-
-            View layout = inflater.inflate(R.layout.new_user_fragment, container, false);
+            final View layout = inflater.inflate(R.layout.new_user_fragment, container, false);
 
             etName = (EditText) layout.findViewById(R.id.etName);
             etEmailText = (EditText) layout.findViewById(R.id.etEmailText);
@@ -209,7 +212,19 @@ public class LoginSignUpActivity extends AppCompatActivity {
             tilSignupName = (TextInputLayout) layout.findViewById(R.id.tilSignupName);
             tilSignupEmail = (TextInputLayout) layout.findViewById(R.id.tilSignupEmail);
             tilSignupPassword = (TextInputLayout) layout.findViewById(R.id.tilSignupPassword);
+//            View coordinatorLayout = layout.findViewById(R.id.snackBarPosition);
             cd = new ConnectionDetector(getActivity());
+
+            final View.OnClickListener clickListener = new View.OnClickListener() {
+                public void onClick(View v) {
+                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                }
+            };
+//            if (coordinatorLayout != null) {
+//                Snackbar.make(coordinatorLayout, "You are not connected to the internet.", Snackbar.LENGTH_LONG)
+//                        .setAction("CONNECT", clickListener).show();
+//            }
+
 
             etName.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -394,6 +409,8 @@ public class LoginSignUpActivity extends AppCompatActivity {
                             }
                         });
                         builder2.show();
+
+
                     }
                 }
             });

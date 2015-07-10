@@ -2,71 +2,30 @@ package eia.fluint;
 
 import android.location.Location;
 
+import com.parse.ParseUser;
+
+import java.util.Date;
+
 /**
  * Created by Raymond on 6/29/2015.
  */
 public class Transaction {
+    private Date arrivalTime;
     private int amount;
-    private int flagId;
-    private double lat;
-    private double lon;
-    private double err;
+    private Location coordinateLocation;
     private long time;
-    private Location location;
-    private String buyOrSell;
-    private String userName;
-    private String currency;
-    private String country;
+    private ParseUser parseUser;          // e.g. currentUser
+    private String buyOrSell;             // e.g. SELL
+    private String flightNo;              // e.g. AF6077
+    private String userName;              // e.g. John Doe
+    private String userEmail;             // e.g. johndoe@gmail.com
+    private String currency;              // e.g. EUR, USD, JPY
+    private String arrivalLocation;       // e.g. SFO, LAX, JFK
 
     public static final String TAG = "Transaction";
 
-
     public Transaction() {
         time = System.currentTimeMillis();
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public int getFlagId() {
-        return flagId;
-    }
-
-    public double getLat() {
-        return lat;
-    }
-
-    public double getLon() {
-        return lon;
-    }
-
-    public double getErr() {
-        return err;
-    }
-
-    public long getTime() {
-        return time;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public String getBuyOrSell() {
-        return buyOrSell;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public String getCountry() {
-        return country;
     }
 
 }

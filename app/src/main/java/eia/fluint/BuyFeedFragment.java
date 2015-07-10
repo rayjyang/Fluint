@@ -1,6 +1,7 @@
 package eia.fluint;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -98,6 +99,14 @@ public class BuyFeedFragment extends Fragment implements FeedAdapter.ClickListen
         mProgressBar = (ProgressBar) view.findViewById(R.id.buyFeedProgressBar);
 
         fabBuyFeed = (FloatingActionButton) view.findViewById(R.id.fabBuyFeed);
+        fabBuyFeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: launch add new Buy post Activity
+                Intent intent = new Intent(getActivity(), AddPostActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // TODO: XML: wrap FAB in a CoordinatorLayout
 

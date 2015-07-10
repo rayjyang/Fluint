@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="primaryColor">#00BCD4</color>
-    <color name="primaryColorDark">#0097A7</color>
+    <color name="primaryColor">#2BC0E4</color>
+    <color name="primaryColorDark">#2C9CB5</color>
+    <color name="accentPinkColor">#eaecc6</color>
     <color name="accentColor">#FF4081</color>
     <color name="whiteColor">#FFFFFF</color>
     <color name="colorHighlight">#B6B6B6</color>
+    <color name="facebookColor">#3b5998</color>
+    <color name="googlePlusColor">#d34836</color>
 
 
 

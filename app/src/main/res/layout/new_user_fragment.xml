@@ -5,117 +5,126 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/newUserFragmentContainer"
-    android:paddingLeft="16dp"
-    android:paddingTop="16dp"
-    android:paddingRight="16dp"
-    android:paddingBottom="16dp">
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/nameEmailContainer"
-        android:layout_weight=".2"
+        android:focusableInTouchMode="false"
+        android:id="@+id/newUserContainer"
+        android:layout_weight="1"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:layout_marginTop="32dp"
-        android:gravity="center_horizontal">
+        android:paddingTop="16dp"
+        android:paddingRight="16dp">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/tilSignupName"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:hintTextAppearance="@android:style/TextAppearance.Medium"
-            android:layout_marginBottom="8dp">
-            <EditText
-                android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/nameEmailContainer"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilSignupName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/etName"
-                android:hint="@string/name"
-                android:imeOptions="actionNext"
-                android:singleLine="true"
-                android:nextFocusForward="@+id/etEmailText"/>
-        </android.support.design.widget.TextInputLayout>
+                app:hintTextAppearance="@android:style/TextAppearance.Medium"
+                android:layout_marginBottom="8dp">
+                <android.support.v7.widget.AppCompatEditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/etName"
+                    android:hint="@string/name"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true"
+                    android:nextFocusForward="@+id/etEmailText"/>
+            </android.support.design.widget.TextInputLayout>
 
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/tilSignupEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:hintTextAppearance="@android:style/TextAppearance.Medium"
-            android:layout_marginBottom="8dp">
-
-            <EditText
-                android:layout_width="fill_parent"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilSignupEmail"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:ems="10"
-                android:id="@+id/etEmailText"
-                android:hint="@string/email" />
+                app:hintTextAppearance="@android:style/TextAppearance.Medium"
+                android:layout_marginBottom="8dp">
 
-        </android.support.design.widget.TextInputLayout>
+                <android.support.v7.widget.AppCompatEditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:ems="10"
+                    android:id="@+id/etEmailText"
+                    android:hint="@string/email" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/tilSignupPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:hintTextAppearance="@android:style/TextAppearance.Medium"
-            android:layout_marginBottom="8dp">
+            </android.support.design.widget.TextInputLayout>
 
-            <EditText
-                android:layout_width="fill_parent"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilSignupPassword"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:id="@+id/etPasswordText"
-                android:hint="@string/password" />
+                app:hintTextAppearance="@android:style/TextAppearance.Medium">
 
-        </android.support.design.widget.TextInputLayout>
+                <android.support.v7.widget.AppCompatEditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:id="@+id/etPasswordText"
+                    android:hint="@string/password" />
 
-        <ImageButton
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ibContinue" />
+            </android.support.design.widget.TextInputLayout>
 
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/registerFGContainer"
-        android:layout_weight="0.9"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:gravity="bottom">
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/register_with"
-            android:id="@+id/registerWithText"
-            android:textSize="20sp"
-            android:layout_weight="1" />
-
-        <LinearLayout
-            android:orientation="horizontal"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/ibContainer">
+            android:layout_height="72dp"
+            card_view:cardBackgroundColor="@color/primaryColor">
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatButton
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="72dp"
+                android:id="@+id/ibContinue"
+                android:textColor="@color/whiteColor"
+                android:gravity="center"
+                android:text="Sign up"
+                android:textSize="16sp"
+                android:padding="8dp"
+                android:background="@color/primaryColor" />
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            card_view:cardBackgroundColor="@color/facebookColor">
+
+            <android.support.v7.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
                 android:id="@+id/ibFacebook"
-                android:layout_weight="1" />
+                android:text="Sign up with Facebook"
+                android:background="@color/facebookColor"
+                android:textSize="16sp"
+                android:textColor="@color/whiteColor"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal|center_vertical"/>
 
-            <ImageButton
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/ibGoogle"
-                android:layout_weight="1" />
-        </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
     </LinearLayout>
 
 </LinearLayout>

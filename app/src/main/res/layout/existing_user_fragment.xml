@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             app:hintTextAppearance="@android:style/TextAppearance.Medium"
             android:layout_marginBottom="8dp">
-            <EditText
+            <android.support.v7.widget.AppCompatEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             app:hintTextAppearance="@android:style/TextAppearance.Medium">
 
-            <EditText
+            <android.support.v7.widget.AppCompatEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
@@ -63,10 +63,17 @@
         android:paddingRight="16dp"
         android:id="@+id/loginButtonHolder">
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatButton
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ibLoginButton" />
+            android:layout_height="48dp"
+            android:id="@+id/ibLoginButton"
+            android:textColor="@color/whiteColor"
+            android:gravity="center"
+            android:text="Login"
+            android:textAllCaps="true"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:background="@color/primaryColor"/>
 
     </LinearLayout>
 
@@ -96,13 +103,13 @@
             android:layout_weight="1"
             android:id="@+id/ibSocialLoginContainer">
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatButton
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/ibLoginFacebook"
                 android:layout_weight="1" />
 
-            <ImageButton
+            <android.support.v7.widget.AppCompatButton
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/ibLoginGoogle"

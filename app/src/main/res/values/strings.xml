@@ -41,4 +41,8 @@
     <string name="logout">Log out</string>
     <string name="buy_preference">Buy preference</string>
     <string name="sell_preference">Sell preference</string>
+    <string name="title_activity_add_post">AddPostActivity</string>
+    <string name="currency_type">New Text</string>
+    <string name="sell">Sell</string>
+    <string name="amount">Amount</string>
 </resources>

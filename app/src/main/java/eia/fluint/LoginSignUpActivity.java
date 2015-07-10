@@ -14,6 +14,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -176,12 +178,11 @@ public class LoginSignUpActivity extends AppCompatActivity {
         private static final String TAG_NEW = "NewLoginOrSignup";
         private static final String USER_DATA = "user_data";
 
-        protected EditText etName;
-        protected EditText etEmailText;
-        protected EditText etPasswordText;
-        protected ImageButton ibContinue;
-        protected ImageButton ibFacebook;
-        protected ImageButton ibGoogle;
+        protected android.support.v7.widget.AppCompatEditText etName;
+        protected android.support.v7.widget.AppCompatEditText etEmailText;
+        protected android.support.v7.widget.AppCompatEditText etPasswordText;
+        protected android.support.v7.widget.AppCompatButton ibContinue;
+        protected android.support.v7.widget.AppCompatButton ibFacebook;
         protected ConnectionDetector cd;
         protected boolean isInternetPresentNew;
         protected Collection<String> permissions;
@@ -203,12 +204,11 @@ public class LoginSignUpActivity extends AppCompatActivity {
 
             final View layout = inflater.inflate(R.layout.new_user_fragment, container, false);
 
-            etName = (EditText) layout.findViewById(R.id.etName);
-            etEmailText = (EditText) layout.findViewById(R.id.etEmailText);
-            etPasswordText = (EditText) layout.findViewById(R.id.etPasswordText);
-            ibContinue = (ImageButton) layout.findViewById(R.id.ibContinue);
-            ibFacebook = (ImageButton) layout.findViewById(R.id.ibFacebook);
-            ibGoogle = (ImageButton) layout.findViewById(R.id.ibGoogle);
+            etName = (AppCompatEditText) layout.findViewById(R.id.etName);
+            etEmailText = (AppCompatEditText) layout.findViewById(R.id.etEmailText);
+            etPasswordText = (AppCompatEditText) layout.findViewById(R.id.etPasswordText);
+            ibContinue = (AppCompatButton) layout.findViewById(R.id.ibContinue);
+            ibFacebook = (AppCompatButton) layout.findViewById(R.id.ibFacebook);
             tilSignupName = (TextInputLayout) layout.findViewById(R.id.tilSignupName);
             tilSignupEmail = (TextInputLayout) layout.findViewById(R.id.tilSignupEmail);
             tilSignupPassword = (TextInputLayout) layout.findViewById(R.id.tilSignupPassword);
@@ -445,13 +445,6 @@ public class LoginSignUpActivity extends AppCompatActivity {
                 }
             });
 
-            ibGoogle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-
             return layout;
         }
 
@@ -469,11 +462,11 @@ public class LoginSignUpActivity extends AppCompatActivity {
         private static final String TAG_EXISTING = "ExistingLoginOrSignup";
 
         // TODO: create class variables for our Views
-        protected EditText etLoginEmail;
-        protected EditText etLoginPassword;
-        protected ImageButton ibLoginButton;
-        protected ImageButton ibLoginFacebook;
-        protected ImageButton ibLoginGoogle;
+        protected AppCompatEditText etLoginEmail;
+        protected AppCompatEditText etLoginPassword;
+        protected AppCompatButton ibLoginButton;
+        protected AppCompatButton ibLoginFacebook;
+        protected AppCompatButton ibLoginGoogle;
         protected TextView forgotPassword;
         protected ConnectionDetector cd;
         protected boolean isInternetPresent;
@@ -506,11 +499,11 @@ public class LoginSignUpActivity extends AppCompatActivity {
             View layout = inflater.inflate(R.layout.existing_user_fragment, container, false);
 
             // TODO: get references to the different Views
-            etLoginEmail = (EditText) layout.findViewById(R.id.etLoginEmail);
-            etLoginPassword = (EditText) layout.findViewById(R.id.etLoginPassword);
-            ibLoginButton = (ImageButton) layout.findViewById(R.id.ibLoginButton);
-            ibLoginFacebook = (ImageButton) layout.findViewById(R.id.ibLoginFacebook);
-            ibLoginGoogle = (ImageButton) layout.findViewById(R.id.ibLoginGoogle);
+            etLoginEmail = (AppCompatEditText) layout.findViewById(R.id.etLoginEmail);
+            etLoginPassword = (AppCompatEditText) layout.findViewById(R.id.etLoginPassword);
+            ibLoginButton = (AppCompatButton) layout.findViewById(R.id.ibLoginButton);
+            ibLoginFacebook = (AppCompatButton) layout.findViewById(R.id.ibLoginFacebook);
+            ibLoginGoogle = (AppCompatButton) layout.findViewById(R.id.ibLoginGoogle);
             forgotPassword = (TextView) layout.findViewById(R.id.forgotPassword);
             tilLoginEmail = (TextInputLayout) layout.findViewById(R.id.tilLoginEmail);
             tilLoginPassword = (TextInputLayout) layout.findViewById(R.id.tilLoginPassword);

@@ -5,10 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/existingUserFragmentContainer"
-    android:paddingLeft="16dp"
-    android:paddingTop="16dp"
-    android:paddingRight="16dp"
-    android:paddingBottom="16dp">
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:orientation="vertical"
@@ -18,121 +15,106 @@
         android:layout_weight=".7"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="32dp">
+        android:paddingTop="16dp"
+        android:gravity="center_horizontal">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/tilLoginEmail"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:hintTextAppearance="@android:style/TextAppearance.Medium"
-            android:layout_marginBottom="8dp">
-            <android.support.v7.widget.AppCompatEditText
+            android:layout_height="match_parent"
+            android:id="@+id/loginEmailETHolder"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilLoginEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:ems="10"
-                android:id="@+id/etLoginEmail"
-                android:hint="@string/email" />
-        </android.support.design.widget.TextInputLayout>
+                app:hintTextAppearance="@android:style/TextAppearance.Medium"
+                android:layout_marginBottom="8dp">
+                <android.support.v7.widget.AppCompatEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:id="@+id/etLoginEmail"
+                    android:singleLine="true"
+                    android:ems="10"
+                    android:hint="@string/email" />
+            </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/tilLoginPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:hintTextAppearance="@android:style/TextAppearance.Medium">
-
-            <android.support.v7.widget.AppCompatEditText
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilLoginPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:id="@+id/etLoginPassword"
-                android:hint="@string/password" />
+                app:hintTextAppearance="@android:style/TextAppearance.Medium">
 
-        </android.support.design.widget.TextInputLayout>
+                <android.support.v7.widget.AppCompatEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:id="@+id/etLoginPassword"
+                    android:hint="@string/password" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1.15"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:id="@+id/loginButtonHolder">
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:id="@+id/signInButtonsContainer"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:paddingBottom="32dp"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
-        <android.support.v7.widget.AppCompatButton
-            android:layout_width="fill_parent"
-            android:layout_height="48dp"
-            android:id="@+id/ibLoginButton"
-            android:textColor="@color/whiteColor"
-            android:gravity="center"
-            android:text="Login"
-            android:textAllCaps="true"
-            android:textSize="16sp"
-            android:padding="8dp"
-            android:background="@color/primaryColor"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/loginFGContainer"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/login_with"
-            android:id="@+id/loginWithText"
-            android:textSize="20sp"
-            android:layout_weight="1" />
-
-        <LinearLayout
-            android:orientation="horizontal"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/ibSocialLoginContainer">
+            android:layout_height="56dp"
+            card_view:cardBackgroundColor="#72909090"
+            card_view:cardElevation="4dp"
+            android:layout_marginBottom="8dp" >
 
             <android.support.v7.widget.AppCompatButton
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/ibLoginButton"
+                android:textColor="@color/whiteColor"
+                android:text="Welcome back"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textAllCaps="false" />
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            card_view:cardBackgroundColor="@color/facebookColor"
+            card_view:cardElevation="4dp">
+
+            <android.support.v7.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:id="@+id/ibLoginFacebook"
-                android:layout_weight="1" />
+                android:textColor="@color/whiteColor"
+                android:text="Log in with Facebook"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:layout_gravity="center_horizontal|center_vertical"/>
 
-            <android.support.v7.widget.AppCompatButton
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/ibLoginGoogle"
-                android:layout_weight="1" />
-        </LinearLayout>
-    </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1.25"
-        android:gravity="center_vertical|right"
-        android:id="@+id/forgotPWHolder"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/forgot_password"
-            android:id="@+id/forgotPassword"
-            android:textSize="16sp" />
     </LinearLayout>
 
 </LinearLayout>

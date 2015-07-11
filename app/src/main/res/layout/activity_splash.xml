@@ -2,13 +2,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryColor"
+    android:background="@drawable/splash_gradient"
     tools:context="eia.fluint.SplashActivity"
-    android:gravity="center">
+    android:gravity="center"
+    android:id="@+id/parentLayout"
+    android:orientation="vertical"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/hello_world" />
+    <ImageView
+        android:id="@+id/fluintLogo"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/fluint_logo"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal|bottom"
+        android:paddingBottom="32dp"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            card_view:cardBackgroundColor="#72909090"
+            android:layout_marginBottom="8dp"
+            card_view:cardElevation="4dp">
+
+            <android.support.v7.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Sign in"
+                android:textColor="@color/whiteColor"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:id="@+id/splashSignIn" />
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            card_view:cardBackgroundColor="@color/accentColorTemp"
+            card_view:cardElevation="4dp">
+
+            <android.support.v7.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Register"
+                android:textColor="@color/whiteColor"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:id="@+id/splashRegister" />
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
 
 </LinearLayout>

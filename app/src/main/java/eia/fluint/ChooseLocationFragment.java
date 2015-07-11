@@ -3,6 +3,7 @@ package eia.fluint;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,10 +64,13 @@ public class ChooseLocationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 TransactionAirportFragment fragment = new TransactionAirportFragment();
+
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
 
-                ft.replace(R.id.addPostFragmentContainer, fragment);
-                ft.addToBackStack(null);
+                ft.setCustomAnimations(R.animator.slide_in_from_right, R.animator.slide_out_to_left);
+
+                ft.replace(R.id.addPostFragmentContainer, fragment, TransactionAirportFragment.TAG_FRAGMENT);
+                ft.addToBackStack(TransactionAirportFragment.TAG_FRAGMENT);
                 ft.commit();
             }
         });

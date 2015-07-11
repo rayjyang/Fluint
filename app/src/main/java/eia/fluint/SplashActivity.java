@@ -1,9 +1,16 @@
 package eia.fluint;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.AppCompatButton;
+import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
@@ -15,6 +22,12 @@ public class SplashActivity extends Activity {
 
     private static final String APPLICATION_ID = "ClUIw0Dh2ja21S5sH0vjTrJ6a9nL9g1vH2b9EfMg";
     private static final String CLIENT_KEY = "I9qGl0kinVIKh0Ld76aehXrA4O7EcXu10Ojnt6ze";
+
+    private ImageView fluintLogo;
+    private LinearLayout parentLayout;
+    private AppCompatButton splashSignIn;
+    private AppCompatButton spashRegister;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +48,7 @@ public class SplashActivity extends Activity {
         // that quits the application for the user; does not send back to login page
 
         ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser != null) {
+        if (true) {
 
             // TODO: Create an intent to send user to the MainActivity
             Intent intent = new Intent(this, MainFeedActivity.class);
@@ -46,17 +59,24 @@ public class SplashActivity extends Activity {
             finish();
         } else {
             setContentView(R.layout.activity_splash);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(SplashActivity.this, LoginSignUpActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }, splashDelay);
+
+            fluintLogo = (ImageView) findViewById(R.id.fluintLogo);
+            parentLayout = (LinearLayout) findViewById(R.id.parentLayout);
+
+            animateInLogo();
+
         }
 
 
+    }
+
+    private void animateInLogo() {
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        ObjectAnimator animator = ObjectAnimator.ofFloat(fluintLogo, "y", -200);
+        animator.setDuration(5000);
+        animator.start();
     }
 
 }

@@ -86,37 +86,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/registerFGContainer"
-        android:gravity="bottom">
+        android:gravity="bottom"
+        android:paddingBottom="32dp"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            card_view:cardBackgroundColor="@color/primaryColor">
+            android:layout_height="56dp"
+            card_view:cardBackgroundColor="@color/accentColorTemp"
+            card_view:cardElevation="4dp"
+            android:layout_marginBottom="8dp">
 
             <android.support.v7.widget.AppCompatButton
-                android:layout_width="fill_parent"
-                android:layout_height="72dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:id="@+id/ibContinue"
                 android:textColor="@color/whiteColor"
                 android:gravity="center"
+                android:layout_gravity="center_horizontal|center_vertical"
                 android:text="Sign up"
-                android:textSize="16sp"
-                android:padding="8dp"
-                android:background="@color/primaryColor" />
+                android:textAllCaps="false"
+                android:textSize="16sp" />
 
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            card_view:cardBackgroundColor="@color/facebookColor">
+            android:layout_height="56dp"
+            card_view:cardBackgroundColor="@color/facebookColor"
+            card_view:cardElevation="4dp">
 
             <android.support.v7.widget.AppCompatButton
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:id="@+id/ibFacebook"
                 android:text="Sign up with Facebook"
-                android:background="@color/facebookColor"
+                android:textAllCaps="false"
                 android:textSize="16sp"
                 android:textColor="@color/whiteColor"
                 android:gravity="center"

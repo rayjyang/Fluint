@@ -6,9 +6,6 @@ import com.parse.ParseUser;
 
 import java.util.Date;
 
-/**
- * Created by Raymond on 6/29/2015.
- */
 public class Transaction {
     private Date arrivalTime;
     private int amount;

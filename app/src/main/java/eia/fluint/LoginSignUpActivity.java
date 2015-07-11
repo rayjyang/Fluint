@@ -1,5 +1,6 @@
 package eia.fluint;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -287,6 +288,11 @@ public class LoginSignUpActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
+                    final ProgressDialog pDialog = new ProgressDialog(getActivity(), R.style.AuthenticateDialog);
+                    pDialog.setIndeterminate(true);
+                    pDialog.setMessage("Signing up");
+                    pDialog.show();
+
                     // TODO: Parse signup
                     // 1) Check if the email is already in the Parse database
                     //    Dialog: An account with that email already exists. Refer to UX forums to
@@ -301,7 +307,7 @@ public class LoginSignUpActivity extends AppCompatActivity {
                     final String email = etEmailText.getText().toString();
                     final String password = etPasswordText.getText().toString();
 
-                    if (name.equals("") || email.equals("") || password.equals("")) {
+                    if (name.equals("") || email.equals("") || password.equals("") || !email.contains("@")) {
                         if (name.equals("") && email.equals("") && password.equals("")) {
                             tilSignupName.setError("Name cannot be left blank");
                             tilSignupEmail.setError("Email cannot be left blank");
@@ -328,6 +334,8 @@ public class LoginSignUpActivity extends AppCompatActivity {
                         } else if (password.equals("")) {
                             tilSignupPassword.setError("Password cannot be left blank");
                             return;
+                        } else if (!email.contains("@")) {
+                            tilSignupEmail.setError("Please provide a valid email");
                         }
                     }
 
@@ -345,6 +353,7 @@ public class LoginSignUpActivity extends AppCompatActivity {
                             @Override
                             public void done(List<ParseUser> list, ParseException e) {
                                 if (e == null && list.size() > 0) {
+                                    pDialog.dismiss();
                                     // TODO: email is already taken. Show a dialog
                                     // should also check if list.size() > 0 ?
                                     android.support.v7.app.AlertDialog.Builder builder = new
@@ -371,7 +380,6 @@ public class LoginSignUpActivity extends AppCompatActivity {
                                 } else {
                                     // Email is not taken. Allow user to continue
 
-                                    // TODO: Decision. Sign user up or send him to ContinueSignUpActivity?
                                     ParseUser user = new ParseUser();
                                     user.setUsername(email);
                                     user.setPassword(password);
@@ -380,13 +388,19 @@ public class LoginSignUpActivity extends AppCompatActivity {
                                         @Override
                                         public void done(ParseException e) {
                                             // Sign up and store current user
+                                            pDialog.dismiss();
+                                            if (e == null) {
+                                                Intent intent = new Intent(getActivity(), MainFeedActivity.class);
+                                                intent.putExtra(USER_DATA, userData);
+                                                startActivity(intent);
+                                                getActivity().finish();
+                                            } else {
+                                                // TODO: Display a Snackbar saying signup failed
+
+                                            }
+
                                         }
                                     });
-
-                                    Intent intent = new Intent(getActivity(), MainFeedActivity.class);
-                                    intent.putExtra(USER_DATA, userData);
-                                    startActivity(intent);
-                                    getActivity().finish();
                                 }
                             }
                         });
@@ -466,7 +480,6 @@ public class LoginSignUpActivity extends AppCompatActivity {
         protected AppCompatEditText etLoginPassword;
         protected AppCompatButton ibLoginButton;
         protected AppCompatButton ibLoginFacebook;
-        protected AppCompatButton ibLoginGoogle;
         protected TextView forgotPassword;
         protected ConnectionDetector cd;
         protected boolean isInternetPresent;
@@ -503,7 +516,6 @@ public class LoginSignUpActivity extends AppCompatActivity {
             etLoginPassword = (AppCompatEditText) layout.findViewById(R.id.etLoginPassword);
             ibLoginButton = (AppCompatButton) layout.findViewById(R.id.ibLoginButton);
             ibLoginFacebook = (AppCompatButton) layout.findViewById(R.id.ibLoginFacebook);
-            ibLoginGoogle = (AppCompatButton) layout.findViewById(R.id.ibLoginGoogle);
             forgotPassword = (TextView) layout.findViewById(R.id.forgotPassword);
             tilLoginEmail = (TextInputLayout) layout.findViewById(R.id.tilLoginEmail);
             tilLoginPassword = (TextInputLayout) layout.findViewById(R.id.tilLoginPassword);
@@ -672,13 +684,6 @@ public class LoginSignUpActivity extends AppCompatActivity {
                         });
                         builderDialog.show();
                     }
-
-                }
-            });
-
-            ibLoginGoogle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
                 }
             });

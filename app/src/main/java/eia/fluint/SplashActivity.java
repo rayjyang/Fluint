@@ -4,11 +4,9 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.AppCompatButton;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -20,26 +18,17 @@ public class SplashActivity extends Activity {
 
     private long splashDelay = 800;
 
-    private static final String APPLICATION_ID = "ClUIw0Dh2ja21S5sH0vjTrJ6a9nL9g1vH2b9EfMg";
-    private static final String CLIENT_KEY = "I9qGl0kinVIKh0Ld76aehXrA4O7EcXu10Ojnt6ze";
+    private static final String ARG_PAGE = "page";
 
     private ImageView fluintLogo;
     private LinearLayout parentLayout;
     private AppCompatButton splashSignIn;
-    private AppCompatButton spashRegister;
+    private AppCompatButton splashRegister;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // TODO: Parse initialization
-        // Enable Local Datastore.
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(this, APPLICATION_ID, CLIENT_KEY);
-
-
-        ParseFacebookUtils.initialize(getApplicationContext());
 
         // TODO: Parse authentication
         // Check if user is already logged in
@@ -62,8 +51,28 @@ public class SplashActivity extends Activity {
 
             fluintLogo = (ImageView) findViewById(R.id.fluintLogo);
             parentLayout = (LinearLayout) findViewById(R.id.parentLayout);
+            splashSignIn = (AppCompatButton) findViewById(R.id.splashSignIn);
+            splashRegister = (AppCompatButton) findViewById(R.id.splashRegister);
 
-            animateInLogo();
+            splashSignIn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(SplashActivity.this, LoginSignUpActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                }
+            });
+
+            splashRegister.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(SplashActivity.this, LoginSignUpActivity.class);
+                    intent.putExtra(ARG_PAGE, 1);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                }
+            });
+
 
         }
 

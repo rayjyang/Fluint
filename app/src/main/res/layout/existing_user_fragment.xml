@@ -86,6 +86,7 @@
             <android.support.v7.widget.AppCompatButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="#72909090"
                 android:id="@+id/ibLoginButton"
                 android:textColor="@color/whiteColor"
                 android:text="Welcome back"
@@ -106,6 +107,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/ibLoginFacebook"
+                android:background="@color/facebookColor"
                 android:textColor="@color/whiteColor"
                 android:text="Log in with Facebook"
                 android:gravity="center"

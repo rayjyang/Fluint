@@ -19,7 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="@drawable/home_interior_converted"
             android:gravity="bottom"
             android:clickable="true">
 
@@ -62,7 +61,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="@drawable/dubai_clouds_converted"
             android:gravity="bottom"
             android:clickable="true">
 
@@ -104,7 +102,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="@drawable/airport"
             android:gravity="bottom"
             android:clickable="true">
 

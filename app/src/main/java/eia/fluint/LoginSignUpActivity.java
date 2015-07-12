@@ -7,13 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
@@ -27,14 +25,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.internal.CollectionMapper;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseQuery;
@@ -113,6 +107,10 @@ public class LoginSignUpActivity extends AppCompatActivity {
         });
         mTabs.setViewPager(mPager);
 
+        int defaultValue = 0;
+        int page = getIntent().getIntExtra("page", defaultValue);
+        mPager.setCurrentItem(page);
+
 
     }
 
@@ -140,6 +138,18 @@ public class LoginSignUpActivity extends AppCompatActivity {
         return ret;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
+    }
+
     class LoginPagerAdapter extends FragmentPagerAdapter {
 
         String[] tabs = getResources().getStringArray(R.array.tabs);
@@ -158,13 +168,13 @@ public class LoginSignUpActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    NewUserFragment newUserFragment = NewUserFragment.getInstance(position);
-                    return newUserFragment;
-                case 1:
                     ExistingUserFragment existingUserFragment = ExistingUserFragment.getInstance(position);
                     return existingUserFragment;
+                default:
+                    NewUserFragment newUserFragment = NewUserFragment.getInstance(position);
+                    return newUserFragment;
+
             }
-            return null;
         }
 
         @Override
@@ -308,6 +318,7 @@ public class LoginSignUpActivity extends AppCompatActivity {
                     final String password = etPasswordText.getText().toString();
 
                     if (name.equals("") || email.equals("") || password.equals("") || !email.contains("@")) {
+                        pDialog.dismiss();
                         if (name.equals("") && email.equals("") && password.equals("")) {
                             tilSignupName.setError("Name cannot be left blank");
                             tilSignupEmail.setError("Email cannot be left blank");
@@ -336,6 +347,7 @@ public class LoginSignUpActivity extends AppCompatActivity {
                             return;
                         } else if (!email.contains("@")) {
                             tilSignupEmail.setError("Please provide a valid email");
+                            return;
                         }
                     }
 
@@ -454,7 +466,24 @@ public class LoginSignUpActivity extends AppCompatActivity {
                             }
                         });
                     } else {
-
+                        android.support.v7.app.AlertDialog.Builder builder3 = new
+                                android.support.v7.app.AlertDialog.Builder(getActivity(),
+                                R.style.AppCompatAlertDialogStyle);
+                        builder3.setTitle("No Internet Connection");
+                        builder3.setMessage("You are not connected to the internet.\nDo you want to check your Wifi settings?");
+                        builder3.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                            }
+                        });
+                        builder3.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        builder3.show();
                     }
                 }
             });
@@ -469,6 +498,7 @@ public class LoginSignUpActivity extends AppCompatActivity {
             Log.d(TAG_NEW, "Entered new user onResume!");
 
         }
+
     }
 
     public static class ExistingUserFragment extends Fragment {
@@ -480,7 +510,6 @@ public class LoginSignUpActivity extends AppCompatActivity {
         protected AppCompatEditText etLoginPassword;
         protected AppCompatButton ibLoginButton;
         protected AppCompatButton ibLoginFacebook;
-        protected TextView forgotPassword;
         protected ConnectionDetector cd;
         protected boolean isInternetPresent;
 
@@ -516,7 +545,6 @@ public class LoginSignUpActivity extends AppCompatActivity {
             etLoginPassword = (AppCompatEditText) layout.findViewById(R.id.etLoginPassword);
             ibLoginButton = (AppCompatButton) layout.findViewById(R.id.ibLoginButton);
             ibLoginFacebook = (AppCompatButton) layout.findViewById(R.id.ibLoginFacebook);
-            forgotPassword = (TextView) layout.findViewById(R.id.forgotPassword);
             tilLoginEmail = (TextInputLayout) layout.findViewById(R.id.tilLoginEmail);
             tilLoginPassword = (TextInputLayout) layout.findViewById(R.id.tilLoginPassword);
             cd = new ConnectionDetector(getActivity());
@@ -565,6 +593,10 @@ public class LoginSignUpActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
                     // TODO: set ProgressBar's visibility to View.VISIBLE
+                    final ProgressDialog pDialog2 = new ProgressDialog(getActivity(), R.style.AuthenticateDialog);
+                    pDialog2.setIndeterminate(true);
+                    pDialog2.setMessage("Signing in");
+                    pDialog2.show();
 
                     // Get the email and password from the user-inputted fields
                     String email = etLoginEmail.getText().toString();
@@ -572,6 +604,7 @@ public class LoginSignUpActivity extends AppCompatActivity {
 
 
                     if (email.equals("") || password.equals("")) {
+                        pDialog2.dismiss();
                         if (email.equals("") && password.equals("")) {
                             tilLoginEmail.setError("Email cannot be left blank");
                             tilLoginPassword.setError("Password cannot be left blank");
@@ -588,10 +621,10 @@ public class LoginSignUpActivity extends AppCompatActivity {
                     // TODO: verify. If Parse verified, create a new ParseUser and save to device
                     isInternetPresent = cd.isConnectingToInternet();
                     if (isInternetPresent) {
-                        Toast.makeText(getActivity(), "Internet present", Toast.LENGTH_SHORT).show();
                         ParseUser.logInInBackground(email, password, new LogInCallback() {
                             @Override
                             public void done(ParseUser parseUser, ParseException e) {
+                                pDialog2.dismiss();
                                 if (e == null && parseUser != null) {
                                     Intent intent = new Intent(getActivity(), MainFeedActivity.class);
                                     startActivity(intent);
@@ -618,6 +651,7 @@ public class LoginSignUpActivity extends AppCompatActivity {
                             }
                         });
                     } else {
+                        pDialog2.dismiss();
                         android.support.v7.app.AlertDialog.Builder builderDialog = new
                                 android.support.v7.app.AlertDialog.Builder(getActivity(),
                                 R.style.AppCompatAlertDialogStyle);
@@ -655,7 +689,9 @@ public class LoginSignUpActivity extends AppCompatActivity {
                                 } else if (parseUser.isNew()) {
                                     // User just signed up and logged in through Facebook
                                     // If Parse doesn't automatically do it, link the fb account and ParseUser
-
+                                    Intent intent1 = new Intent(getActivity(), MainFeedActivity.class);
+                                    startActivity(intent1);
+                                    getActivity().finish();
                                 } else {
                                     // User just logged in through Facebook
                                     Intent intent = new Intent(getActivity(), MainFeedActivity.class);
@@ -688,13 +724,6 @@ public class LoginSignUpActivity extends AppCompatActivity {
                 }
             });
 
-            forgotPassword.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // TODO: start a new activity to ask for email?
-
-                }
-            });
 
             return layout;
         }
@@ -708,11 +737,6 @@ public class LoginSignUpActivity extends AppCompatActivity {
 
         }
 
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-            ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
-        }
     }
 
 }

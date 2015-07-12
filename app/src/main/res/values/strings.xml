@@ -18,8 +18,8 @@
 
 
     <string-array name="tabs">
-        <item>NEW USER</item>
         <item>EXISTING USER</item>
+        <item>NEW USER</item>
     </string-array>
     <string name="title_activity_main_feed">MainFeedActivity</string>
     <string name="title_activity_continue_sign_up">ContinueSignUpActivity</string>

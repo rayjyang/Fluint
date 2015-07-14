@@ -24,6 +24,7 @@ android {
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -40,4 +41,5 @@ dependencies {
     compile 'com.android.support:design:22.2.0'
     compile 'com.balysv:material-ripple:1.0.2'
     compile 'com.afollestad:material-dialogs:0.7.6.0'
+    compile 'org.adw.library:discrete-seekbar:1.0.0'
 }

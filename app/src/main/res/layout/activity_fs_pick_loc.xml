@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="eia.fluint.FSPickLocActivity"
@@ -26,7 +27,8 @@
                 android:layout_weight="1"
                 android:entries="@array/CurrencyCodesValues"
                 style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-                android:layout_marginRight="4dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="2dp"
                 android:backgroundTint="@color/whiteColor"/>
 
             <android.support.v7.widget.AppCompatEditText
@@ -36,7 +38,7 @@
                 android:hint="Amount"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="6dp"
                 android:backgroundTint="@color/whiteColor"
                 android:textColorHint="@color/whiteColor"
                 android:inputType="number"/>
@@ -92,7 +94,8 @@
                 android:layout_weight="1"
                 android:entries="@array/CurrencyCodesValues"
                 style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-                android:layout_marginRight="4dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="2dp"
                 android:backgroundTint="@color/whiteColor"/>
 
             <android.support.v7.widget.AppCompatEditText
@@ -102,7 +105,7 @@
                 android:hint="Amount"
                 android:textSize="16sp"
                 android:gravity="center_vertical"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="6dp"
                 android:backgroundTint="@color/whiteColor"
                 android:textColorHint="@color/whiteColor"
                 android:inputType="number"/>
@@ -112,11 +115,11 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="64dp"
+        android:layout_height="0dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        android:layout_weight="3">
 
 
         <fragment
@@ -181,5 +184,30 @@
         </LinearLayout>
 
     </FrameLayout>
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="right">
+
+            <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:dsb_min="1"
+                app:dsb_max="30"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
 
 </LinearLayout>

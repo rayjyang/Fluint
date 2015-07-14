@@ -56,14 +56,17 @@ public class ChooseLocationFragment extends Fragment {
         chooseALocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FSPickLocFragment fragment = new FSPickLocFragment();
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                FSPickLocFragment fragment = new FSPickLocFragment();
+//                FragmentTransaction ft = getFragmentManager().beginTransaction();
+//
+//                ft.setCustomAnimations(R.animator.slide_in_from_right, R.animator.slide_out_to_left);
+//
+//                ft.replace(R.id.addForSalePostFragmentContainer, fragment, FSPickLocFragment.TAG_FRAGMENT);
+//                ft.addToBackStack(TransactionFSAirportFragment.TAG_FRAGMENT);
+//                ft.commit();
 
-                ft.setCustomAnimations(R.animator.slide_in_from_right, R.animator.slide_out_to_left);
-
-                ft.replace(R.id.addForSalePostFragmentContainer, fragment, FSPickLocFragment.TAG_FRAGMENT);
-                ft.addToBackStack(TransactionFSAirportFragment.TAG_FRAGMENT);
-                ft.commit();
+                Intent intent = new Intent(getActivity(), FSPickLocActivity.class);
+                startActivity(intent);
             }
         });
 

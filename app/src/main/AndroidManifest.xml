@@ -4,7 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="ANDROID.PERMISSION.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".FluintApplication"
@@ -49,8 +53,14 @@
         </activity>
         <activity
             android:name=".FSPickLocActivity"
-            android:label="@string/title_activity_fspick_loc" >
+            android:label="@string/title_activity_fspick_loc"
+            android:windowSoftInputMode="stateHidden">
         </activity>
+
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAq5LC9EY_Fn8YllvCdJiu0O2oYZKBhPKc" />
     </application>
 
 </manifest>

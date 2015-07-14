@@ -1,6 +1,7 @@
 package eia.fluint;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -54,8 +56,8 @@ public class FSPickLocActivity extends AppCompatActivity implements
     private LatLng center;
     private LinearLayout markerLayout;
     private Geocoder geocoder;
-    private List<Address> addresses;
-    private TextView Address;
+    private List<Address> addresses = new ArrayList<>();
+    private TextView addressText;
     double latitude;
     double longitude;
     private GPSTracker gps;
@@ -66,7 +68,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fs_pick_loc);
         markerText = (TextView) findViewById(R.id.fsPickLocMarkerText);
-        Address = (TextView) findViewById(R.id.fsPickLocAddressText);
+        addressText = (TextView) findViewById(R.id.fsPickLocAddressText);
         markerLayout = (LinearLayout) findViewById(R.id.fsPickLocMarker);
         // Getting Google Play availability status
         int status = GooglePlayServicesUtil
@@ -264,7 +266,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
 
         @Override
         protected void onPreExecute() {
-            Address.setText(" Getting location ");
+            addressText.setText(" Getting location ");
         }
 
         @Override
@@ -273,8 +275,10 @@ public class FSPickLocActivity extends AppCompatActivity implements
             try {
                 geocoder = new Geocoder(FSPickLocActivity.this, Locale.ENGLISH);
                 addresses = geocoder.getFromLocation(x, y, 1);
+
+                Log.d("PickLocActivity", "" + addresses.size());
                 str = new StringBuilder();
-                if (Geocoder.isPresent()) {
+                if (Geocoder.isPresent() && addresses.size() > 0) {
                     Address returnAddress = addresses.get(0);
 
                     String localityString = returnAddress.getLocality();
@@ -287,6 +291,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
                     str.append(zipcode + "");
 
                 } else {
+
                 }
             } catch (IOException e) {
                 Log.e("tag", e.getMessage());
@@ -298,7 +303,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
         @Override
         protected void onPostExecute(String result) {
             try {
-                Address.setText(addresses.get(0).getAddressLine(0)
+                addressText.setText(addresses.get(0).getAddressLine(0)
                         + addresses.get(0).getAddressLine(1) + " ");
             } catch (Exception e) {
                 e.printStackTrace();

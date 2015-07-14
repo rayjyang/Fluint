@@ -10,9 +10,7 @@ import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
@@ -118,7 +116,7 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                    BuyFeedFragment fragment = new BuyFeedFragment();
+                    ForSaleFeedFragment fragment = new ForSaleFeedFragment();
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
 //                    ft.setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right);
                     ft.replace(R.id.feedFragmentContainer, fragment);

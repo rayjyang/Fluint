@@ -13,11 +13,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
-public class MainFeedActivity extends AppCompatActivity implements BuyFeedFragment.OnFragmentInteractionListener,
-        SellFeedFragment.OnFragmentInteractionListener {
+public class MainFeedActivity extends AppCompatActivity {
 
     private static final String NAV_ITEM_ID = "navItemId";
 
@@ -37,7 +35,7 @@ public class MainFeedActivity extends AppCompatActivity implements BuyFeedFragme
         setSupportActionBar(toolbar);
 
         if (savedInstanceState == null) {
-            mNavItemId = R.id.navBuy;
+            mNavItemId = R.id.navForSale;
         } else {
             mNavItemId = savedInstanceState.getInt(NAV_ITEM_ID);
         }
@@ -60,11 +58,11 @@ public class MainFeedActivity extends AppCompatActivity implements BuyFeedFragme
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
                 switch (mNavItemId) {
-                    case R.id.navSell:
-                        toolbar.setTitle("Sell");
+                    case R.id.navBuyRequest:
+                        toolbar.setTitle("Requests");
                         toolbar.setTitleTextColor(getResources().getColor(R.color.whiteColor));
 
-                        fragment = new SellFeedFragment();
+                        fragment = new BuyRequestFeedFragment();
                         fragmentTransaction.replace(R.id.feedFragmentContainer, fragment);
                         fragmentTransaction.commit();
                         return true;
@@ -82,10 +80,10 @@ public class MainFeedActivity extends AppCompatActivity implements BuyFeedFragme
                         fragmentTransaction.commit();
                         return true;
                     default:
-                        toolbar.setTitle("Buy");
+                        toolbar.setTitle("For Sale");
                         toolbar.setTitleTextColor(getResources().getColor(R.color.whiteColor));
 
-                        fragment = new BuyFeedFragment();
+                        fragment = new ForSaleFeedFragment();
                         fragmentTransaction.replace(R.id.feedFragmentContainer, fragment);
                         fragmentTransaction.commit();
                         return true;
@@ -97,8 +95,8 @@ public class MainFeedActivity extends AppCompatActivity implements BuyFeedFragme
         mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer);
         drawerLayout.setDrawerListener(mDrawerToggle);
 
-        toolbar.setTitle("Buy");
-        BuyFeedFragment buyFeedFragment = new BuyFeedFragment();
+        toolbar.setTitle("For Sale");
+        ForSaleFeedFragment buyFeedFragment = new ForSaleFeedFragment();
         getFragmentManager().beginTransaction().add(R.id.feedFragmentContainer, buyFeedFragment).commit();
 
 
@@ -132,8 +130,4 @@ public class MainFeedActivity extends AppCompatActivity implements BuyFeedFragme
         outState.putInt(NAV_ITEM_ID, mNavItemId);
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 }

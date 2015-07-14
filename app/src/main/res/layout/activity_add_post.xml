@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="eia.fluint.AddPostActivity"
+    tools:context="eia.fluint.AddForSalePostActivity"
     android:orientation="vertical">
 
     <include
@@ -10,7 +10,7 @@
         layout="@layout/toolbar_add_post" />
 
     <FrameLayout
-        android:id="@+id/addPostFragmentContainer"
+        android:id="@+id/addForSalePostFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

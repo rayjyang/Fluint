@@ -1,0 +1,130 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="eia.fluint.FSPickLocFragment"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="@color/primaryColor">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:gravity="center">
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:entries="@array/CurrencyCodesValues"
+                style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                android:layout_marginRight="4dp"
+                android:backgroundTint="@color/whiteColor"/>
+
+            <android.support.v7.widget.AppCompatEditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Amount"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:layout_marginLeft="4dp"
+                android:backgroundTint="@color/whiteColor"
+                android:textColorHint="@color/whiteColor"
+                android:inputType="number"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:gravity="center">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                style="@style/Divider" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="in exchange for"
+                android:layout_weight="1"
+                android:textColor="#b5848484"
+                android:gravity="center"
+                android:textStyle="italic"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                style="@style/Divider" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:gravity="center">
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:entries="@array/CurrencyCodesValues"
+                style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                android:layout_marginRight="4dp"
+                android:backgroundTint="@color/whiteColor"/>
+
+            <android.support.v7.widget.AppCompatEditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Amount"
+                android:textSize="16sp"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:backgroundTint="@color/whiteColor"
+                android:textColorHint="@color/whiteColor"
+                android:inputType="number"/>
+
+        </LinearLayout>
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fsPickLocMapContainer">
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            
+
+
+
+        </fragment>
+
+
+    </FrameLayout>
+</LinearLayout>

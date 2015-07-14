@@ -46,4 +46,6 @@
     <string name="sell">Sell</string>
     <string name="amount">Amount</string>
     <string name="title_activity_welcome">WelcomeActivity</string>
+    <string name="title_activity_make_fspick_loc">MakeFSPickLocActivity</string>
+    <string name="title_activity_fspick_loc">FSPickLocActivity</string>
 </resources>

@@ -1,9 +1,9 @@
 package eia.fluint;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,21 +56,28 @@ public class ChooseLocationFragment extends Fragment {
         chooseALocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FSPickLocFragment fragment = new FSPickLocFragment();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
 
+                ft.setCustomAnimations(R.animator.slide_in_from_right, R.animator.slide_out_to_left);
+
+                ft.replace(R.id.addForSalePostFragmentContainer, fragment, FSPickLocFragment.TAG_FRAGMENT);
+                ft.addToBackStack(TransactionFSAirportFragment.TAG_FRAGMENT);
+                ft.commit();
             }
         });
 
         chooseAirportLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TransactionAirportFragment fragment = new TransactionAirportFragment();
+                TransactionFSAirportFragment fragment = new TransactionFSAirportFragment();
 
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
 
                 ft.setCustomAnimations(R.animator.slide_in_from_right, R.animator.slide_out_to_left);
 
-                ft.replace(R.id.addPostFragmentContainer, fragment, TransactionAirportFragment.TAG_FRAGMENT);
-                ft.addToBackStack(TransactionAirportFragment.TAG_FRAGMENT);
+                ft.replace(R.id.addForSalePostFragmentContainer, fragment, TransactionFSAirportFragment.TAG_FRAGMENT);
+                ft.addToBackStack(TransactionFSAirportFragment.TAG_FRAGMENT);
                 ft.commit();
             }
         });

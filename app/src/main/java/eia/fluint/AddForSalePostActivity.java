@@ -1,11 +1,9 @@
 package eia.fluint;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,12 +12,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 
-public class AddPostActivity extends AppCompatActivity {
+public class AddForSalePostActivity extends AppCompatActivity {
 
-    private static final String TAG = "AddPostActivity";
+    private static final String TAG = "AddForSalePostActivity";
     private final String CLASS_KEY = "transaction";
 
     private Toolbar toolbar;
@@ -34,7 +31,7 @@ public class AddPostActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ChooseLocationFragment fragment = new ChooseLocationFragment();
-        getFragmentManager().beginTransaction().add(R.id.addPostFragmentContainer, fragment).commit();
+        getFragmentManager().beginTransaction().add(R.id.addForSalePostFragmentContainer, fragment).commit();
         toolbar.setTitle("Choose A Location");
 
 
@@ -75,7 +72,7 @@ public class AddPostActivity extends AppCompatActivity {
         switch (id) {
             case android.R.id.home:
 
-                Fragment f = getFragmentManager().findFragmentById(R.id.addPostFragmentContainer);
+                Fragment f = getFragmentManager().findFragmentById(R.id.addForSalePostFragmentContainer);
                 if (f instanceof ChooseLocationFragment) {
                     finish();
                 }
@@ -84,7 +81,7 @@ public class AddPostActivity extends AppCompatActivity {
 
                 // TODO: Fix going back animations
 
-                ft.replace(R.id.addPostFragmentContainer, fragment);
+                ft.replace(R.id.addForSalePostFragmentContainer, fragment);
                 ft.addToBackStack(null);
                 ft.commit();
 

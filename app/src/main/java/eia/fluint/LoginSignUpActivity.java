@@ -417,6 +417,7 @@ public class LoginSignUpActivity extends AppCompatActivity {
                             }
                         });
                     } else {
+                        pDialog.dismiss();
                         android.support.v7.app.AlertDialog.Builder builder2 = new
                                 android.support.v7.app.AlertDialog.Builder(getActivity(),
                                 R.style.AppCompatAlertDialogStyle);

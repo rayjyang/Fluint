@@ -60,6 +60,7 @@ public class SplashActivity extends Activity {
                     Intent intent = new Intent(SplashActivity.this, LoginSignUpActivity.class);
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    finish();
                 }
             });
 
@@ -70,6 +71,7 @@ public class SplashActivity extends Activity {
                     intent.putExtra(ARG_PAGE, 1);
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    finish();
                 }
             });
 

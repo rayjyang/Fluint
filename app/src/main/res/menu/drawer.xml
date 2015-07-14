@@ -4,16 +4,16 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/navBuy"
+            android:id="@+id/navForSale"
             android:checked="false"
             android:icon="@drawable/lorem_ipsum_photo"
-            android:title="@string/nav_buy" />
+            android:title="Currency For Sale" />
 
         <item
-            android:id="@+id/navSell"
+            android:id="@+id/navBuyRequest"
             android:checked="false"
             android:icon="@drawable/lorem_ipsum_photo"
-            android:title="@string/nav_sell" />
+            android:title="Currency Requests" />
 
         <item
             android:id="@+id/navProfile"

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.IntentSender.SendIntentException;
 import android.location.Address;
 import android.location.Geocoder;
@@ -14,8 +15,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -249,6 +253,30 @@ public class FSPickLocActivity extends AppCompatActivity implements
         // TODO Auto-generated method stub
         stupMap();
 
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        View v = getCurrentFocus();
+        boolean ret = super.dispatchTouchEvent(ev);
+
+        if (v instanceof EditText) {
+            View w = getCurrentFocus();
+            int scrcoords[] = new int[2];
+            w.getLocationOnScreen(scrcoords);
+            float x = ev.getRawX() + w.getLeft() - scrcoords[0];
+            float y = ev.getRawY() + w.getTop() - scrcoords[1];
+
+            Log.d("Activity", "Touch event " + ev.getRawX() + "," + ev.getRawY() + " " + x + "," + y
+                    + " rect " + w.getLeft() + "," + w.getTop() + "," + w.getRight() + "," + w.getBottom()
+                    + " coords " + scrcoords[0] + "," + scrcoords[1]);
+            if (ev.getAction() == MotionEvent.ACTION_UP && (x < w.getLeft() || x >= w.getRight() || y < w.getTop() || y > w.getBottom())) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
+            }
+        }
+        return ret;
     }
 
     private class GetLocationAsync extends AsyncTask<String, Void, String> {

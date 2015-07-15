@@ -1,7 +1,5 @@
 package eia.fluint;
 
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
@@ -59,7 +57,7 @@ public class BuyRequestFeedFragment extends Fragment {
         recyclerViewSell.setLayoutManager(mLayoutManager);
 
         sellFeedProgressBar = (ProgressBar) layout.findViewById(R.id.sellFeedProgressBar);
-        fabSellFeed = (FloatingActionButton) layout.findViewById(R.id.fabSellFeed);
+        fabSellFeed = (FloatingActionButton) layout.findViewById(R.id.fabBuyRequestFeed);
 
         return layout;
     }

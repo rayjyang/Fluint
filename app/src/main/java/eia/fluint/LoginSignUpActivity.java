@@ -140,8 +140,15 @@ public class LoginSignUpActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+//        super.onBackPressed();
+        if (ParseUser.getCurrentUser() == null) {
+            Intent intent = new Intent(LoginSignUpActivity.this, SplashActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            finish();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override

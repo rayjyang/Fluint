@@ -47,7 +47,9 @@ import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -61,9 +63,6 @@ public class FSPickLocActivity extends AppCompatActivity implements
     private LocationRequest mLocationRequest;
     GoogleMap mGoogleMap;
 
-    public static String ShopLat;
-    public static String ShopPlaceId;
-    public static String ShopLong;
     // Stores the current instantiation of the location client in this object
     private GoogleApiClient mGoogleApiClient;
     boolean mUpdatesRequested = false;
@@ -83,6 +82,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
     private String currencyB;
     private int amountA;
     private int amountB;
+    private boolean resolved;
 
     private AppCompatSpinner spinnerFSPickLocGive;
     private AppCompatEditText etFSPickLocGive;
@@ -95,6 +95,8 @@ public class FSPickLocActivity extends AppCompatActivity implements
     private Location setLocation;
 
     private Transaction transaction;
+    private ParseGeoPoint currPoint;
+    private ParseGeoPoint setPoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,14 +225,34 @@ public class FSPickLocActivity extends AppCompatActivity implements
                 transaction.setOriginalPoster(user);
                 transaction.setOpUsername(username);
                 transaction.setPosterId(userId);
+                transaction.setResolved(false);
+
+
+                if (mostRecentUserLocation != null) {
+                    currPoint = new ParseGeoPoint(mostRecentUserLocation.getLatitude(), mostRecentUserLocation.getLongitude());
+                    transaction.setCurrentPoint(currPoint);
+                }
+
+                if (setLocation != null) {
+                    setPoint = new ParseGeoPoint(setLocation.getLatitude(), setLocation.getLongitude());
+                    transaction.setPickedPoint(setPoint);
+                }
+
 
                 transaction.setCurrentLocation(mostRecentUserLocation);
 
                 String amountAText = etFSPickLocGive.getText().toString();
                 String amountBText = etFSPickLocWant.getText().toString();
 
-                if (!amountAText.equals("") && amountBText.equals("")) {
+                Toast.makeText(FSPickLocActivity.this, amountAText, Toast.LENGTH_SHORT).show();
+                Toast.makeText(FSPickLocActivity.this, amountBText, Toast.LENGTH_SHORT).show();
+
+                if (!amountAText.equals("") && !amountBText.equals("")) {
                     amountA = Integer.parseInt(amountAText);
+                    amountB = Integer.parseInt(amountBText);
+                } else if (!amountAText.equals("")) {
+                    amountA = Integer.parseInt(amountAText);
+                } else {
                     amountB = Integer.parseInt(amountBText);
                 }
 
@@ -239,10 +261,11 @@ public class FSPickLocActivity extends AppCompatActivity implements
 
                 if (transaction.getCurrencyA() == null || transaction.getCurrencyB() == null
                         || amountAText.equals("") || amountBText.equals("")
-                        || transaction.getPickedLocation() == null || transaction.getCurrentLocation() == null) {
+                        || transaction.getPickedPoint() == null || transaction.getCurrentPoint() == null) {
                     if (setLocation == null) {
                         if (mostRecentUserLocation != null) {
                             setLocation = mostRecentUserLocation;
+                            setPoint = new ParseGeoPoint(setLocation.getLatitude(), setLocation.getLongitude());
                         } else {
                             pDialog.dismiss();
                             Toast.makeText(FSPickLocActivity.this, "Please specify a location", Toast.LENGTH_LONG).show();
@@ -263,18 +286,20 @@ public class FSPickLocActivity extends AppCompatActivity implements
                     return;
                 }
 
+
+
                 ParseObject fsPost = new ParseObject("ForSalePost");
                 fsPost.put("transactionType", transaction.getTransactionType());
                 fsPost.put("currencyA", transaction.getCurrencyA());
                 fsPost.put("amountA", transaction.getAmountA());
                 fsPost.put("currencyB", transaction.getCurrencyB());
                 fsPost.put("amountB", transaction.getAmountB());
-                fsPost.put("pickedLoc", transaction.getPickedLocation());
-                fsPost.put("currLoc", transaction.getCurrentLocation());
+                fsPost.put("pickedLoc", transaction.getPickedPoint());
+//                fsPost.put("currLoc", transaction.getCurrentPoint());
                 fsPost.put("radius", transaction.getRadius());
                 fsPost.put("username", transaction.getOpUsername());
                 fsPost.put("userId", transaction.getPosterId());
-                fsPost.put("transObj", transaction);
+//                fsPost.put("transObj", transaction);
 
                 fsPost.saveInBackground(new SaveCallback() {
                     @Override
@@ -283,11 +308,13 @@ public class FSPickLocActivity extends AppCompatActivity implements
                         if (e == null) {
                             // Submit post was successful
                             Intent intent = new Intent(FSPickLocActivity.this, MainFeedActivity.class);
-                            intent.putExtra("nav", 0);
+                            intent.putExtra("nav", 1);
                             startActivity(intent);
 
                         } else {
-
+                            AlertDialog.Builder builda = new AlertDialog.Builder(FSPickLocActivity.this, R.style.AppCompatAlertDialogStyle);
+                            builda.setMessage(e.getMessage());
+                            builda.show();
                         }
                     }
                 });
@@ -355,10 +382,21 @@ public class FSPickLocActivity extends AppCompatActivity implements
             gps = new GPSTracker(this);
 
             gps.canGetLocation();
+            boolean canGetLocation = gps.canGetLocation();
+
+            if (canGetLocation) {
+
+            } else {
+
+            }
 
             latitude = gps.getLatitude();
             longitude = gps.getLongitude();
             currentPoint = new LatLng(latitude, longitude);
+            currPoint = new ParseGeoPoint(latitude, longitude);
+            transaction.setCurrentPoint(currPoint);
+            setPoint = new ParseGeoPoint(latitude, longitude);
+            transaction.setPickedPoint(setPoint);
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(currentPoint).zoom(19f).tilt(0).build();

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,7 +38,7 @@ public class SplashActivity extends Activity {
         // that quits the application for the user; does not send back to login page
 
         ParseUser currentUser = ParseUser.getCurrentUser();
-        if (true) {
+        if (currentUser != null) {
 
             // TODO: Create an intent to send user to the MainActivity
             Intent intent = new Intent(this, MainFeedActivity.class);
@@ -90,4 +91,27 @@ public class SplashActivity extends Activity {
         animator.start();
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        View v = getWindow().getDecorView().findViewById(android.R.id.content);
+        v.requestFocus();
+        v.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
 }

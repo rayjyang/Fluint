@@ -2,6 +2,7 @@ package eia.fluint;
 
 import android.location.Location;
 
+import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 
 import java.util.Date;
@@ -20,12 +21,15 @@ public class Transaction {
     private Date arrival;
     private Location pickedLocation;
     private Location currentLocation;
+    private ParseGeoPoint pickedPoint;
+    private ParseGeoPoint currentPoint;
     private int radius;
     private String flightNo;
     private String airport;
     private ParseUser originalPoster;
     private String opUsername;
     private String posterId;
+    private boolean resolved;
 
 
 
@@ -99,6 +103,22 @@ public class Transaction {
         return currentLocation;
     }
 
+    public void setPickedPoint(ParseGeoPoint point) {
+        pickedPoint = point;
+    }
+
+    public ParseGeoPoint getPickedPoint() {
+        return pickedPoint;
+    }
+
+    public void setCurrentPoint(ParseGeoPoint point) {
+        currentPoint = point;
+    }
+
+    public ParseGeoPoint getCurrentPoint() {
+        return currentPoint;
+    }
+
     public void setRadius(int rad) {
         radius = rad;
     }
@@ -147,6 +167,12 @@ public class Transaction {
         return posterId;
     }
 
+    public void setResolved(boolean bool) {
+        resolved = bool;
+    }
 
+    public boolean getResolved() {
+        return resolved;
+    }
 
 }

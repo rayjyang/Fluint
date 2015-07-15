@@ -40,6 +40,12 @@ public class MainFeedActivity extends AppCompatActivity {
             mNavItemId = savedInstanceState.getInt(NAV_ITEM_ID);
         }
 
+        int navValue = 0;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            navValue = extras.getInt("nav", 0);
+        }
+
         mTitle = getTitle().toString();
         navigationView = (NavigationView) findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -94,6 +100,20 @@ public class MainFeedActivity extends AppCompatActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer);
         drawerLayout.setDrawerListener(mDrawerToggle);
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        switch (navValue) {
+            case 1:
+                toolbar.setTitle("Requests");
+                BuyRequestFeedFragment buyRequestFeedFragment = new BuyRequestFeedFragment();
+                ft.replace(R.id.feedFragmentContainer, buyRequestFeedFragment).commit();
+                break;
+            default:
+                toolbar.setTitle("For Sale");
+                ForSaleFeedFragment forSaleFeedFragment = new ForSaleFeedFragment();
+                ft.replace(R.id.feedFragmentContainer, forSaleFeedFragment).commit();
+                break;
+        }
 
         toolbar.setTitle("For Sale");
         ForSaleFeedFragment buyFeedFragment = new ForSaleFeedFragment();

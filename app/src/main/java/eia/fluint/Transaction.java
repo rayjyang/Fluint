@@ -8,7 +8,6 @@ import java.util.Date;
 
 public class Transaction {
     private long time;
-    private ParseUser parseUser;
     private String userName;
     private String userEmail;
     private String arrivalLocation;
@@ -24,6 +23,9 @@ public class Transaction {
     private int radius;
     private String flightNo;
     private String airport;
+    private ParseUser originalPoster;
+    private String opUsername;
+    private String posterId;
 
 
 
@@ -119,6 +121,30 @@ public class Transaction {
 
     public String getAirport() {
         return airport;
+    }
+
+    public void setOriginalPoster(ParseUser user) {
+        originalPoster = user;
+    }
+
+    public ParseUser getOriginalPoster() {
+        return originalPoster;
+    }
+
+    public void setOpUsername(String user) {
+        opUsername = user;
+    }
+
+    public String getOpUsername() {
+        return opUsername;
+    }
+
+    public void setPosterId(String id) {
+        posterId = id;
+    }
+
+    public String getPosterId() {
+        return posterId;
     }
 
 

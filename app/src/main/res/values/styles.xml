@@ -25,9 +25,11 @@
 
     </style>
 
-    <style name="AuthenticateDialog" parent="Theme.AppCompat.Dialog">
-        <item name="android:background">@color/primaryColor</item>
+    <style name="AuthenticateDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:background">@color/whiteColor</item>
+        <item name="android:textColor">@color/primaryColorDark</item>
     </style>
+
 
 
 </resources>

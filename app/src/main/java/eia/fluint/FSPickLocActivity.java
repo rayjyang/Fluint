@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.location.Address;
 import android.location.Geocoder;
@@ -45,7 +47,10 @@ import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
@@ -206,31 +211,54 @@ public class FSPickLocActivity extends AppCompatActivity implements
         fsPickLocSubmit.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                final ProgressDialog pDialog = new ProgressDialog(FSPickLocActivity.this, R.style.AuthenticateDialog);
+                pDialog.setIndeterminate(true);
+                pDialog.setMessage("Creating your post");
+                pDialog.show();
+
+                ParseUser user = ParseUser.getCurrentUser();
+                String username = user.getUsername();
+                String userId = user.getObjectId();
+
+                transaction.setOriginalPoster(user);
+                transaction.setOpUsername(username);
+                transaction.setPosterId(userId);
+
                 transaction.setCurrentLocation(mostRecentUserLocation);
 
-                amountA = Integer.parseInt(etFSPickLocGive.getText().toString());
-                amountB = Integer.parseInt(etFSPickLocWant.getText().toString());
+                String amountAText = etFSPickLocGive.getText().toString();
+                String amountBText = etFSPickLocWant.getText().toString();
+
+                if (!amountAText.equals("") && amountBText.equals("")) {
+                    amountA = Integer.parseInt(amountAText);
+                    amountB = Integer.parseInt(amountBText);
+                }
+
                 transaction.setAmountA(amountA);
                 transaction.setAmountB(amountB);
 
                 if (transaction.getCurrencyA() == null || transaction.getCurrencyB() == null
-                        || Integer.valueOf(transaction.getAmountA()) == null || Integer.valueOf(transaction.getAmountB()) == null
+                        || amountAText.equals("") || amountBText.equals("")
                         || transaction.getPickedLocation() == null || transaction.getCurrentLocation() == null) {
                     if (setLocation == null) {
                         if (mostRecentUserLocation != null) {
                             setLocation = mostRecentUserLocation;
                         } else {
+                            pDialog.dismiss();
                             Toast.makeText(FSPickLocActivity.this, "Please specify a location", Toast.LENGTH_LONG).show();
                             return;
                         }
-                    } else {
+                    } else if (transaction.getCurrencyA() == null || transaction.getCurrencyB() == null
+                            || amountAText.equals("") || amountBText.equals("")) {
+                        pDialog.dismiss();
                         Toast.makeText(FSPickLocActivity.this, "Please fill out all required fields", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                 }
 
-                if (String.valueOf(transaction.getAmountA()).contains(".") || String.valueOf(transaction.getAmountB()).contains(".")) {
+                if (amountAText.contains(".") || amountBText.contains(".")) {
+                    pDialog.dismiss();
                     Toast.makeText(FSPickLocActivity.this, "Whole number amounts only", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -242,7 +270,27 @@ public class FSPickLocActivity extends AppCompatActivity implements
                 fsPost.put("currencyB", transaction.getCurrencyB());
                 fsPost.put("amountB", transaction.getAmountB());
                 fsPost.put("pickedLoc", transaction.getPickedLocation());
-                fsPost.put("curLoc", transaction.getCurrentLocation());
+                fsPost.put("currLoc", transaction.getCurrentLocation());
+                fsPost.put("radius", transaction.getRadius());
+                fsPost.put("username", transaction.getOpUsername());
+                fsPost.put("userId", transaction.getPosterId());
+                fsPost.put("transObj", transaction);
+
+                fsPost.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        pDialog.dismiss();
+                        if (e == null) {
+                            // Submit post was successful
+                            Intent intent = new Intent(FSPickLocActivity.this, MainFeedActivity.class);
+                            intent.putExtra("nav", 0);
+                            startActivity(intent);
+
+                        } else {
+
+                        }
+                    }
+                });
 
 
 

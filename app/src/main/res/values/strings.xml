@@ -48,4 +48,5 @@
     <string name="title_activity_welcome">WelcomeActivity</string>
     <string name="title_activity_make_fspick_loc">MakeFSPickLocActivity</string>
     <string name="title_activity_fspick_loc">FSPickLocActivity</string>
+    <string name="title_activity_query_buy_request">QueryBuyRequest</string>
 </resources>

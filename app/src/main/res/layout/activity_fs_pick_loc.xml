@@ -22,6 +22,7 @@
             android:gravity="center">
 
             <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spinnerFSPickLocGive"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -32,6 +33,7 @@
                 android:backgroundTint="@color/whiteColor"/>
 
             <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/etFSPickLocGive"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -89,6 +91,7 @@
             android:gravity="center">
 
             <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spinnerFSPickLocWant"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -99,6 +102,7 @@
                 android:backgroundTint="@color/whiteColor"/>
 
             <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/etFSPickLocWant"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -119,7 +123,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:layout_weight="3">
+        android:layout_weight="2">
 
 
         <fragment
@@ -132,7 +136,9 @@
             android:id="@+id/fsPickLocMarker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="bottom|right"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -142,17 +148,24 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_corner_text_marker"
                 android:gravity="center"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:text="Set"
+                android:padding="8dp"
+                android:text="Set Location"
+                android:textSize="16sp"
                 android:minWidth="48dp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@color/textColor"/>
 
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
+                android:layout_height="wrap_content"
+                android:src="@drawable/pin_last"/>
 
         </LinearLayout>
 
@@ -160,26 +173,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:background="@android:color/white"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="Selected location"
-                android:textColor="#ff44e03e"
-                android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/fsPickLocAddressText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="Getting location"
-                android:textSize="14sp"/>
+                android:text="Getting location..."
+                android:textSize="16sp"/>
 
         </LinearLayout>
 
@@ -188,6 +195,7 @@
     <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
+        android:layout_marginTop="8dp"
         android:layout_height="0dp"
         android:layout_weight="1">
 
@@ -198,13 +206,37 @@
             android:gravity="right">
 
             <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+                android:id="@+id/fsPickLocRadius"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:dsb_min="1"
                 app:dsb_max="30"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="2dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Radius"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="16dp"/>
 
         </LinearLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/fsPickLocSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:background="@color/accentColorTemp"
+            android:text="Submit"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="12dp"/>
 
 
 

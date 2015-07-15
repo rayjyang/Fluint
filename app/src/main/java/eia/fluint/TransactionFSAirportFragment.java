@@ -181,7 +181,7 @@ public class TransactionFSAirportFragment extends Fragment {
                         currencyWhich = i;
                         currencyCodeChoice = charSequence.toString();
                         tvChangeCurrency.setText(charSequence);
-                        transaction.setCurrency(currencyCodeChoice);
+//                        transaction.setFsCurrencySell(currencyCodeChoice);
                         return true;
                     }
                 });
@@ -256,10 +256,10 @@ public class TransactionFSAirportFragment extends Fragment {
                     ParseObject buyPost = new ParseObject("BuyPost");
                     buyPost.put("transactionObject", transaction);
                     buyPost.put("transactionType", transaction.getTransactionType());
-                    buyPost.put("currency", transaction.getCurrency());
-                    buyPost.put("amount", transaction.getAmount());
+//                    buyPost.put("currency", transaction.getFsCurrencySell());
+//                    buyPost.put("amount", transaction.getAmount());
                     buyPost.put("arrival", transaction.getArrival());
-                    buyPost.put("location", transaction.getLocation());
+                    buyPost.put("location", transaction.getPickedLocation());
                     buyPost.put("flightNo", transaction);
                     buyPost.put("airport", transaction.getAirport());
 

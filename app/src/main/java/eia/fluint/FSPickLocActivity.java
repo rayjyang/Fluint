@@ -2,6 +2,7 @@ package eia.fluint;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -13,12 +14,17 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatSpinner;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,11 +43,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.ParseObject;
+
+import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
 public class FSPickLocActivity extends AppCompatActivity implements
         LocationListener, GoogleApiClient.ConnectionCallbacks,
@@ -65,7 +71,25 @@ public class FSPickLocActivity extends AppCompatActivity implements
     double latitude;
     double longitude;
     private GPSTracker gps;
-    private LatLng curentpoint;
+    private LatLng currentPoint;
+
+    private int radius = 5;
+    private String currencyA;
+    private String currencyB;
+    private int amountA;
+    private int amountB;
+
+    private AppCompatSpinner spinnerFSPickLocGive;
+    private AppCompatEditText etFSPickLocGive;
+    private AppCompatSpinner spinnerFSPickLocWant;
+    private AppCompatEditText etFSPickLocWant;
+    private DiscreteSeekBar fsPickLocRadius;
+    private AppCompatButton fsPickLocSubmit;
+
+    private Location mostRecentUserLocation;
+    private Location setLocation;
+
+    private Transaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +98,15 @@ public class FSPickLocActivity extends AppCompatActivity implements
         markerText = (TextView) findViewById(R.id.fsPickLocMarkerText);
         addressText = (TextView) findViewById(R.id.fsPickLocAddressText);
         markerLayout = (LinearLayout) findViewById(R.id.fsPickLocMarker);
+
+        transaction = new Transaction();
+        transaction.setTransactionType("sell");
+        transaction.setRadius(radius);
+
+        // For sure: transactionType
+        // Not sure: 1) currencyA 2) currencyB 3) amountA 4) amountB
+        // 5) pickedLocation 6) currentLocation
+
         // Getting Google Play availability status
         int status = GooglePlayServicesUtil
                 .isGooglePlayServicesAvailable(getBaseContext());
@@ -118,6 +151,107 @@ public class FSPickLocActivity extends AppCompatActivity implements
 
             mGoogleApiClient.connect();
         }
+
+        spinnerFSPickLocGive = (AppCompatSpinner) findViewById(R.id.spinnerFSPickLocGive);
+        etFSPickLocGive = (AppCompatEditText) findViewById(R.id.etFSPickLocGive);
+        spinnerFSPickLocWant = (AppCompatSpinner) findViewById(R.id.spinnerFSPickLocWant);
+        etFSPickLocWant = (AppCompatEditText) findViewById(R.id.etFSPickLocWant);
+        fsPickLocRadius = (DiscreteSeekBar) findViewById(R.id.fsPickLocRadius);
+        fsPickLocSubmit = (AppCompatButton) findViewById(R.id.fsPickLocSubmit);
+
+        spinnerFSPickLocGive.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                currencyA = parent.getSelectedItem().toString();
+                transaction.setCurrencyA(currencyA);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerFSPickLocWant.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                currencyB = parent.getSelectedItem().toString();
+                transaction.setCurrencyB(currencyB);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        fsPickLocRadius.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+            @Override
+            public void onProgressChanged(DiscreteSeekBar discreteSeekBar, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(DiscreteSeekBar discreteSeekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(DiscreteSeekBar discreteSeekBar) {
+                radius = discreteSeekBar.getProgress();
+                transaction.setRadius(radius);
+            }
+        });
+
+        fsPickLocSubmit.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                transaction.setCurrentLocation(mostRecentUserLocation);
+
+                amountA = Integer.parseInt(etFSPickLocGive.getText().toString());
+                amountB = Integer.parseInt(etFSPickLocWant.getText().toString());
+                transaction.setAmountA(amountA);
+                transaction.setAmountB(amountB);
+
+                if (transaction.getCurrencyA() == null || transaction.getCurrencyB() == null
+                        || Integer.valueOf(transaction.getAmountA()) == null || Integer.valueOf(transaction.getAmountB()) == null
+                        || transaction.getPickedLocation() == null || transaction.getCurrentLocation() == null) {
+                    if (setLocation == null) {
+                        if (mostRecentUserLocation != null) {
+                            setLocation = mostRecentUserLocation;
+                        } else {
+                            Toast.makeText(FSPickLocActivity.this, "Please specify a location", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    } else {
+                        Toast.makeText(FSPickLocActivity.this, "Please fill out all required fields", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                }
+
+                if (String.valueOf(transaction.getAmountA()).contains(".") || String.valueOf(transaction.getAmountB()).contains(".")) {
+                    Toast.makeText(FSPickLocActivity.this, "Whole number amounts only", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                ParseObject fsPost = new ParseObject("ForSalePost");
+                fsPost.put("transactionType", transaction.getTransactionType());
+                fsPost.put("currencyA", transaction.getCurrencyA());
+                fsPost.put("amountA", transaction.getAmountA());
+                fsPost.put("currencyB", transaction.getCurrencyB());
+                fsPost.put("amountB", transaction.getAmountB());
+                fsPost.put("pickedLoc", transaction.getPickedLocation());
+                fsPost.put("curLoc", transaction.getCurrentLocation());
+
+
+
+
+
+            }
+        });
+
+
     }
 
     private void stupMap() {
@@ -140,8 +274,10 @@ public class FSPickLocActivity extends AppCompatActivity implements
 
                                 @Override
                                 public void onLocationChanged(Location location) {
-                                    markerText.setText("Location received: "
-                                            + location.toString());
+
+                                    mostRecentUserLocation = location;
+//                                    markerText.setText("Location received: "
+//                                            + location.toString());
 
                                 }
                             });
@@ -174,10 +310,10 @@ public class FSPickLocActivity extends AppCompatActivity implements
 
             latitude = gps.getLatitude();
             longitude = gps.getLongitude();
-            curentpoint = new LatLng(latitude, longitude);
+            currentPoint = new LatLng(latitude, longitude);
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(curentpoint).zoom(19f).tilt(70).build();
+                    .target(currentPoint).zoom(19f).tilt(0).build();
 
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.animateCamera(CameraUpdateFactory
@@ -192,9 +328,11 @@ public class FSPickLocActivity extends AppCompatActivity implements
                     // TODO Auto-generated method stub
                     center = mGoogleMap.getCameraPosition().target;
 
-                    markerText.setText(" Set your Location ");
+                    markerText.setText("Set Location");
+                    markerText.setTextColor(getResources().getColor(R.color.textColor));
+                    markerText.setBackgroundColor(getResources().getColor(R.color.whiteColor));
                     mGoogleMap.clear();
-                    markerLayout.setVisibility(View.VISIBLE);
+//                    markerLayout.setVisibility(View.VISIBLE);
 
                     try {
                         new GetLocationAsync(center.latitude, center.longitude)
@@ -216,15 +354,16 @@ public class FSPickLocActivity extends AppCompatActivity implements
                         LatLng latLng1 = new LatLng(center.latitude,
                                 center.longitude);
 
-                        Marker m = mGoogleMap.addMarker(new MarkerOptions()
-                                .position(latLng1)
-                                .title(" Set your Location ")
-                                .snippet("")
-                                .icon(BitmapDescriptorFactory
-                                        .fromResource(R.drawable.pin_last)));
-                        m.setDraggable(true);
+                        setLocation = new Location("");
+                        setLocation.setLatitude(latLng1.latitude);
+                        setLocation.setLongitude(latLng1.longitude);
+                        setLocation.setTime(new Date().getTime());
 
-                        markerLayout.setVisibility(View.GONE);
+                        transaction.setPickedLocation(setLocation);
+
+                        markerText.setBackgroundColor(getResources().getColor(R.color.materialLightGreen));
+                        markerText.setTextColor(getResources().getColor(R.color.whiteColor));
+//                        markerLayout.setVisibility(View.GONE);
                     } catch (Exception e) {
                     }
 
@@ -294,7 +433,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
 
         @Override
         protected void onPreExecute() {
-            addressText.setText(" Getting location ");
+            addressText.setText("Getting location...");
         }
 
         @Override

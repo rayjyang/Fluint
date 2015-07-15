@@ -14,10 +14,14 @@ public class Transaction {
     private String arrivalLocation;
 
     private String transactionType;
-    private String currency;
-    private int amount;
+    private String currencyA;
+    private String currencyB;
+    private int amountA;
+    private int amountB;
     private Date arrival;
-    private Location location;
+    private Location pickedLocation;
+    private Location currentLocation;
+    private int radius;
     private String flightNo;
     private String airport;
 
@@ -37,20 +41,36 @@ public class Transaction {
         return transactionType;
     }
 
-    public void setCurrency(String which) {
-        currency = which;
+    public void setCurrencyA(String which) {
+        currencyA = which;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getCurrencyA() {
+        return currencyA;
     }
 
-    public void setAmount(int amt) {
-        amount = amt;
+    public void setCurrencyB(String which) {
+        currencyB = which;
     }
 
-    public int getAmount() {
-        return amount;
+    public String getCurrencyB() {
+        return currencyB;
+    }
+
+    public void setAmountA(int amt) {
+        amountA = amt;
+    }
+
+    public int getAmountA() {
+        return amountA;
+    }
+
+    public void setAmountB(int amt) {
+        amountB = amt;
+    }
+
+    public int getAmountB() {
+        return amountB;
     }
 
     public void setArrival(Date arr) {
@@ -61,12 +81,28 @@ public class Transaction {
         return arrival;
     }
 
-    public void setLocation(Location loc) {
-        location = loc;
+    public void setPickedLocation(Location loc) {
+        pickedLocation = loc;
     }
 
-    public Location getLocation() {
-        return location;
+    public Location getPickedLocation() {
+        return pickedLocation;
+    }
+
+    public void setCurrentLocation(Location loc) {
+        currentLocation = loc;
+    }
+
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setRadius(int rad) {
+        radius = rad;
+    }
+
+    public int getRadius() {
+        return radius;
     }
 
     public void setFlightNo(String fn) {

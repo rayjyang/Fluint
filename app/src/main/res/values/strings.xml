@@ -52,4 +52,7 @@
     <string name="search_distance">Radius Adjuster</string>
     <string name="country_preference">Country preference</string>
     <string name="browse">Browse</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="profile">Profile</string>
 </resources>

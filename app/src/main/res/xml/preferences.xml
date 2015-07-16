@@ -26,4 +26,12 @@
         android:title="@string/logout"
         android:key="@string/log_out_button" />
 
+    <EditTextPreference android:title="Your Name"
+        android:key="username"
+        android:summary="Please provide your username"></EditTextPreference>
+    <CheckBoxPreference android:title="Application Updates"
+        android:defaultValue="false"
+        android:summary="This option if selected will allow the application to check for latest versions."
+        android:key="applicationUpdates" />
+
 </PreferenceScreen>

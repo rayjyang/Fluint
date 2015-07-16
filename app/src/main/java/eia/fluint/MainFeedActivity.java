@@ -21,6 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,8 @@ public class MainFeedActivity extends AppCompatActivity {
 
     private boolean whichView = false;
 
+    private int NUM_NAV_ITEMS = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,38 +69,31 @@ public class MainFeedActivity extends AppCompatActivity {
         gps = new GPSTracker(this);
         Location loc = gps.getLocation();
 
-        if (loc != null) {
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainFeedActivity.this);
-
-        }
 
 
         toolbar = (Toolbar) findViewById(R.id.toolBarFeed);
         setSupportActionBar(toolbar);
 
-        if (savedInstanceState == null) {
-            mNavItemId = R.id.browse;
-        } else {
-            mNavItemId = savedInstanceState.getInt(NAV_ITEM_ID);
-        }
-
-        int navValue = 0;
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            navValue = extras.getInt("nav", 0);
-        }
 
         mPager = (ViewPager) findViewById(R.id.loginPagerMain);
         mPager.setAdapter(new MainPagerAdapter(getFragmentManager()));
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                // TODO: scale Floating Action Button size
+                Log.d("POSITION_OFFSET", positionOffset + "");
+                if (positionOffset < 0.5) {
+                    fabMainFeed.setScaleX((1 - 2 * positionOffset));
+                    fabMainFeed.setScaleY((1 - 2 * positionOffset));
+                } else {
+                    fabMainFeed.setScaleX((2 * positionOffset - 1));
+                    fabMainFeed.setScaleY((2 * positionOffset - 1));
+                }
             }
 
             @Override
             public void onPageSelected(int position) {
-
+                whichView = !whichView;
             }
 
             @Override
@@ -117,7 +113,7 @@ public class MainFeedActivity extends AppCompatActivity {
         mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.whiteColor);
+                return getResources().getColor(R.color.primaryColorLight);
             }
         });
         mTabs.setViewPager(mPager);
@@ -127,54 +123,26 @@ public class MainFeedActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                menuItem.setChecked(true);
+
+                menuItem.setChecked(false);
 
                 mNavItemId = menuItem.getItemId();
                 drawerLayout.closeDrawers();
 
-                Fragment fragment;
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
                 switch (mNavItemId) {
                     case R.id.navProfile:
-                        toolbar.setTitle("Profile");
-                        mTabs.setVisibility(View.GONE);
-                        mPager.setVisibility(View.GONE);
-                        fabMainFeed.setVisibility(View.GONE);
-                        mPager.setActivated(false);
-
-                        toolbar.setTitleTextColor(getResources().getColor(R.color.whiteColor));
-
-                        fragment = new ProfileFragment();
-                        fragmentTransaction.replace(R.id.feedFragmentContainer, fragment);
-                        fragmentTransaction.commit();
+                        Intent profIntent = new Intent(MainFeedActivity.this, ProfileActivity.class);
+                        startActivity(profIntent);
                         return true;
                     case R.id.navSettings:
-                        toolbar.setTitle("Settings");
-                        mTabs.setVisibility(View.GONE);
-                        mPager.setVisibility(View.GONE);
-                        fabMainFeed.setVisibility(View.GONE);
-                        mPager.setActivated(false);
-
-                        toolbar.setTitleTextColor(getResources().getColor(R.color.whiteColor));
-
-                        fragment = new SettingsFragment();
-                        fragmentTransaction.replace(R.id.feedFragmentContainer, fragment);
-                        fragmentTransaction.commit();
+                        Intent settingsIntent = new Intent(MainFeedActivity.this, SettingsActivity.class);
+                        startActivity(settingsIntent);
                         return true;
-                    default:
-                        toolbar.setTitle("Browse");
-                        toolbar.setTitleTextColor(getResources().getColor(R.color.whiteColor));
-                        mTabs.setVisibility(View.VISIBLE);
-                        mPager.setVisibility(View.VISIBLE);
-                        fabMainFeed.setVisibility(View.VISIBLE);
-                        mPager.setActivated(true);
-                        mPager.setCurrentItem(0, true);
-                        fragment = new ForSaleFeedFragment();
-                        fragmentTransaction.replace(R.id.feedFragmentContainer, fragment);
-                        fragmentTransaction.commit();
-                        return true;
+
+
                 }
+                return false;
             }
         });
 
@@ -182,26 +150,13 @@ public class MainFeedActivity extends AppCompatActivity {
         fabMainFeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Fragment f = getFragmentManager().findFragmentById(R.id.feedFragmentContainer);
-//                if (f instanceof ForSaleFeedFragment) {
-//                    Intent intent = new Intent(MainFeedActivity.this, AddForSalePostActivity.class);
-//                    startActivity(intent);
-//                } else if (f instanceof BuyRequestFeedFragment) {
-//                    Toast.makeText(MainFeedActivity.this, "LOOOOOOOOONG", Toast.LENGTH_LONG).show();
-//                    Intent intent = new Intent(MainFeedActivity.this, AddForSalePostActivity.class);
-//                    startActivity(intent);
-//                } else {
-//
-//                    // TODO: f is null
-//                    Toast.makeText(MainFeedActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
-//                }
-
-                if (!whichView) {
+                if (whichView) {
                     Toast.makeText(MainFeedActivity.this, "SECOND INTENT", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(MainFeedActivity.this, AddForSalePostActivity.class);
                     startActivity(intent);
 
                 } else {
+                    Toast.makeText(MainFeedActivity.this, "FIRST INTENT", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(MainFeedActivity.this, AddForSalePostActivity.class);
                     startActivity(intent);
                 }
@@ -212,27 +167,10 @@ public class MainFeedActivity extends AppCompatActivity {
         mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer);
         drawerLayout.setDrawerListener(mDrawerToggle);
 
-//        FragmentTransaction ft = getFragmentManager().beginTransaction();
-//        switch (navValue) {
-//            case 1:
-//                toolbar.setTitle("Requests");
-//                BuyRequestFeedFragment buyRequestFeedFragment = new BuyRequestFeedFragment();
-//                ft.replace(R.id.feedFragmentContainer, buyRequestFeedFragment).commit();
-//                break;
-//            default:
-//                toolbar.setTitle("For Sale");
-//                ForSaleFeedFragment forSaleFeedFragment = new ForSaleFeedFragment();
-//                ft.replace(R.id.feedFragmentContainer, forSaleFeedFragment).commit();
-//                break;
-//        }
-
 
 
         toolbar.setTitle("Browse");
         toolbar.setTitleTextColor(getResources().getColor(R.color.whiteColor));
-        mTabs.setVisibility(View.VISIBLE);
-        mPager.setVisibility(View.VISIBLE);
-        mPager.setActivated(true);
         mPager.setCurrentItem(0, true);
         ForSaleFeedFragment forSaleFeedFragment = new ForSaleFeedFragment();
         getFragmentManager().beginTransaction().replace(R.id.feedFragmentContainer, forSaleFeedFragment);
@@ -240,30 +178,6 @@ public class MainFeedActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    public ViewPager getmPager() {
-        return mPager;
-    }
-
-    public SlidingTabLayout getmTabs() {
-        return mTabs;
-    }
-
-    public NavigationView getNavigationView() {
-        return navigationView;
-    }
-
-    public GPSTracker getGps() {
-        return gps;
-    }
-
-    public FloatingActionButton getFabMainFeed() {
-        return fabMainFeed;
-    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -300,6 +214,10 @@ public class MainFeedActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    public GPSTracker getGps() {
+        return gps;
+    }
+
     class MainPagerAdapter extends FragmentPagerAdapter {
 
         String[] tabs = {"FOR SALE", "REQUESTS"};
@@ -320,11 +238,9 @@ public class MainFeedActivity extends AppCompatActivity {
             switch (position) {
                 case 1:
                     BuyRequestFeedFragment brfFragment = new BuyRequestFeedFragment();
-                    whichView = true;
                     return brfFragment;
                 default:
                     ForSaleFeedFragment fsfFragment = new ForSaleFeedFragment();
-                    whichView = false;
                     return fsfFragment;
             }
         }

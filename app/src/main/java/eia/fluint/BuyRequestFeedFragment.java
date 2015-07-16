@@ -42,6 +42,7 @@ public class BuyRequestFeedFragment extends Fragment {
         swipeRefreshSell.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                swipeRefreshSell.setBackgroundColor(getResources().getColor(R.color.accentPinkColor));
                 getLocation();
                 getLatestPosts();
             }

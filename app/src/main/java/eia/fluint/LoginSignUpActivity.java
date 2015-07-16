@@ -106,7 +106,7 @@ public class LoginSignUpActivity extends AppCompatActivity {
         mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.whiteColor);
+                return getResources().getColor(R.color.primaryColorLight);
             }
         });
         mTabs.setViewPager(mPager);

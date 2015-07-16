@@ -49,4 +49,7 @@
     <string name="title_activity_make_fspick_loc">MakeFSPickLocActivity</string>
     <string name="title_activity_fspick_loc">FSPickLocActivity</string>
     <string name="title_activity_query_buy_request">QueryBuyRequest</string>
+    <string name="search_distance">Radius Adjuster</string>
+    <string name="country_preference">Country preference</string>
+    <string name="browse">Browse</string>
 </resources>

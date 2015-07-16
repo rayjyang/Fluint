@@ -32,7 +32,7 @@
             android:layout_marginBottom="8dp"
             android:text="Log In"
             android:background="@drawable/sign_in_button_border"
-            android:textColor="@color/textColor"
+            android:textColor="@color/textColorPrimary"
             android:textSize="16sp"
             android:textAllCaps="false"
             android:gravity="center"

@@ -104,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:text="Currency"
                     android:textSize="18sp"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/textColorPrimary"
                     android:layout_marginBottom="2dp"/>
 
                 <TextView
@@ -162,7 +162,7 @@
                     android:layout_height="wrap_content"
                     android:text="Amount"
                     android:textSize="18sp"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/textColorPrimary"
                     android:layout_marginBottom="2dp"/>
 
                 <TextView
@@ -219,7 +219,7 @@
                     android:layout_height="wrap_content"
                     android:text="Arrival date"
                     android:textSize="18sp"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/textColorPrimary"
                     android:layout_marginBottom="2dp"/>
 
                 <TextView
@@ -273,7 +273,7 @@
                     android:layout_height="wrap_content"
                     android:text="Arrival time"
                     android:textSize="18sp"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/textColorPrimary"
                     android:layout_marginBottom="2dp"/>
 
                 <TextView
@@ -327,7 +327,7 @@
                     android:layout_height="wrap_content"
                     android:text="Flight number"
                     android:textSize="18sp"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/textColorPrimary"
                     android:layout_marginBottom="2dp"/>
 
                 <TextView
@@ -383,7 +383,7 @@
                     android:layout_height="wrap_content"
                     android:text="Airport"
                     android:textSize="18sp"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/textColorPrimary"
                     android:layout_marginBottom="2dp"/>
 
                 <TextView

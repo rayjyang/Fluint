@@ -7,21 +7,25 @@ import android.app.Fragment;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -33,12 +37,13 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
 
     private RecyclerView recyclerView;
     private FeedAdapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
+    private GridLayoutManager mLayoutManager;
     private SwipeRefreshLayout feedSwipeRefresh;
-    private ProgressBar mProgressBar;
-    private FloatingActionButton fabForSaleFeed;
 
     private String buyPreference = "None";
+
+    private ParseGeoPoint currentLocation;
+    private int radiusWithin;
 
     /**
      * Use this factory method to create a new instance of
@@ -55,6 +60,7 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
         // Required empty public constructor
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,7 +76,7 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
             public void onRefresh() {
                 // TODO: refresh content and update location
                 getUserLocation();
-                getLatestPosts(buyPreference);
+                getLatestPostsLocSorted(buyPreference);
             }
         });
 
@@ -79,22 +85,13 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        // TODO: get reference to ProgressBar
-        mProgressBar = (ProgressBar) view.findViewById(R.id.buyFeedProgressBar);
 
-        fabForSaleFeed = (FloatingActionButton) view.findViewById(R.id.fabForSaleFeed);
-        fabForSaleFeed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: launch add new Buy post Activity
-                Intent intent = new Intent(getActivity(), AddForSalePostActivity.class);
-                startActivity(intent);
-            }
-        });
+        // mAdapter = new FeedAdapter(myDataset);
+        // recyclerView.setAdapter(mAdapter);
+
 
         // TODO: XML: wrap FAB in a CoordinatorLayout
 
@@ -117,57 +114,61 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
         Toast.makeText(getActivity(), buyPreference, Toast.LENGTH_SHORT).show();
 
         getUserLocation();
-        getLatestPosts(buyPreference);
+        getLatestPostsLocSorted(buyPreference);
 
     }
 
 
 
-    public void getLatestPosts(String buy) {
+    public void getLatestPostsLocSorted(String pref) {
         // TODO: get latest posts
-        mProgressBar.setVisibility(View.VISIBLE);
 
-        if (buy.equals("None")) {
-            // TODO: query all buy posts within X miles of user
+//        SharedPreferences sp
+
+        // TODO: add user's country to settings and if they're from America use miles
+
+
+
+        if (pref.equals("None")) {
+            // User has no preference to what currency he wants to buy
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("ForSalePost");
+            query.whereEqualTo("resolved", false);
+
+            query.whereWithinKilometers("pickedLoc", currentLocation, radiusWithin);
+
+            Date currentDate = new Date();
+
+            Calendar c = Calendar.getInstance();
+            c.setTime(currentDate);
+            c.add(Calendar.DATE, -30);
+            Date thirtyDaysAgo = c.getTime();
+
+            query.whereLessThanOrEqualTo("createdAt", thirtyDaysAgo);
+
+
 
         } else {
 
+
         }
-
-        ParseQuery query = new ParseQuery(Transaction.TAG);
-        query.setLimit(100);
-        query.orderByDescending("createdAt");
-        query.findInBackground(new FindCallback() {
-            @Override
-            public void done(List list, ParseException e) {
-                mProgressBar.setVisibility(View.INVISIBLE);
-                if (e == null) {
-                    ArrayList<Transaction> latestData = new ArrayList<>();
-                    for (Object o : list) {
-                        Transaction trans = new Transaction();
-                        ParseObject po = (ParseObject) o;
-                        latestData.add(trans);
-
-                    }
-                    FeedAdapter adapter = new FeedAdapter(getActivity(), latestData);
-                    adapter.setClickListener(ForSaleFeedFragment.this);
-                    recyclerView.setAdapter(adapter);
-                } else {
-                    // Exception caught
-                }
-            }
-
-            @Override
-            public void done(Object o, Throwable t) {
-                mProgressBar.setVisibility(View.INVISIBLE);
-            }
-        });
 
 
     }
 
     private void getUserLocation() {
         // TODO: get user's location
+        GPSTracker gps = ((MainFeedActivity) getActivity()).getGps();
+        try {
+            double latitude = gps.getLatitude();
+            double longitude = gps.getLongitude();
+            ParseGeoPoint userPoint = new ParseGeoPoint(latitude, longitude);
+            Toast.makeText(getActivity(), "" + latitude + "  ####  " + longitude, Toast.LENGTH_LONG).show();
+            // Latitude and longitude are 0.0 and 0.0 for some reason
+
+        } catch (NullPointerException e) {
+
+        }
+
 
     }
 

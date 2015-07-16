@@ -3,11 +3,13 @@
 
     <color name="primaryColor">#2BC0E4</color>
     <color name="primaryColorDark">#2C9CB5</color>
+    <color name="primaryColorLight">#B2EBF2</color>
     <color name="accentPinkColor">#eaecc6</color>
-    <color name="accentColor">#FF4081</color>
-    <color name="accentColorTemp">#D34836</color>
+    <!--<color name="accentColorTemp">#FF4081</color>-->
+    <color name="accentColor">#D34836</color>
     <color name="whiteColor">#FFFFFF</color>
-    <color name="textColor">#333333</color>
+    <color name="textColorPrimary">#212121</color>
+    <color name="textColorSecondary">#727272</color>
     <color name="textHintColor">#999999</color>
     <color name="colorHighlight">#B6B6B6</color>
     <color name="facebookColor">#3b5998</color>

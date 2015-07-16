@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -16,14 +16,41 @@
             android:id="@+id/toolBarFeed"
             layout="@layout/toolbar_main_feed" />
 
+        <eia.fluint.SlidingTabLayout
+            android:id="@+id/loginTabsMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryColor"
+            android:textColor="#ffffff"
+            android:layout_below="@+id/toolBarFeed"/>
 
+        <android.support.v4.view.ViewPager
+            android:id="@+id/loginPagerMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/loginTabsMain"
+            android:layout_alignParentLeft="true"/>
 
         <FrameLayout
             android:id="@+id/feedFragmentContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_below="@+id/loginTabsMain"/>
 
-    </LinearLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabMainFeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            app:borderWidth="0dp"
+            android:elevation="4dp" />
+
+    </RelativeLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigationView"

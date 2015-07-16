@@ -17,6 +17,9 @@
         android:entries="@array/CurrencyCodes"
         android:entryValues="@array/CurrencyCodesValues" />
 
+    <Preference
+        android:title="Search Distance"
+        android:key="@string/search_distance" />
 
 
     <Preference

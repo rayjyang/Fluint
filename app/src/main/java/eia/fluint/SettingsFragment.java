@@ -117,7 +117,16 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     ForSaleFeedFragment fragment = new ForSaleFeedFragment();
+                    MainFeedActivity activity = (MainFeedActivity) getActivity();
+                    activity.getSupportActionBar().setTitle("Browse");
+                    activity.getmPager().setVisibility(View.VISIBLE);
+                    activity.getmPager().setCurrentItem(0);
+                    activity.getmPager().setActivated(true);
+                    activity.getmTabs().setVisibility(View.VISIBLE);
+                    activity.getNavigationView().getMenu().getItem(0).setChecked(true);
+                    activity.getFabMainFeed().setVisibility(View.VISIBLE);
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
+
 //                    ft.setCustomAnimations(R.animator.slide_in_from_left, R.animator.slide_out_to_right);
                     ft.replace(R.id.feedFragmentContainer, fragment);
                     ft.addToBackStack(null);

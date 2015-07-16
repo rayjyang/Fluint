@@ -20,8 +20,6 @@ public class BuyRequestFeedFragment extends Fragment {
     private FeedAdapter feedAdapter;
     private LinearLayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeRefreshSell;
-    private ProgressBar sellFeedProgressBar;
-    private FloatingActionButton fabSellFeed;
 
 
     public static BuyRequestFeedFragment newInstance() {
@@ -55,9 +53,6 @@ public class BuyRequestFeedFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewSell.setLayoutManager(mLayoutManager);
-
-        sellFeedProgressBar = (ProgressBar) layout.findViewById(R.id.sellFeedProgressBar);
-        fabSellFeed = (FloatingActionButton) layout.findViewById(R.id.fabBuyRequestFeed);
 
         return layout;
     }

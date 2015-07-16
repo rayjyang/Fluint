@@ -20,6 +20,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,9 @@ public class LoginSignUpActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 //        toolbar.setTitleTextColor(getResources().getColor(R.color.whiteColor));
 
         // TODO: Set logo
@@ -97,7 +101,7 @@ public class LoginSignUpActivity extends AppCompatActivity {
             }
         });
         mTabs = (SlidingTabLayout) findViewById(R.id.loginTabs);
-        mTabs.setCustomTabView(R.layout.custom_tab_view, R.id.loginTabsText);
+        mTabs.setCustomTabView(R.layout.custom_tab_view_login, R.id.loginTabsText);
         mTabs.setDistributeEvenly(true);
         mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
@@ -112,6 +116,22 @@ public class LoginSignUpActivity extends AppCompatActivity {
         mPager.setCurrentItem(page);
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home:
+                Intent intent = new Intent(LoginSignUpActivity.this, SplashActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

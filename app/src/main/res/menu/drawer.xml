@@ -4,27 +4,18 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/navForSale"
-            android:checked="false"
-            android:icon="@drawable/lorem_ipsum_photo"
-            android:title="Currency For Sale" />
-
-        <item
-            android:id="@+id/navBuyRequest"
-            android:checked="false"
-            android:icon="@drawable/lorem_ipsum_photo"
-            android:title="Currency Requests" />
+            android:id="@+id/browse"
+            android:checked="true"
+            android:title="Browse" />
 
         <item
             android:id="@+id/navProfile"
             android:checked="false"
-            android:icon="@drawable/lorem_ipsum_photo"
             android:title="@string/nav_profile" />
 
         <item
             android:id="@+id/navSettings"
             android:checked="false"
-            android:icon="@drawable/lorem_ipsum_photo"
             android:title="@string/nav_settings" />
 
 

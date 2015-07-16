@@ -47,7 +47,6 @@ import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -109,6 +108,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
         transaction = new Transaction();
         transaction.setTransactionType("sell");
         transaction.setRadius(radius);
+        transaction.setResolved(false);
 
         // For sure: transactionType
         // Not sure: 1) currencyA 2) currencyB 3) amountA 4) amountB
@@ -295,10 +295,10 @@ public class FSPickLocActivity extends AppCompatActivity implements
                 fsPost.put("currencyB", transaction.getCurrencyB());
                 fsPost.put("amountB", transaction.getAmountB());
                 fsPost.put("pickedLoc", transaction.getPickedPoint());
-//                fsPost.put("currLoc", transaction.getCurrentPoint());
                 fsPost.put("radius", transaction.getRadius());
                 fsPost.put("username", transaction.getOpUsername());
-                fsPost.put("userId", transaction.getPosterId());
+                fsPost.put("resolved", transaction.getResolved());
+
 //                fsPost.put("transObj", transaction);
 
                 fsPost.saveInBackground(new SaveCallback() {
@@ -415,7 +415,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
                     center = mGoogleMap.getCameraPosition().target;
 
                     markerText.setText("Set Location");
-                    markerText.setTextColor(getResources().getColor(R.color.textColor));
+                    markerText.setTextColor(getResources().getColor(R.color.textColorPrimary));
                     markerText.setBackgroundColor(getResources().getColor(R.color.whiteColor));
                     mGoogleMap.clear();
 //                    markerLayout.setVisibility(View.VISIBLE);

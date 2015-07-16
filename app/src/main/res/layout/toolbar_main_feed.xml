@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@color/primaryColor"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    app:title="@string/buy">
+    app:title="@string/browse">
 
 
 

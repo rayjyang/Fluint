@@ -28,6 +28,7 @@ public class Transaction {
     private String airport;
     private ParseUser originalPoster;
     private String opUsername;
+    private String posterName;
     private String posterId;
     private boolean resolved;
 
@@ -157,6 +158,14 @@ public class Transaction {
 
     public String getOpUsername() {
         return opUsername;
+    }
+
+    public void setPosterName(String name) {
+        posterName = name;
+    }
+
+    public String getPosterName() {
+        return posterName;
     }
 
     public void setPosterId(String id) {

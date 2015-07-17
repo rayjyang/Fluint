@@ -7,12 +7,12 @@ import android.app.Fragment;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -37,7 +37,7 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
 
     private RecyclerView recyclerView;
     private FeedAdapter mAdapter;
-    private GridLayoutManager mLayoutManager;
+    private LinearLayoutManager mLayoutManager;
     private SwipeRefreshLayout feedSwipeRefresh;
 
     private String buyPreference = "None";
@@ -85,8 +85,12 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
-        mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
+
+        FeedAdapter fa = new FeedAdapter(getActivity(), fakeData());
+        fa.setClickListener(this);
+        recyclerView.setAdapter(fa);
 
 
         // mAdapter = new FeedAdapter(myDataset);
@@ -102,6 +106,18 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
         return view;
     }
 
+    private List<Transaction> fakeData() {
+        ArrayList<Transaction> data = new ArrayList<>();
+        for (int i = 0; i < 40; i++) {
+            Transaction obj = new Transaction();
+            obj.setPosterName("Raymond Yang");
+            obj.setAmountA((i + 4) * 3 * i + 15);
+            obj.setCurrencyA("EUR");
+            data.add(obj);
+        }
+
+        return data;
+    }
 
 
     @Override
@@ -175,7 +191,7 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
 
     @Override
     public void itemClicked(View view, int position) {
-
+        Toast.makeText(getActivity(), position + "", Toast.LENGTH_SHORT).show();
     }
 
 

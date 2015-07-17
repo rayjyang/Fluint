@@ -4,7 +4,7 @@
     <color name="primaryColor">#2BC0E4</color>
     <color name="primaryColorDark">#2C9CB5</color>
     <color name="primaryColorLight">#B2EBF2</color>
-    <color name="accentPinkColor">#eaecc6</color>
+    <color name="lightColor">#eaecc6</color>
     <!--<color name="accentColorTemp">#FF4081</color>-->
     <color name="accentColor">#D34836</color>
     <color name="whiteColor">#FFFFFF</color>

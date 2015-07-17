@@ -221,11 +221,13 @@ public class FSPickLocActivity extends AppCompatActivity implements
                 ParseUser user = ParseUser.getCurrentUser();
                 String username = user.getUsername();
                 String userId = user.getObjectId();
+                String name = (String) user.get("name");
 
                 transaction.setOriginalPoster(user);
                 transaction.setOpUsername(username);
                 transaction.setPosterId(userId);
                 transaction.setResolved(false);
+                transaction.setPosterName(name);
 
 
                 if (mostRecentUserLocation != null) {
@@ -289,17 +291,18 @@ public class FSPickLocActivity extends AppCompatActivity implements
 
 
                 ParseObject fsPost = new ParseObject("ForSalePost");
-                fsPost.put("transactionType", transaction.getTransactionType());
-                fsPost.put("currencyA", transaction.getCurrencyA());
-                fsPost.put("amountA", transaction.getAmountA());
-                fsPost.put("currencyB", transaction.getCurrencyB());
-                fsPost.put("amountB", transaction.getAmountB());
-                fsPost.put("pickedLoc", transaction.getPickedPoint());
-                fsPost.put("radius", transaction.getRadius());
-                fsPost.put("username", transaction.getOpUsername());
-                fsPost.put("resolved", transaction.getResolved());
+                fsPost.put("transactionType", transaction.getTransactionType()); //
+                fsPost.put("currencyA", transaction.getCurrencyA()); //
+                fsPost.put("amountA", transaction.getAmountA()); //
+                fsPost.put("currencyB", transaction.getCurrencyB()); //
+                fsPost.put("amountB", transaction.getAmountB()); //
+                fsPost.put("pickedLoc", transaction.getPickedPoint()); //
+                fsPost.put("radius", transaction.getRadius()); //
+                fsPost.put("username", transaction.getOpUsername()); //
+                fsPost.put("posterId", transaction.getPosterId());
+                fsPost.put("posterName", transaction.getPosterName());
+                fsPost.put("resolved", transaction.getResolved()); //
 
-//                fsPost.put("transObj", transaction);
 
                 fsPost.saveInBackground(new SaveCallback() {
                     @Override

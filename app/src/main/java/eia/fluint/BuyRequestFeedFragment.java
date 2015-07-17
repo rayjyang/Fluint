@@ -2,14 +2,12 @@ package eia.fluint;
 
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 
 public class BuyRequestFeedFragment extends Fragment {
@@ -42,7 +40,7 @@ public class BuyRequestFeedFragment extends Fragment {
         swipeRefreshSell.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshSell.setBackgroundColor(getResources().getColor(R.color.accentPinkColor));
+                swipeRefreshSell.setBackgroundColor(getResources().getColor(R.color.lightColor));
                 getLocation();
                 getLatestPosts();
             }

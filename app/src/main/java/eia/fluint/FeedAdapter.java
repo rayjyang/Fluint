@@ -5,12 +5,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Raymond on 6/29/2015.
- */
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.DataViewHolder> {
 
     private List<Transaction> transactions;
@@ -23,9 +27,21 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.DataViewHolder
     class DataViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // TODO: references to views in a card
+        TextView posterNameFS;
+        TextView postDetailsFS;
+        TextView postAmountFS;
+        TextView ratingFS;
+        TextView distanceFS;
 
         public DataViewHolder(View itemView) {
             super(itemView);
+
+            posterNameFS = (TextView) itemView.findViewById(R.id.posterNameFS);
+            postDetailsFS = (TextView) itemView.findViewById(R.id.postDetailsFS);
+            postAmountFS = (TextView) itemView.findViewById(R.id.postAmountFS);
+            ratingFS = (TextView) itemView.findViewById(R.id.ratingFS);
+            distanceFS = (TextView) itemView.findViewById(R.id.distanceFS);
+
             itemView.setOnClickListener(this);
         }
 
@@ -59,9 +75,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.DataViewHolder
         transactions = list;
     }
 
-    private void initializeData() {
-        // Get data about users and their posts
-    }
 
     public void add(Transaction trans) {
         transactions.add(trans);
@@ -90,6 +103,94 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.DataViewHolder
         // TODO: dynamically set the views according to data in the Transaction object
         // holder.VIEW.setText()
 
+
+        String posterName = transaction.getPosterName();
+        String shortenedName = parseName(posterName);
+        if (shortenedName == null || shortenedName.equals("")) {
+            shortenedName = "User";
+        }
+        holder.posterNameFS.setText(shortenedName);
+
+        String postDetails = parsePostDetails(transaction);
+        holder.postDetailsFS.setText(postDetails);
+
+        String postAmount = parsePostAmount(transaction);
+        holder.postAmountFS.setText(postAmount);
+
+        String rating = parseRating(transaction);
+        holder.ratingFS.setText(rating);
+
+        String distance = parseDistance(transaction);
+        holder.distanceFS.setText(distance);
+    }
+
+    private String parseDistance(Transaction trans) {
+        return "12 km";
+    }
+
+    private String parseRating(Transaction trans) {
+        // Make a query with object id
+        ParseQuery query = ParseUser.getQuery();
+
+        // TODO: actually get the user
+        ParseUser user = new ParseUser();
+        query.findInBackground(new FindCallback() {
+            @Override
+            public void done(List list, ParseException e) {
+
+            }
+
+            @Override
+            public void done(Object o, Throwable throwable) {
+
+            }
+        });
+
+        String rating;
+//        rating = user.get("rating") + "";
+        rating = "4.3";
+        return rating;
+
+    }
+
+    private String parsePostAmount(Transaction trans) {
+        String amountA = trans.getAmountA() + " " + trans.getCurrencyA();
+        return amountA;
+    }
+
+    private String parsePostDetails(Transaction trans) {
+        Date date = new Date();
+
+
+        return "2 hrs" + " " + Character.toString((char) 183) +  " San Francisco";
+    }
+
+    private String parseName(String posterName) {
+        try {
+            if (!posterName.contains(" ") || (posterName.charAt(posterName.length() - 1) == ' ')) {
+                return posterName;
+            } else {
+                String shortenedName;
+                String[] nameParts = posterName.split(" ");
+                if (nameParts.length == 2) {
+                    String firstName = nameParts[0];
+                    String lastName = nameParts[1];
+                    shortenedName = firstName + " " + lastName.charAt(0) + ".";
+                    return shortenedName;
+                } else {
+                    String firstName = nameParts[0];
+                    String lastName = nameParts[nameParts.length - 1];
+                    shortenedName = firstName + " " + lastName.charAt(0) + ".";
+                    return shortenedName;
+                }
+            }
+        } catch (NullPointerException e) {
+            if (posterName != null || !posterName.equals("")) {
+                return posterName;
+            } else {
+                return "User";
+            }
+        }
     }
 
     @Override

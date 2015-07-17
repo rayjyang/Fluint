@@ -3,8 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/custom_ripple"
-    android:clickable="true"
     xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.CardView
@@ -17,7 +15,7 @@
         android:focusable="true"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        card_view:cardElevation="2dp">
+        card_view:cardElevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,7 +26,15 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+
+                <ImageView
+                    android:id="@+id/profileFS"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:src="@drawable/profile"/>
 
 
             </LinearLayout>
@@ -100,37 +106,62 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:gravity="center_vertical"
-                    android:paddingRight="24dp">
+                    android:gravity="top"
+                    android:paddingRight="24dp"
+                    android:paddingTop="6dp">
 
                     <ImageView
+                        android:src="@drawable/material_star_rating"
                         android:id="@+id/imgStar"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp" />
+                        android:layout_width="24dp"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="1dp"/>
 
                     <TextView
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="6dp"
                         android:id="@+id/ratingFS"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="4.7"
                         android:layout_toRightOf="@id/imgStar"
-                        android:textColor="@color/textColorSecondary"/>
+                        android:layout_marginRight="9dp"
+                        android:textColor="@color/textColorSecondary" />
 
                     <ImageView
                         android:id="@+id/imgPin"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="23dp"
+                        android:layout_height="22dp"
+                        android:layout_marginTop="4dp"
+                        android:src="@drawable/material_map_pin"
                         android:layout_toRightOf="@id/ratingFS"/>
 
                     <TextView
                         android:id="@+id/distanceFS"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="6dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="30 km"
                         android:textColor="@color/textColorSecondary"
-                        android:layout_toRightOf="@id/imgPin"/>
+                        android:layout_toRightOf="@id/imgPin"
+                        android:layout_marginRight="8dp"/>
+
+                    <ImageView
+                        android:id="@+id/imgExchange"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@id/distanceFS"
+                        android:layout_width="24dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/material_exchange"/>
+
+                    <TextView
+                        android:id="@+id/exchangeFS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="65 USD"
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="14sp"
+                        android:layout_toRightOf="@id/imgExchange"
+                        android:layout_marginTop="7dp"/>
 
                 </RelativeLayout>
 

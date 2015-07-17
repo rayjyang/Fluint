@@ -1,16 +1,20 @@
 package eia.fluint;
 
 import android.content.Context;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import org.w3c.dom.Text;
 
 import java.util.Date;
 import java.util.List;
@@ -32,6 +36,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.DataViewHolder
         TextView postAmountFS;
         TextView ratingFS;
         TextView distanceFS;
+        TextView exchangeFS;
+        ImageView profileFS;
 
         public DataViewHolder(View itemView) {
             super(itemView);
@@ -41,6 +47,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.DataViewHolder
             postAmountFS = (TextView) itemView.findViewById(R.id.postAmountFS);
             ratingFS = (TextView) itemView.findViewById(R.id.ratingFS);
             distanceFS = (TextView) itemView.findViewById(R.id.distanceFS);
+            exchangeFS = (TextView) itemView.findViewById(R.id.exchangeFS);
+            profileFS = (ImageView) itemView.findViewById(R.id.profileFS);
 
             itemView.setOnClickListener(this);
         }
@@ -88,7 +96,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.DataViewHolder
 
     @Override
     public DataViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_feed_recycler_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_feed_fs_recycler_row, parent, false);
 
         // TODO: set the view's size, margins, paddings, and layout parameters
 
@@ -122,6 +130,18 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.DataViewHolder
 
         String distance = parseDistance(transaction);
         holder.distanceFS.setText(distance);
+
+        String exchange = parseExchange(transaction);
+        holder.exchangeFS.setText(exchange);
+
+
+    }
+
+    private String parseExchange(Transaction trans) {
+        String currencyB = trans.getCurrencyB();
+        int amountB = trans.getAmountB();
+        String parsed = "" + amountB + " " + currencyB;
+        return parsed;
     }
 
     private String parseDistance(Transaction trans) {

@@ -3,6 +3,7 @@ package eia.fluint;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ public class MainFeedActivity extends AppCompatActivity {
 
 
     private boolean whichView = false;
+    private boolean dynamicView = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +68,24 @@ public class MainFeedActivity extends AppCompatActivity {
                 // TODO: scale Floating Action Button size
                 Log.d("POSITION_OFFSET", positionOffset + "");
                 if (positionOffset < 0.5) {
+                    dynamicView = false;
                     fabMainFeed.setScaleX((1 - 2 * positionOffset));
                     fabMainFeed.setScaleY((1 - 2 * positionOffset));
                 } else {
+                    if (positionOffset <= 0.7 && positionOffset >= 0.3) {
+                        if (dynamicView) {
+                            fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColorDark)));
+                        } else {
+                            fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.accentColor)));
+                        }
+                    } else {
+                        if (dynamicView) {
+                            fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColorDark)));
+                        } else {
+                            fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.accentColor)));
+                        }
+                    }
+                    dynamicView = true;
                     fabMainFeed.setScaleX((2 * positionOffset - 1));
                     fabMainFeed.setScaleY((2 * positionOffset - 1));
                 }

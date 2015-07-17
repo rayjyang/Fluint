@@ -2,13 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="eia.fluint.SettingsActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="eia.fluint.SettingsActivity">
 
     <include
         android:id="@+id/toolbarSettings"
         layout="@layout/toolbar_settings_activity" />
 
+    
 
 
 </LinearLayout>

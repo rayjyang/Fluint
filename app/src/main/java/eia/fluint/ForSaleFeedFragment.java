@@ -88,9 +88,9 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
 
-        FeedAdapter fa = new FeedAdapter(getActivity(), fakeData());
-        fa.setClickListener(this);
-        recyclerView.setAdapter(fa);
+        mAdapter = new FeedAdapter(getActivity(), fakeData());
+        mAdapter.setClickListener(this);
+        recyclerView.setAdapter(mAdapter);
 
 
         // mAdapter = new FeedAdapter(myDataset);
@@ -113,6 +113,8 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
             obj.setPosterName("Raymond Yang");
             obj.setAmountA((i + 4) * 3 * i + 15);
             obj.setCurrencyA("EUR");
+            obj.setAmountB((i + 5) * 3 * i + 15);
+            obj.setCurrencyB("USD");
             data.add(obj);
         }
 

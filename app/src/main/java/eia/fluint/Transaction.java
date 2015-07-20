@@ -13,6 +13,7 @@ public class Transaction {
     private String userEmail;
     private String arrivalLocation;
 
+    private String timezone;
     private String transactionType;
     private String where;
     private String currencyA;
@@ -43,6 +44,14 @@ public class Transaction {
 
     public Transaction() {
         time = System.currentTimeMillis();
+    }
+
+    public void setTimezone(String tz) {
+        timezone = tz;
+    }
+
+    public String getTimezone() {
+        return timezone;
     }
 
     public void setTransactionType(String type) {

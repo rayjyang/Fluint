@@ -231,6 +231,9 @@ public class FSPickLocActivity extends AppCompatActivity implements
                 transaction.setResolved(false);
                 transaction.setPosterName(name);
 
+                // Do timezone stuff
+
+
 
                 if (mostRecentUserLocation != null) {
                     currPoint = new ParseGeoPoint(mostRecentUserLocation.getLatitude(), mostRecentUserLocation.getLongitude());

@@ -21,6 +21,7 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.joda.time.DateTime;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
@@ -125,6 +126,10 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.DataViewHolder
             shortenedName = "User";
         }
         holder.posterNameFS.setText(shortenedName);
+
+        final String elapsedTime;
+
+
 
         parsePostDetails(transaction, new Handler(new Handler.Callback() {
             @Override

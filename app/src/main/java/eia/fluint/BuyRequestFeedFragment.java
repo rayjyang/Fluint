@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -93,14 +94,19 @@ public class BuyRequestFeedFragment extends Fragment {
         swipeRefreshSell.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshSell.setBackgroundColor(getResources().getColor(R.color.lightColor));
                 boolean hasLocation = getUserLocation();
                 if (!hasLocation) {
                     // TODO: display a snackbar saying we could not get their location at this time
 
                 }
-                getPreferredPosts();
-                return;
+                mAdapter = new FeedAdapter(getActivity(), getPreferredPosts());
+                mAdapter.notifyDataSetChanged();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshSell.setRefreshing(false);
+                    }
+                }, 3000);
             }
         });
         swipeRefreshSell.setColorSchemeResources(R.color.primaryColor);
@@ -110,6 +116,11 @@ public class BuyRequestFeedFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewSell.setLayoutManager(mLayoutManager);
+
+        mAdapter = new FeedAdapter(getActivity(), getPreferredPosts());
+        recyclerViewSell.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+
 
         return layout;
     }

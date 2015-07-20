@@ -17,8 +17,10 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -28,6 +30,7 @@ public class BuyRequestFeedFragment extends Fragment {
     private static final int RAD_PREF = 25;
     private static final int MIN_SELL_PREF = 1;
     private static final int MAX_SELL_FREF = 1000;
+    private static final String DIST_PREF = "km";
 
     private RecyclerView recyclerViewSell;
     private FeedAdapter mAdapter;
@@ -43,6 +46,7 @@ public class BuyRequestFeedFragment extends Fragment {
     private int minSellPreference;
     private int maxSellPreference;
     private int radiusPreference;
+    private String distancePreference;
 
 
 
@@ -74,6 +78,7 @@ public class BuyRequestFeedFragment extends Fragment {
         minSellPreference = globalUserSettings.getInt("minSellPreference", MIN_SELL_PREF);
         maxSellPreference = globalUserSettings.getInt("maxSellPreference", MAX_SELL_FREF);
         radiusPreference = globalUserSettings.getInt("radiusPreference", RAD_PREF);
+        distancePreference = globalUserSettings.getString("distancePreference", DIST_PREF);
 
     }
 
@@ -116,11 +121,20 @@ public class BuyRequestFeedFragment extends Fragment {
         Toast.makeText(getActivity(), "BR onResume", Toast.LENGTH_SHORT).show();
 
         // TODO: get user preferences
+        sellPreference = globalUserSettings.getStringSet("sellPreference", defaultSellPreference);
+        minSellPreference = globalUserSettings.getInt("minBuyPreference", MIN_SELL_PREF);
+        maxSellPreference = globalUserSettings.getInt("maxBuyPreference", MAX_SELL_FREF);
+        radiusPreference = globalUserSettings.getInt("radiusPreference", RAD_PREF);
+        distancePreference = globalUserSettings.getString("distancePreference", DIST_PREF);
+
 
         boolean hasLocation = getUserLocation();
         if (!hasLocation) {
 
         }
+
+        mAdapter = new FeedAdapter(getActivity(), getPreferredPosts());
+        mAdapter.notifyDataSetChanged();
 
     }
 
@@ -147,7 +161,9 @@ public class BuyRequestFeedFragment extends Fragment {
         }
     }
 
-    private void getPreferredPosts() {
+    private List<Transaction> getPreferredPosts() {
+
+        ArrayList<Transaction> transactions = new ArrayList<>();
 
         Calendar c = Calendar.getInstance();
 
@@ -156,7 +172,7 @@ public class BuyRequestFeedFragment extends Fragment {
         query1.whereEqualTo("resolved", false);
         query1.whereEqualTo("where", "CurrentLocation");
 
-
+        return transactions;
 
     }
 

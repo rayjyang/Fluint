@@ -1,8 +1,10 @@
 package eia.fluint;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
@@ -172,7 +174,27 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.DataViewHolder
     }
 
     private String parseDistance(Transaction trans) {
-        return "12 km";
+        ParseGeoPoint geoPoint = trans.getCurrentPoint();
+        SharedPreferences sp = mContext.getSharedPreferences("eia.fluint.USER_SETTINGS", Context.MODE_PRIVATE);
+        String distPref = sp.getString("distancePreference", "km");
+        double distance;
+        if (distPref.equals("km")) {
+            if (geoPoint != null) {
+                distance = geoPoint.distanceInKilometersTo(trans.getLocationPoint());
+            } else {
+                distance = 0.0;
+            }
+        } else {
+            if (geoPoint != null) {
+                distance = geoPoint.distanceInMilesTo(trans.getLocationPoint());
+            } else {
+                distance = 0.0;
+            }
+        }
+
+        String result = "" + (int) distance + " " + distPref;
+
+        return result;
     }
 
     private String parseRating(Transaction trans) {

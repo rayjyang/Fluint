@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -33,9 +34,11 @@ import java.util.TimeZone;
 public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickListener {
 
     private static final String TAG = "ForSaleFeedFragment";
+    private static final String FS_POST_TAG = "FS_POSTS";
     private static final int RAD_PREF = 25;
     private static final int MIN_BUY_PREF = 1;
     private static final int MAX_BUY_FREF = 1000;
+    private static final String DIST_PREF = "km";
 
     private RecyclerView recyclerView;
     private FeedAdapter mAdapter;
@@ -47,6 +50,7 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
     private int minBuyPreference;
     private int maxBuyPreference;
     private int radiusPreference;
+    private String distancePreference;
 
     private double latitude = 0.0;
     private double longitude = 0.0;
@@ -89,11 +93,13 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
         minBuyPreference = globalUserSettings.getInt("minBuyPreference", MIN_BUY_PREF);
         maxBuyPreference = globalUserSettings.getInt("maxBuyPreference", MAX_BUY_FREF);
         radiusPreference = globalUserSettings.getInt("radiusPreference", RAD_PREF);
+        distancePreference = globalUserSettings.getString("distancePreference", DIST_PREF);
 
         Log.d("BUY_PREF", buyPreference.toString());
         Log.d("MIN_BUY_PREF", minBuyPreference + "");
         Log.d("MAX_BUY_PREF", maxBuyPreference + "");
         Log.d("RAD_PREF", radiusPreference + "");
+        Log.d("DIST_PREF", distancePreference);
 
 
     }
@@ -117,11 +123,11 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
                     // TODO: display a snackbar saying we could not find location at this time
                     // use a saved location?
                     mAdapter = new FeedAdapter(getActivity(), getPreferredPosts());
-                    recyclerView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
 //                    getPreferredPosts();
                 } else {
                     mAdapter = new FeedAdapter(getActivity(), getPreferredPosts());
-                    recyclerView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
 //                    getPreferredPosts();
                 }
                 new Handler().postDelayed(new Runnable() {
@@ -143,10 +149,8 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
         mAdapter = new FeedAdapter(getActivity(), getPreferredPosts());
         mAdapter.setClickListener(this);
         recyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
 
-
-        // mAdapter = new FeedAdapter(myDataset);
-        // recyclerView.setAdapter(mAdapter);
 
 
         // TODO: XML: wrap FAB in a CoordinatorLayout
@@ -189,11 +193,13 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
         minBuyPreference = globalUserSettings.getInt("minBuyPreference", MIN_BUY_PREF);
         maxBuyPreference = globalUserSettings.getInt("maxBuyPreference", MAX_BUY_FREF);
         radiusPreference = globalUserSettings.getInt("radiusPreference", RAD_PREF);
+        distancePreference = globalUserSettings.getString("distancePreference", DIST_PREF);
 
         Log.d("BUY_PREF", buyPreference.toString());
         Log.d("MIN_BUY_PREF", minBuyPreference + "");
         Log.d("MAX_BUY_PREF", maxBuyPreference + "");
         Log.d("RAD_PREF", radiusPreference + "");
+        Log.d("DIST_PREF", distancePreference);
         boolean hasLocation = getUserLocation();
         if (!hasLocation) {
             // TODO: display a snackbar indicating we could not get their location at this time
@@ -203,7 +209,7 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
 
 
         mAdapter = new FeedAdapter(getActivity(), getPreferredPosts());
-        recyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
     }
 
 
@@ -253,6 +259,7 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
         query2.whereLessThanOrEqualTo("amountA", maxBuyPreference);
         query2.whereGreaterThanOrEqualTo("amountB", minBuyPreference);
         query2.whereEqualTo("locationType", "pick");
+//        query2.orderByDescending("createdAt");
 //        query2.whereWithinKilometers("location", currentLocation, 100);
 
         c.setTime(currentDate);
@@ -284,12 +291,30 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
                         t.setOpUsername(trans.getString("username"));
                         t.setCreatedAt(trans.getCreatedAt());
 
+                        // used to calculate location distances on the cardview
+                        t.setCurrentPoint(currentLocation);
+
                         transactions.add(t);
 
                     }
+
+                    ParseObject.unpinAllInBackground(FS_POST_TAG, list, new DeleteCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Log.d(FS_POST_TAG, "WHEEEEEE");
+                            } else {
+                                Log.e(FS_POST_TAG, "UHOHH", e);
+                                return;
+                            }
+                        }
+                    });
+
+                    ParseObject.pinAllInBackground(FS_POST_TAG, list);
                 } else {
                     // TODO: display a cute fragment indicating we could not retrieve all posts at this time
                     Log.d(TAG, "Could not retrieve posts at this time.");
+                    return;
                 }
             }
         });

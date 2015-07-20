@@ -6,12 +6,15 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
@@ -22,6 +25,11 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
+    private CardView buyPreference;
+    private CardView sellPreference;
+    private CardView radiusPreference;
+    private CardView logOut;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +39,61 @@ public class SettingsActivity extends AppCompatActivity {
         toolbar.setTitle("Settings");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        buyPreference = (CardView) findViewById(R.id.buyPreference);
+        sellPreference = (CardView) findViewById(R.id.sellPreference);
+        radiusPreference = (CardView) findViewById(R.id.radiusPreference);
+        logOut = (CardView) findViewById(R.id.logOut);
+
+        buyPreference.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        sellPreference.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        radiusPreference.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ProgressDialog pDialog = new ProgressDialog(SettingsActivity.this, R.style.AuthenticateDialog);
+                pDialog.setIndeterminate(true);
+                pDialog.setMessage("Logging out");
+                pDialog.show();
+                ParseUser.logOutInBackground(new LogOutCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        pDialog.dismiss();
+                        if (e == null) {
+                            Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            // TODO: show AlertDialog indicating logout was unsuccessful
+                            AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                            builder.setTitle("Logout unsuccessful");
+                            builder.setMessage("We could not log you out at this time. Please try again later.");
+                            builder.show();
+                        }
+                    }
+                });
+
+            }
+        });
 
         // TODO: Get references to settings views and set OnClickListeners
 

@@ -20,9 +20,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by Raymond on 7/14/2015.
- */
 public class GPSTracker extends Service implements LocationListener {
     private final FragmentActivity mActivity;
 

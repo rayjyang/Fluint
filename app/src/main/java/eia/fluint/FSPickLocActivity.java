@@ -223,6 +223,8 @@ public class FSPickLocActivity extends AppCompatActivity implements
                 String userId = user.getObjectId();
                 String name = (String) user.get("name");
 
+                transaction.setWhere("PL");
+                transaction.setLocationType("pick");
                 transaction.setOriginalPoster(user);
                 transaction.setOpUsername(username);
                 transaction.setPosterId(userId);
@@ -237,7 +239,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
 
                 if (setLocation != null) {
                     setPoint = new ParseGeoPoint(setLocation.getLatitude(), setLocation.getLongitude());
-                    transaction.setPickedPoint(setPoint);
+                    transaction.setLocationPoint(setPoint);
                 }
 
 
@@ -263,7 +265,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
 
                 if (transaction.getCurrencyA() == null || transaction.getCurrencyB() == null
                         || amountAText.equals("") || amountBText.equals("")
-                        || transaction.getPickedPoint() == null || transaction.getCurrentPoint() == null) {
+                        || transaction.getLocationPoint() == null || transaction.getCurrentPoint() == null) {
                     if (setLocation == null) {
                         if (mostRecentUserLocation != null) {
                             setLocation = mostRecentUserLocation;
@@ -291,12 +293,14 @@ public class FSPickLocActivity extends AppCompatActivity implements
 
 
                 ParseObject fsPost = new ParseObject("ForSalePost");
-                fsPost.put("transactionType", transaction.getTransactionType()); //
+                fsPost.put("transactionType", transaction.getTransactionType());
+                fsPost.put("where", transaction.getWhere());// /
                 fsPost.put("currencyA", transaction.getCurrencyA()); //
                 fsPost.put("amountA", transaction.getAmountA()); //
                 fsPost.put("currencyB", transaction.getCurrencyB()); //
                 fsPost.put("amountB", transaction.getAmountB()); //
-                fsPost.put("pickedLoc", transaction.getPickedPoint()); //
+                fsPost.put("location", transaction.getLocationPoint());
+                fsPost.put("locationType", transaction.getLocationType());
                 fsPost.put("radius", transaction.getRadius()); //
                 fsPost.put("username", transaction.getOpUsername()); //
                 fsPost.put("posterId", transaction.getPosterId());
@@ -311,7 +315,6 @@ public class FSPickLocActivity extends AppCompatActivity implements
                         if (e == null) {
                             // Submit post was successful
                             Intent intent = new Intent(FSPickLocActivity.this, MainFeedActivity.class);
-                            intent.putExtra("nav", 1);
                             startActivity(intent);
 
                         } else {
@@ -399,7 +402,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
             currPoint = new ParseGeoPoint(latitude, longitude);
             transaction.setCurrentPoint(currPoint);
             setPoint = new ParseGeoPoint(latitude, longitude);
-            transaction.setPickedPoint(setPoint);
+            transaction.setLocationPoint(setPoint);
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(currentPoint).zoom(19f).tilt(0).build();
@@ -448,7 +451,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
                         setLocation.setLongitude(latLng1.longitude);
                         setLocation.setTime(new Date().getTime());
 
-                        transaction.setPickedLocation(setLocation);
+                        transaction.setLocation(setLocation);
 
                         markerText.setBackgroundColor(getResources().getColor(R.color.materialLightGreen));
                         markerText.setTextColor(getResources().getColor(R.color.whiteColor));

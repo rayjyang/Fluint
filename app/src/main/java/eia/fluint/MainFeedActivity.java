@@ -44,7 +44,6 @@ public class MainFeedActivity extends AppCompatActivity {
 
 
     private boolean whichView = false;
-    private boolean dynamicView = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +51,6 @@ public class MainFeedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_feed);
 
         gps = new GPSTracker(this);
-        Location loc = gps.getLocation();
 
 
 
@@ -67,25 +65,19 @@ public class MainFeedActivity extends AppCompatActivity {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 // TODO: scale Floating Action Button size
                 Log.d("POSITION_OFFSET", positionOffset + "");
+                Log.d("POS_OFFSET_VIEW", whichView + "");
+                Log.d("JUST_POS", position + "");
+
                 if (positionOffset < 0.5) {
-                    dynamicView = false;
+                    if (whichView) {
+                        fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColorDark)));
+                    } else {
+                        fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.accentColor)));
+                    }
                     fabMainFeed.setScaleX((1 - 2 * positionOffset));
                     fabMainFeed.setScaleY((1 - 2 * positionOffset));
                 } else {
-                    if (positionOffset <= 0.7 && positionOffset >= 0.3) {
-                        if (dynamicView) {
-                            fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColorDark)));
-                        } else {
-                            fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.accentColor)));
-                        }
-                    } else {
-                        if (dynamicView) {
-                            fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColorDark)));
-                        } else {
-                            fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.accentColor)));
-                        }
-                    }
-                    dynamicView = true;
+                    fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColorDark)));
                     fabMainFeed.setScaleX((2 * positionOffset - 1));
                     fabMainFeed.setScaleY((2 * positionOffset - 1));
                 }
@@ -150,6 +142,11 @@ public class MainFeedActivity extends AppCompatActivity {
         fabMainFeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // TODO: expand the FAB to give three options, each launching a different intent
+                // Can use whichView boolean value to launch the right intent by assigning
+                // OnClickListener to the 3 options and check the whichView boolean in each
+
                 if (whichView) {
                     Toast.makeText(MainFeedActivity.this, "SECOND INTENT", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(MainFeedActivity.this, AddForSalePostActivity.class);

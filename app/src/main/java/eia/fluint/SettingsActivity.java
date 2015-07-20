@@ -31,6 +31,9 @@ public class SettingsActivity extends AppCompatActivity {
         toolbar.setTitle("Settings");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // TODO: Get references to settings views and set OnClickListeners
+
     }
 
     @Override

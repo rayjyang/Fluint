@@ -97,7 +97,10 @@
             android:layout_height="56dp"
             card_view:cardBackgroundColor="@color/accentColor"
             card_view:cardElevation="4dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground">
 
             <android.support.v7.widget.AppCompatButton
                 android:layout_width="match_parent"
@@ -117,7 +120,10 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             card_view:cardBackgroundColor="@color/facebookColor"
-            card_view:cardElevation="4dp">
+            card_view:cardElevation="4dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground">
 
             <android.support.v7.widget.AppCompatButton
                 android:layout_width="match_parent"

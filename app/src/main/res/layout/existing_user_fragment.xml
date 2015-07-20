@@ -89,49 +89,35 @@
         android:id="@+id/signInButtonsContainer"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:paddingBottom="32dp"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto">
+        android:paddingBottom="32dp">
 
-        <android.support.v7.widget.CardView
+
+        <android.support.v7.widget.AppCompatButton
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            card_view:cardBackgroundColor="#72909090"
-            card_view:cardElevation="4dp"
-            android:layout_marginBottom="8dp" >
+            android:background="@drawable/login_button_border"
+            android:id="@+id/ibLoginButton"
+            android:textColor="@color/textColorPrimary"
+            android:text="Log In"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            android:layout_marginBottom="8dp"/>
 
-            <android.support.v7.widget.AppCompatButton
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#72909090"
-                android:id="@+id/ibLoginButton"
-                android:textColor="@color/whiteColor"
-                android:text="Log In"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:gravity="center"
-                android:textSize="16sp"
-                android:textAllCaps="false" />
 
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
+        <android.support.v7.widget.AppCompatButton
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            card_view:cardBackgroundColor="@color/facebookColor"
-            card_view:cardElevation="4dp">
+            android:id="@+id/ibLoginFacebook"
+            android:background="@drawable/log_in_facebook_button_border"
+            android:textColor="@color/whiteColor"
+            android:text="Log in with Facebook"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            android:layout_gravity="center_horizontal|center_vertical"/>
 
-            <android.support.v7.widget.AppCompatButton
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/ibLoginFacebook"
-                android:background="@color/facebookColor"
-                android:textColor="@color/whiteColor"
-                android:text="Log in with Facebook"
-                android:gravity="center"
-                android:textSize="16sp"
-                android:textAllCaps="false"
-                android:layout_gravity="center_horizontal|center_vertical"/>
-
-        </android.support.v7.widget.CardView>
 
     </LinearLayout>
 

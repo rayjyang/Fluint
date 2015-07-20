@@ -259,7 +259,7 @@ public class TransactionFSAirportFragment extends Fragment {
 //                    buyPost.put("currency", transaction.getFsCurrencySell());
 //                    buyPost.put("amount", transaction.getAmount());
                     buyPost.put("arrival", transaction.getArrival());
-                    buyPost.put("location", transaction.getPickedLocation());
+                    buyPost.put("location", transaction.getLocation());
                     buyPost.put("flightNo", transaction);
                     buyPost.put("airport", transaction.getAirport());
 

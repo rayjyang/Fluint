@@ -14,14 +14,16 @@ public class Transaction {
     private String arrivalLocation;
 
     private String transactionType;
+    private String where;
     private String currencyA;
     private String currencyB;
     private int amountA;
     private int amountB;
     private Date arrival;
-    private Location pickedLocation;
+    private String locationType;
+    private Location location;
     private Location currentLocation;
-    private ParseGeoPoint pickedPoint;
+    private ParseGeoPoint locationPoint;
     private ParseGeoPoint currentPoint;
     private int radius;
     private String flightNo;
@@ -32,6 +34,9 @@ public class Transaction {
     private String posterId;
     private boolean resolved;
 
+    // private Parse fields
+    private Date createdAt;
+    private String postObjectId;
 
 
     public static final String TAG = "Transaction";
@@ -46,6 +51,14 @@ public class Transaction {
 
     public String getTransactionType() {
         return transactionType;
+    }
+
+    public void setWhere(String loc) {
+        where = loc;
+    }
+
+    public String getWhere() {
+        return where;
     }
 
     public void setCurrencyA(String which) {
@@ -88,12 +101,20 @@ public class Transaction {
         return arrival;
     }
 
-    public void setPickedLocation(Location loc) {
-        pickedLocation = loc;
+    public void setLocationType(String loc) {
+        locationType = loc;
     }
 
-    public Location getPickedLocation() {
-        return pickedLocation;
+    public String getLocationType() {
+        return locationType;
+    }
+
+    public void setLocation(Location loc) {
+        location = loc;
+    }
+
+    public Location getLocation() {
+        return location;
     }
 
     public void setCurrentLocation(Location loc) {
@@ -104,12 +125,12 @@ public class Transaction {
         return currentLocation;
     }
 
-    public void setPickedPoint(ParseGeoPoint point) {
-        pickedPoint = point;
+    public void setLocationPoint(ParseGeoPoint point) {
+        locationPoint = point;
     }
 
-    public ParseGeoPoint getPickedPoint() {
-        return pickedPoint;
+    public ParseGeoPoint getLocationPoint() {
+        return locationPoint;
     }
 
     public void setCurrentPoint(ParseGeoPoint point) {
@@ -182,6 +203,22 @@ public class Transaction {
 
     public boolean getResolved() {
         return resolved;
+    }
+
+    public void setCreatedAt(Date date) {
+        createdAt = date;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setPostObjectId(String id) {
+        postObjectId = id;
+    }
+
+    public String getPostObjectId() {
+        return postObjectId;
     }
 
 }

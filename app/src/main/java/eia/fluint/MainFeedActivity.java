@@ -1,10 +1,13 @@
 package eia.fluint;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -17,12 +20,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
+import com.github.clans.fab.FloatingActionMenu;
 
 
 public class MainFeedActivity extends AppCompatActivity {
@@ -42,8 +49,12 @@ public class MainFeedActivity extends AppCompatActivity {
 
     private FloatingActionButton fabMainFeed;
 
+    private FloatingActionMenu fabMenu;
+
 
     private boolean whichView = false;
+
+    int pivotX, pivotY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +68,17 @@ public class MainFeedActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolBarFeed);
         setSupportActionBar(toolbar);
 
+        Display mdisp = getWindowManager().getDefaultDisplay();
+        Point mdispSize = new Point();
+        mdisp.getSize(mdispSize);
+        int maxX = mdispSize.x;
+        int maxY = mdispSize.y;
+
+        float dpPadding = convertDpToPixel(20, MainFeedActivity.this);
+
+        pivotX = maxX - (int) dpPadding;
+        pivotY = maxY - (int) dpPadding;
+
 
         mPager = (ViewPager) findViewById(R.id.loginPagerMain);
         mPager.setAdapter(new MainPagerAdapter(getFragmentManager()));
@@ -68,18 +90,21 @@ public class MainFeedActivity extends AppCompatActivity {
                 Log.d("POS_OFFSET_VIEW", whichView + "");
                 Log.d("JUST_POS", position + "");
 
+
                 if (positionOffset < 0.5) {
                     if (whichView) {
-                        fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColorDark)));
+//                        fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColorDark)));
                     } else {
-                        fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.accentColor)));
+//                        fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.accentColor)));
                     }
-                    fabMainFeed.setScaleX((1 - 2 * positionOffset));
-                    fabMainFeed.setScaleY((1 - 2 * positionOffset));
+//                    fabMainFeed.setScaleX((1 - 2 * positionOffset));
+//                    fabMainFeed.setScaleY((1 - 2 * positionOffset));
+
                 } else {
-                    fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColorDark)));
-                    fabMainFeed.setScaleX((2 * positionOffset - 1));
-                    fabMainFeed.setScaleY((2 * positionOffset - 1));
+
+//                    fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColorDark)));
+//                    fabMainFeed.setScaleX((2 * positionOffset - 1));
+//                    fabMainFeed.setScaleY((2 * positionOffset - 1));
                 }
             }
 
@@ -138,27 +163,29 @@ public class MainFeedActivity extends AppCompatActivity {
             }
         });
 
-        fabMainFeed = (FloatingActionButton) findViewById(R.id.fabMainFeed);
-        fabMainFeed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        fabMenu = (FloatingActionMenu) findViewById(R.id.fabMenu);
 
-                // TODO: expand the FAB to give three options, each launching a different intent
-                // Can use whichView boolean value to launch the right intent by assigning
-                // OnClickListener to the 3 options and check the whichView boolean in each
-
-                if (whichView) {
-                    Toast.makeText(MainFeedActivity.this, "SECOND INTENT", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainFeedActivity.this, AddForSalePostActivity.class);
-                    startActivity(intent);
-
-                } else {
-                    Toast.makeText(MainFeedActivity.this, "FIRST INTENT", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainFeedActivity.this, AddForSalePostActivity.class);
-                    startActivity(intent);
-                }
-            }
-        });
+//        fabMainFeed = (FloatingActionButton) findViewById(R.id.fabMainFeed);
+//        fabMainFeed.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                // TODO: expand the FAB to give three options, each launching a different intent
+//                // Can use whichView boolean value to launch the right intent by assigning
+//                // OnClickListener to the 3 options and check the whichView boolean in each
+//
+//                if (whichView) {
+//                    Toast.makeText(MainFeedActivity.this, "SECOND INTENT", Toast.LENGTH_LONG).show();
+//                    Intent intent = new Intent(MainFeedActivity.this, AddForSalePostActivity.class);
+//                    startActivity(intent);
+//
+//                } else {
+//                    Toast.makeText(MainFeedActivity.this, "FIRST INTENT", Toast.LENGTH_LONG).show();
+//                    Intent intent = new Intent(MainFeedActivity.this, AddForSalePostActivity.class);
+//                    startActivity(intent);
+//                }
+//            }
+//        });
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer);
@@ -213,6 +240,20 @@ public class MainFeedActivity extends AppCompatActivity {
 
     public GPSTracker getGps() {
         return gps;
+    }
+
+    public static float convertDpToPixel(float dp, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float px = dp * (metrics.densityDpi / 160f);
+        return px;
+    }
+
+    public static float convertPixelsToDp(float px, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float dp = px / (metrics.densityDpi / 160f);
+        return dp;
     }
 
     class MainPagerAdapter extends FragmentPagerAdapter {

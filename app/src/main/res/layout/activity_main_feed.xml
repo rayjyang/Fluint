@@ -7,6 +7,7 @@
     android:fitsSystemWindows="true">
 
     <RelativeLayout
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -37,19 +38,60 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/loginTabsMain"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabMainFeed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/fabMainFeed"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_marginRight="24dp"-->
+            <!--android:layout_marginEnd="24dp"-->
+            <!--android:layout_marginBottom="24dp"-->
+            <!--android:src="@drawable/material_plus"-->
+            <!--app:borderWidth="0dp"-->
+            <!--android:elevation="4dp" />-->
+
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/fabMenu"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="24dp"
-            android:src="@drawable/material_plus"
-            app:borderWidth="0dp"
-            android:elevation="4dp" />
+            android:paddingBottom="20dp"
+            android:paddingRight="20dp"
+            fab:menu_labels_singleLine="true"
+            fab:menu_backgroundColor="#bfffffff"
+            fab:menu_fab_size="normal"
+            fab:menu_labels_colorNormal="@android:color/transparent"
+            fab:menu_labels_colorRipple="#42ffffff"
+            fab:menu_labels_textColor="@color/textColorPrimary"
+            fab:menu_labels_textSize="18sp"
+            fab:menu_labels_cornerRadius="0dp"
+            fab:menu_labels_showShadow="false"
+            android:elevation="4dp">
+
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_size="mini"
+                fab:fab_label="Choose a location"/>
+
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_size="mini"
+                fab:fab_label="Pick a location"/>
+
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_size="mini"
+                fab:fab_label="Use an airport"/>
+
+
+
+        </com.github.clans.fab.FloatingActionMenu>
 
     </RelativeLayout>
 

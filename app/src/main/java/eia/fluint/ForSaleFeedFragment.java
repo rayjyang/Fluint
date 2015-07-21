@@ -156,7 +156,11 @@ public class ForSaleFeedFragment extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Transaction details = intentTransactions.get(position);
+                try {
+                    Transaction details = intentTransactions.get(position);
+                } catch (Exception e) {
+                    Log.d("EmptyArr", "Transactions size: " + intentTransactions.size());
+                }
                 Intent intent = new Intent(getActivity(), PostDetailsActivity.class);
                 startActivity(intent);
             }

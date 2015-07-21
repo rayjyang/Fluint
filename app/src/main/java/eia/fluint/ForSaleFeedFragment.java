@@ -1,37 +1,46 @@
 package eia.fluint;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
-import java.util.TimeZone;
 
 
-public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickListener {
+public class ForSaleFeedFragment extends Fragment {
 
     private static final String TAG = "ForSaleFeedFragment";
     private static final String FS_POST_TAG = "FS_POSTS";
@@ -41,7 +50,7 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
     private static final String DIST_PREF = "km";
 
     private RecyclerView recyclerView;
-    private FeedAdapter mAdapter;
+    private FeedAdapterFS mAdapter;
     private LinearLayoutManager mLayoutManager;
     private SwipeRefreshLayout feedSwipeRefresh;
 
@@ -57,6 +66,8 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
     private ParseGeoPoint currentLocation;
 
     private SharedPreferences globalUserSettings;
+
+    private ArrayList<Transaction> intentTransactions;
 
     /**
      * Use this factory method to create a new instance of
@@ -122,11 +133,11 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
                 if (!hasLocation) {
                     // TODO: display a snackbar saying we could not find location at this time
                     // use a saved location?
-                    mAdapter = new FeedAdapter(getActivity(), getPreferredPosts());
+                    mAdapter = new FeedAdapterFS(getActivity(), getPreferredPosts());
                     mAdapter.notifyDataSetChanged();
 //                    getPreferredPosts();
                 } else {
-                    mAdapter = new FeedAdapter(getActivity(), getPreferredPosts());
+                    mAdapter = new FeedAdapterFS(getActivity(), getPreferredPosts());
                     mAdapter.notifyDataSetChanged();
 //                    getPreferredPosts();
                 }
@@ -142,12 +153,24 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
         feedSwipeRefresh.setColorSchemeResources(R.color.primaryColor);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Transaction details = intentTransactions.get(position);
+                Intent intent = new Intent(getActivity(), PostDetailsActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        }));
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new FeedAdapter(getActivity(), getPreferredPosts());
-        mAdapter.setClickListener(this);
+        mAdapter = new FeedAdapterFS(getActivity(), getPreferredPosts());
         recyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
@@ -208,7 +231,7 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
 
 
 
-        mAdapter = new FeedAdapter(getActivity(), getPreferredPosts());
+        mAdapter = new FeedAdapterFS(getActivity(), getPreferredPosts());
         mAdapter.notifyDataSetChanged();
     }
 
@@ -273,26 +296,74 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
             @Override
             public void done(List<ParseObject> list, ParseException e) {
                 if (e == null) {
+                    String parsedName, parsedDetails, parsedA, parsedB, parsedDistance;
+
+                    int amountA, amountB;
+                    String currencyA, currencyB, fullName, posterId;
+                    ParseGeoPoint location;
+
+
+                    PostParser pp = new PostParser(getActivity());
                     for (ParseObject trans : list) {
+                        final Transaction t = new Transaction();
+                        amountA = trans.getInt("amountA");
+                        amountB = trans.getInt("amountB");
+                        currencyA = trans.getString("currencyA");
+                        currencyB = trans.getString("currencyB");
+                        fullName = trans.getString("posterName");
+                        location = trans.getParseGeoPoint("location");
+                        posterId = trans.getString("posterId");
+
+                        // TODO: find user in background and get rating (2 columns)
+                        ParseQuery<ParseUser> queryForUser = ParseUser.getQuery();
+                        queryForUser.getInBackground(posterId, new GetCallback<ParseUser>() {
+                            @Override
+                            public void done(ParseUser parseUser, ParseException e) {
+                                if (e == null) {
+                                    double rating = parseUser.getInt("rating");
+                                    int numRatings = parseUser.getInt("numRatings");
+
+                                    double average = rating / numRatings;
+
+                                    t.setParsedRating(average + "");
+
+                                } else {
+                                    t.setParsedRating(4.5 + "");
+                                }
+                            }
+                        });
+
+
                         Log.d(TAG, "findInBackground in ok");
-                        Transaction t = new Transaction();
                         t.setTransactionType(trans.getString("transactionType"));
                         t.setWhere(trans.getString("where"));
-                        t.setAmountA(trans.getInt("amountA"));
-                        t.setCurrencyA(trans.getString("currencyA"));
-                        t.setAmountB(trans.getInt("amountB"));
-                        t.setCurrencyB(trans.getString("currencyB"));
-                        t.setLocationPoint(trans.getParseGeoPoint("location"));
+                        t.setAmountA(amountA);
+                        t.setCurrencyA(currencyA);
+                        t.setAmountB(amountB);
+                        t.setCurrencyB(currencyB);
+                        t.setLocationPoint(location);
                         t.setLocationType(trans.getString("locationType"));
                         t.setRadius(trans.getInt("radius"));
                         t.setResolved(trans.getBoolean("resolved"));
-                        t.setPosterName(trans.getString("posterName"));
-                        t.setPosterId(trans.getString("posterId"));
+                        t.setPosterName(fullName);
+                        t.setPosterId(posterId);
                         t.setOpUsername(trans.getString("username"));
                         t.setCreatedAt(trans.getCreatedAt());
 
                         // used to calculate location distances on the cardview
                         t.setCurrentPoint(currentLocation);
+
+                        parsedName = pp.parseName(fullName);
+                        parsedA = pp.parseA(amountA + "", currencyA);
+                        parsedB = pp.parseB(amountB + "", currencyB);
+                        parsedDistance = pp.parseDistance(t);
+
+
+                        t.setParsedName(parsedName);
+                        t.setParsedA(parsedA);
+                        t.setParsedB(parsedB);
+                        t.setParsedDistance(parsedDistance);
+
 
                         transactions.add(t);
 
@@ -329,8 +400,11 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
         query3.whereEqualTo("transactionType", "sell");
         query3.whereEqualTo("where", "AP");
 
+        intentTransactions = transactions;
+
         return transactions;
     }
+
 
     private boolean getUserLocation() {
         GPSTracker gps = ((MainFeedActivity) getActivity()).getGps();
@@ -353,13 +427,6 @@ public class ForSaleFeedFragment extends Fragment implements FeedAdapter.ClickLi
             return false;
         }
 
-
-    }
-
-
-    @Override
-    public void itemClicked(View view, int position) {
-        Toast.makeText(getActivity(), position + "", Toast.LENGTH_SHORT).show();
 
     }
 

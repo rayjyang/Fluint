@@ -566,7 +566,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
         protected void onPostExecute(String result) {
             try {
                 addressText.setText(addresses.get(0).getAddressLine(0)
-                        + addresses.get(0).getAddressLine(1) + " ");
+                        + " " + addresses.get(0).getAddressLine(1) + " ");
             } catch (Exception e) {
                 e.printStackTrace();
             }

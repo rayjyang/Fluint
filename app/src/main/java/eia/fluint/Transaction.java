@@ -39,6 +39,18 @@ public class Transaction {
     private Date createdAt;
     private String postObjectId;
 
+    // post details
+    private String city;
+    private int hoursAgo;
+
+    // fields to set in a CardView
+    private String parsedName;
+    private String parsedDetails;
+    private String parsedA;
+    private String parsedB;
+    private String parsedDistance;
+    private String parsedRating;
+
 
     public static final String TAG = "Transaction";
 
@@ -228,6 +240,70 @@ public class Transaction {
 
     public String getPostObjectId() {
         return postObjectId;
+    }
+
+    public void setParsedName(String name) {
+        parsedName = name;
+    }
+
+    public String getParsedName() {
+        return parsedName;
+    }
+
+    public void setParsedDetails(String details) {
+        parsedDetails = details;
+    }
+
+    public String getParsedDetails() {
+        return parsedDetails;
+    }
+
+    public void setParsedA(String a) {
+        parsedA = a;
+    }
+
+    public String getParsedA() {
+        return parsedA;
+    }
+
+    public void setParsedB(String b) {
+        parsedB = b;
+    }
+
+    public String getParsedB() {
+        return parsedB;
+    }
+
+    public void setParsedDistance(String distance) {
+        parsedDistance = distance;
+    }
+
+    public String getParsedDistance() {
+        return parsedDistance;
+    }
+
+    public void setParsedRating(String rating) {
+        parsedRating = rating;
+    }
+
+    public String getParsedRating() {
+        return parsedRating;
+    }
+
+    public void setCity(String c) {
+        city = c;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setHoursAgo(int ha) {
+        hoursAgo = ha;
+    }
+
+    public int getHoursAgo() {
+        return hoursAgo;
     }
 
 }

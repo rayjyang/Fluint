@@ -34,7 +34,7 @@ public class BuyRequestFeedFragment extends Fragment {
     private static final String DIST_PREF = "km";
 
     private RecyclerView recyclerViewSell;
-    private FeedAdapter mAdapter;
+    private FeedAdapterFS mAdapter;
     private LinearLayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeRefreshSell;
     private double latitude = 0.0;
@@ -99,7 +99,7 @@ public class BuyRequestFeedFragment extends Fragment {
                     // TODO: display a snackbar saying we could not get their location at this time
 
                 }
-                mAdapter = new FeedAdapter(getActivity(), getPreferredPosts());
+                mAdapter = new FeedAdapterFS(getActivity(), getPreferredPosts());
                 mAdapter.notifyDataSetChanged();
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -117,7 +117,7 @@ public class BuyRequestFeedFragment extends Fragment {
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewSell.setLayoutManager(mLayoutManager);
 
-        mAdapter = new FeedAdapter(getActivity(), getPreferredPosts());
+        mAdapter = new FeedAdapterFS(getActivity(), getPreferredPosts());
         recyclerViewSell.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
@@ -144,7 +144,7 @@ public class BuyRequestFeedFragment extends Fragment {
 
         }
 
-        mAdapter = new FeedAdapter(getActivity(), getPreferredPosts());
+        mAdapter = new FeedAdapterFS(getActivity(), getPreferredPosts());
         mAdapter.notifyDataSetChanged();
 
     }

@@ -2,11 +2,14 @@ package eia.fluint;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -15,10 +18,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+
+import org.w3c.dom.Text;
 
 
 public class SettingsActivity extends AppCompatActivity {
@@ -29,6 +35,24 @@ public class SettingsActivity extends AppCompatActivity {
     private CardView sellPreference;
     private CardView radiusPreference;
     private CardView logOut;
+
+    private SharedPreferences globalUserSettings;
+
+    // All user preferences
+    private String buying;
+    private String selling;
+    private int radius;
+    private String username;
+
+    // View items to set in onCreate
+    private TextView buyingPreference;
+    private TextView sellingPreference;
+    private TextView radiusDistPreference;
+    private TextView loggedInAsPref;
+
+
+    // TODO: option to link with facebook
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +103,7 @@ public class SettingsActivity extends AppCompatActivity {
                         pDialog.dismiss();
                         if (e == null) {
                             Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                             finish();
                         } else {

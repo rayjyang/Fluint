@@ -48,6 +48,7 @@
                         android:textColor="@color/textColorPrimary" />
 
                     <TextView
+                        android:id="@+id/buyingPreference"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="None"
@@ -84,6 +85,7 @@
                         android:textColor="@color/textColorPrimary"/>
 
                     <TextView
+                        android:id="@+id/sellingPreference"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="None"
@@ -120,6 +122,7 @@
                         android:textColor="@color/textColorPrimary"/>
 
                     <TextView
+                        android:id="@+id/radiusDistPreference"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="None"
@@ -156,6 +159,7 @@
                         android:textColor="@color/textColorPrimary"/>
 
                     <TextView
+                        android:id="@+id/loggedInAsPref"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="You are logged in as: "

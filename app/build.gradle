@@ -45,4 +45,5 @@ dependencies {
     compile 'org.adw.library:discrete-seekbar:1.0.0'
     compile 'com.android.support:support-v13:+'
     compile 'joda-time:joda-time:2.8.1'
+    compile 'com.github.clans:fab:1.5.5'
 }

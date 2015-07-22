@@ -69,7 +69,9 @@ public class PostParser {
 
     public String parseDistance(Transaction trans) {
         ParseGeoPoint geoPoint = trans.getCurrentPoint();
-        SharedPreferences sp = mContext.getSharedPreferences("eia.fluint.USER_SETTINGS", Context.MODE_PRIVATE);
+
+        SharedPreferences sp;
+        sp = mContext.getSharedPreferences("eia.fluint.USER_SETTINGS", Context.MODE_PRIVATE);
         String distPref = sp.getString("distancePreference", "km");
         double distance;
         if (distPref.equals("km")) {
@@ -88,7 +90,7 @@ public class PostParser {
 
         String dist = distance + "";
 
-        String toReturn = dist + " " + distPref;
+        String toReturn;
 
         if (distance <= 1.0) {
             toReturn = "1 " + distPref;

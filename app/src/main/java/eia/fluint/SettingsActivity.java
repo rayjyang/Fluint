@@ -20,11 +20,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import org.w3c.dom.Text;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class SettingsActivity extends AppCompatActivity {
@@ -50,6 +54,10 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView radiusDistPreference;
     private TextView loggedInAsPref;
 
+    private Set<String> defaultBrowsePreferences;
+    private Set<String> tvbuyPreference;
+    private Set<String> tvsellPreference;
+
 
     // TODO: option to link with facebook
 
@@ -64,15 +72,64 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        globalUserSettings = this.getSharedPreferences("eia.fluint.user", MODE_PRIVATE);
+        defaultBrowsePreferences = new HashSet<>();
+        defaultBrowsePreferences.add("USD");
+        defaultBrowsePreferences.add("EUR");
+        defaultBrowsePreferences.add("JPY");
+        defaultBrowsePreferences.add("GBP");
+        defaultBrowsePreferences.add("CNY");
+        defaultBrowsePreferences.add("AUD");
+        defaultBrowsePreferences.add("CAD");
+
+        tvbuyPreference = globalUserSettings.getStringSet("eia.fluint.user.buypref", defaultBrowsePreferences);
+        tvsellPreference = globalUserSettings.getStringSet("eia.fluint.user.sellpref", defaultBrowsePreferences);
+
+        // TODO: make sure they are ordered consistently when printed
+
+
+
         buyPreference = (CardView) findViewById(R.id.buyPreference);
         sellPreference = (CardView) findViewById(R.id.sellPreference);
         radiusPreference = (CardView) findViewById(R.id.radiusPreference);
         logOut = (CardView) findViewById(R.id.logOut);
 
+        buyingPreference = (TextView) findViewById(R.id.buyingPreference);
+        sellingPreference = (TextView) findViewById(R.id.sellingPreference);
+        radiusDistPreference = (TextView) findViewById(R.id.radiusDistPreference);
+        loggedInAsPref = (TextView) findViewById(R.id.loggedInAsPref);
+
+        setBrowsePreferences();
+
+
+
         buyPreference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new MaterialDialog.Builder(SettingsActivity.this)
+                        .items(R.array.CurrencyCodesValues)
+                        .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog materialDialog, Integer[] integers, CharSequence[] charSequences) {
+                                try {
+                                    StringBuilder str = new StringBuilder();
+                                    for (int i = 0; i < charSequences.length - 1; i++) {
+                                        str.append(charSequences[i] + ", ");
+                                    }
+                                    str.append(charSequences[charSequences.length - 1]);
+                                    String tvBuying = str.toString();
+                                    buyingPreference.setText(tvBuying);
 
+
+
+                                    return true;
+                                } catch (Exception e) {
+                                    return false;
+                                }
+                            }
+                        })
+                        .positiveText("OK")
+                        .show();
             }
         });
 
@@ -121,6 +178,60 @@ public class SettingsActivity extends AppCompatActivity {
 
         // TODO: Get references to settings views and set OnClickListeners
 
+    }
+
+    private void setBrowsePreferences() {
+        String tvbuyToSet;
+        String tvsellToSet;
+        StringBuilder strb = new StringBuilder();
+        StringBuilder strb2 = new StringBuilder();
+        if (tvbuyPreference.size() == 1 || tvsellPreference.size() == 1) {
+            if (tvbuyPreference.size() == 1 && tvsellPreference.size() == 1) {
+                for (String s : tvbuyPreference) {
+                    buyingPreference.setText(s);
+                }
+                for (String s : tvsellPreference) {
+                    sellingPreference.setText(s);
+                }
+            } else if (tvbuyPreference.size() == 1) {
+                for (String s : tvbuyPreference) {
+                    buyingPreference.setText(s);
+                }
+                for (String currency : getResources().getStringArray(R.array.CurrencyCodesValues)) {
+                    if (tvsellPreference.contains(currency)) {
+                        strb2.append(currency);
+                        strb2.append(", ");
+                    }
+                }
+                tvsellToSet = strb2.toString();
+                tvsellToSet = tvsellToSet.substring(0, tvsellToSet.length() - 2);
+                sellingPreference.setText(tvsellToSet);
+            } else {
+                for (String s : tvsellPreference) {
+                    sellingPreference.setText(s);
+                }
+            }
+        } else {
+            for (String currency : getResources().getStringArray(R.array.CurrencyCodesValues)) {
+                if (tvbuyPreference.contains(currency)) {
+                    strb.append(currency);
+                    strb.append(", ");
+                }
+
+                if (tvsellPreference.contains(currency)) {
+                    strb2.append(currency);
+                    strb2.append(", ");
+                }
+            }
+
+            tvbuyToSet = strb.toString();
+            tvbuyToSet = tvbuyToSet.substring(0, tvbuyToSet.length() - 2);
+            buyingPreference.setText(tvbuyToSet);
+
+            tvsellToSet = strb2.toString();
+            tvsellToSet = tvsellToSet.substring(0, tvsellToSet.length() - 2);
+            sellingPreference.setText(tvsellToSet);
+        }
     }
 
     @Override

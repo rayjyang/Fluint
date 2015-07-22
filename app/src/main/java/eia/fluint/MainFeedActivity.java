@@ -224,10 +224,7 @@ public class MainFeedActivity extends AppCompatActivity {
 
         toolbar.setTitle("Browse");
         toolbar.setTitleTextColor(getResources().getColor(R.color.whiteColor));
-        mPager.setCurrentItem(0, true);
-        ForSaleFeedFragment forSaleFeedFragment = new ForSaleFeedFragment();
-        getFragmentManager().beginTransaction().replace(R.id.feedFragmentContainer, forSaleFeedFragment);
-        getFragmentManager().beginTransaction().commit();
+        mPager.setCurrentItem(0);
 
     }
 

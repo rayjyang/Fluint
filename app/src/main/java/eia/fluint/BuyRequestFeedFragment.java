@@ -64,7 +64,7 @@ public class BuyRequestFeedFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        globalUserSettings = getActivity().getSharedPreferences("eia.fluint.USER_SETTINGS", Context.MODE_PRIVATE);
+        globalUserSettings = getActivity().getSharedPreferences("eia.fluint.user", Context.MODE_PRIVATE);
 
         defaultSellPreference = new HashSet<>();
         defaultSellPreference.add("USD");
@@ -75,11 +75,11 @@ public class BuyRequestFeedFragment extends Fragment {
         defaultSellPreference.add("AUD");
         defaultSellPreference.add("CAD");
 
-        sellPreference = globalUserSettings.getStringSet("sellPreference", defaultSellPreference);
-        minSellPreference = globalUserSettings.getInt("minSellPreference", MIN_SELL_PREF);
-        maxSellPreference = globalUserSettings.getInt("maxSellPreference", MAX_SELL_FREF);
-        radiusPreference = globalUserSettings.getInt("radiusPreference", RAD_PREF);
-        distancePreference = globalUserSettings.getString("distancePreference", DIST_PREF);
+        sellPreference = globalUserSettings.getStringSet("eia.fluint.user.sellpref", defaultSellPreference);
+        minSellPreference = globalUserSettings.getInt("eia.fluint.user.minsellpref", MIN_SELL_PREF);
+        maxSellPreference = globalUserSettings.getInt("eia.fluint.user.maxsellpref", MAX_SELL_FREF);
+        radiusPreference = globalUserSettings.getInt("eia.fluint.user.radiuspref", RAD_PREF);
+        distancePreference = globalUserSettings.getString("eia.fluint.user.distpref", DIST_PREF);
 
     }
 
@@ -129,14 +129,12 @@ public class BuyRequestFeedFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        Toast.makeText(getActivity(), "BR onResume", Toast.LENGTH_SHORT).show();
-
         // TODO: get user preferences
-        sellPreference = globalUserSettings.getStringSet("sellPreference", defaultSellPreference);
-        minSellPreference = globalUserSettings.getInt("minBuyPreference", MIN_SELL_PREF);
-        maxSellPreference = globalUserSettings.getInt("maxBuyPreference", MAX_SELL_FREF);
-        radiusPreference = globalUserSettings.getInt("radiusPreference", RAD_PREF);
-        distancePreference = globalUserSettings.getString("distancePreference", DIST_PREF);
+        sellPreference = globalUserSettings.getStringSet("eia.fluint.user.sellpref", defaultSellPreference);
+        minSellPreference = globalUserSettings.getInt("eia.fluint.user.minsellpref", MIN_SELL_PREF);
+        maxSellPreference = globalUserSettings.getInt("eia.fluint.user.maxsellpref", MAX_SELL_FREF);
+        radiusPreference = globalUserSettings.getInt("eia.fluint.user.radiuspref", RAD_PREF);
+        distancePreference = globalUserSettings.getString("eia.fluint.user.distpref", DIST_PREF);
 
 
         boolean hasLocation = getUserLocation();
@@ -156,7 +154,6 @@ public class BuyRequestFeedFragment extends Fragment {
             latitude = gps.getLatitude();
             longitude = gps.getLongitude();
             currentLocation = new ParseGeoPoint(latitude, longitude);
-            Toast.makeText(getActivity(), "" + latitude + " ***** " + longitude, Toast.LENGTH_LONG).show();
 
 
         } catch (NullPointerException e) {

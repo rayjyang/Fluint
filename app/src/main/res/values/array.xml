@@ -2,7 +2,6 @@
 <resources>
     
     <string-array name="CurrencyCodes">
-        <item>None</item>
         <item>United States Dollar (USD)</item>
         <item>Euro (EUR)</item>
         <item>Japan Yen (JPY)</item>
@@ -14,7 +13,6 @@
     </string-array>
 
     <string-array name="CurrencyCodesValues">
-        <item>None</item>
         <item>USD</item>
         <item>EUR</item>
         <item>JPY</item>

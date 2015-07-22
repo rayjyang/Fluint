@@ -44,7 +44,7 @@
         <android.support.v7.widget.AppCompatButton
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Register"
+            android:text="Get Started"
             android:background="@drawable/register_button_border"
             android:textColor="@color/whiteColor"
             android:textSize="16sp"

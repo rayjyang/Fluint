@@ -308,7 +308,8 @@ public class FSPickLocActivity extends AppCompatActivity implements
                 fsPost.put("username", transaction.getOpUsername()); //
                 fsPost.put("posterId", transaction.getPosterId());
                 fsPost.put("posterName", transaction.getPosterName());
-                fsPost.put("resolved", transaction.getResolved()); //
+                fsPost.put("resolved", transaction.getResolved());
+                fsPost.put("city", transaction.getCity());
 
 
                 fsPost.saveInBackground(new SaveCallback() {
@@ -327,6 +328,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
                         }
                     }
                 });
+                finish();
 
 
 
@@ -431,7 +433,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
 
                     try {
                         new GetLocationAsync(center.latitude, center.longitude)
-                                .execute();
+                                .execute(transaction);
 
                     } catch (Exception e) {
                     }
@@ -513,7 +515,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
         return ret;
     }
 
-    private class GetLocationAsync extends AsyncTask<String, Void, String> {
+    private class GetLocationAsync extends AsyncTask<Transaction, Void, String> {
 
         // boolean duplicateResponse;
         double x, y;
@@ -532,7 +534,7 @@ public class FSPickLocActivity extends AppCompatActivity implements
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground(Transaction... params) {
 
             try {
                 geocoder = new Geocoder(FSPickLocActivity.this, Locale.ENGLISH);
@@ -547,6 +549,9 @@ public class FSPickLocActivity extends AppCompatActivity implements
                     String city = returnAddress.getCountryName();
                     String region_code = returnAddress.getCountryCode();
                     String zipcode = returnAddress.getPostalCode();
+
+                    Transaction t = params[0];
+                    t.setCity(localityString);
 
                     str.append(localityString + "");
                     str.append(city + "" + region_code + "");

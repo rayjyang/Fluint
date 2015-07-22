@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
@@ -91,33 +92,55 @@ public class FeedAdapterFS extends RecyclerView.Adapter<FeedAdapterFS.DataViewHo
 
         // TODO: dynamically set the views according to data in the Transaction object
 
-        final String elapsedTime;
-
-        parsePostDetails(transaction, new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
-                String result;
-                switch (msg.what) {
-                    case 1:
-                        Log.d("Handler", "Got city name");
-                        Bundle bundle = msg.getData();
-                        result = bundle.getString("city");
-                        holder.postDetailsFS.setText(Character.toString((char) 183) + " " + result);
-                        return true;
-                    default:
-                        Log.d("Handler", "Failed to get city name");
-                        result = "N/A";
-                        holder.postDetailsFS.setText(result);
-                        return false;
-                }
-            }
-        }));
+//        parsePostDetails(transaction, new Handler(new Handler.Callback() {
+//            @Override
+//            public boolean handleMessage(Message msg) {
+//                String result;
+//                switch (msg.what) {
+//                    case 1:
+//                        Log.d("Handler", "Got city name");
+//                        Bundle bundle = msg.getData();
+//                        result = bundle.getString("city");
+//                        holder.postDetailsFS.setText(Character.toString((char) 183) + " " + result);
+//                        return true;
+//                    default:
+//                        Log.d("Handler", "Failed to get city name");
+//                        result = "N/A";
+//                        holder.postDetailsFS.setText(result);
+//                        return false;
+//                }
+//            }
+//        }));
 
 //        new CityAsync(transaction.getLocationPoint().getLatitude(),
 //                transaction.getLocationPoint().getLongitude(), holder).execute();
 
+        if (transaction.getParsedRating() == null || transaction.getParsedRating().equals("")) {
+            ParseQuery<ParseUser> query = ParseUser.getQuery();
+            query.getInBackground(transaction.getPosterId(), new GetCallback<ParseUser>() {
+                @Override
+                public void done(ParseUser parseUser, ParseException e) {
+                    if (e == null) {
+                        Log.d("AVGS", "Somehow the rating was not set in ForSaleFeedFragment");
+                        int rating = parseUser.getInt("rating");
+                        int numRatings = parseUser.getInt("numRatings");
+
+                        double r = (double) rating / numRatings;
+
+                        String toSet = r + "";
+                        if (toSet.length() > 3) {
+                            toSet = toSet.substring(0, 3);
+                        }
+
+                        holder.ratingFS.setText(toSet);
+                    }
+                }
+            });
+        }
+
 
         holder.posterNameFS.setText(transaction.getParsedName());
+        holder.postDetailsFS.setText(transaction.getParsedDetails());
         holder.postAmountFS.setText(transaction.getParsedA());
         holder.ratingFS.setText(transaction.getParsedRating());
         holder.distanceFS.setText(transaction.getParsedDistance());

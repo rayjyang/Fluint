@@ -45,13 +45,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddForSalePostActivity"
-            android:label="@string/title_activity_add_post" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="eia.fluint.MainFeedActivity" />
-        </activity>
-        <activity
             android:name=".FSPickLocActivity"
             android:label="@string/title_activity_fspick_loc"
             android:windowSoftInputMode="stateHidden" >

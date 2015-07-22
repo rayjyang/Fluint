@@ -50,6 +50,9 @@ public class MainFeedActivity extends AppCompatActivity {
     private FloatingActionButton fabMainFeed;
 
     private FloatingActionMenu fabMenu;
+    private com.github.clans.fab.FloatingActionButton fabCurrentLocation;
+    private com.github.clans.fab.FloatingActionButton fabPickLocation;
+    private com.github.clans.fab.FloatingActionButton fabAirport;
 
 
     private boolean whichView = false;
@@ -94,6 +97,7 @@ public class MainFeedActivity extends AppCompatActivity {
                 if (positionOffset < 0.5) {
                     if (whichView) {
 //                        fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColorDark)));
+
                     } else {
 //                        fabMainFeed.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.accentColor)));
                     }
@@ -164,6 +168,31 @@ public class MainFeedActivity extends AppCompatActivity {
         });
 
         fabMenu = (FloatingActionMenu) findViewById(R.id.fabMenu);
+        fabCurrentLocation = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fabCurrentLocation);
+        fabPickLocation = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fabPickLocation);
+        fabAirport = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fabAirport);
+
+        fabCurrentLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        fabPickLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainFeedActivity.this, FSPickLocActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        fabAirport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
 //        fabMainFeed = (FloatingActionButton) findViewById(R.id.fabMainFeed);
 //        fabMainFeed.setOnClickListener(new View.OnClickListener() {

@@ -64,6 +64,7 @@
             fab:menu_backgroundColor="#bfffffff"
             fab:menu_fab_size="normal"
             fab:menu_labels_colorNormal="@android:color/transparent"
+            fab:menu_labels_colorPressed="@android:color/transparent"
             fab:menu_labels_colorRipple="#42ffffff"
             fab:menu_labels_textColor="@color/textColorPrimary"
             fab:menu_labels_textSize="18sp"
@@ -72,18 +73,21 @@
             android:elevation="4dp">
 
             <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fabCurrentLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_size="mini"
                 fab:fab_label="Choose a location"/>
 
             <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fabPickLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_size="mini"
                 fab:fab_label="Pick a location"/>
 
             <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fabAirport"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_size="mini"

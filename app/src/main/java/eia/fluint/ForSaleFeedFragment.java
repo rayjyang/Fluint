@@ -215,6 +215,7 @@ public class ForSaleFeedFragment extends Fragment {
 
         Toast.makeText(getActivity(), "FS onResume", Toast.LENGTH_SHORT).show();
 
+
         // Gets the currency that the user is interested in seeing on the FOR SALE PAGE
         buyPreference = globalUserSettings.getStringSet("buyPreference", defaultBuyPreference);
         minBuyPreference = globalUserSettings.getInt("minBuyPreference", MIN_BUY_PREF);
@@ -246,6 +247,8 @@ public class ForSaleFeedFragment extends Fragment {
         final ArrayList<Transaction> transactions = new ArrayList<>();
         Calendar c = Calendar.getInstance();
 
+        final Date currdate = new Date();
+
 
         // query1 is for when the seller used his current location
         ParseQuery<ParseObject> query1 = ParseQuery.getQuery("ForSalePost");
@@ -258,7 +261,7 @@ public class ForSaleFeedFragment extends Fragment {
         query1.whereEqualTo("locationType", "curr");
 //        query1.whereWithinKilometers("currentLoc", currentLocation, 100);
 
-        Date currentDate = new Date();
+        final Date currentDate = new Date();
         c.setTime(currentDate);
         c.add(Calendar.HOUR, -6);
         Date sixHoursAgo = c.getTime();
@@ -300,11 +303,12 @@ public class ForSaleFeedFragment extends Fragment {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
                 if (e == null) {
-                    String parsedName, parsedDetails, parsedA, parsedB, parsedDistance;
+                    String parsedName, parsedDetails, parsedA, parsedB, parsedDistance, parsedTimeInterval;
 
                     int amountA, amountB;
-                    String currencyA, currencyB, fullName, posterId;
+                    String currencyA, currencyB, fullName, posterId, city;
                     ParseGeoPoint location;
+                    Date utcDate;
 
 
                     PostParser pp = new PostParser(getActivity());
@@ -317,6 +321,8 @@ public class ForSaleFeedFragment extends Fragment {
                         fullName = trans.getString("posterName");
                         location = trans.getParseGeoPoint("location");
                         posterId = trans.getString("posterId");
+                        utcDate = trans.getCreatedAt();
+                        city = trans.getString("city");
 
                         // TODO: find user in background and get rating (2 columns)
                         ParseQuery<ParseUser> queryForUser = ParseUser.getQuery();
@@ -324,15 +330,21 @@ public class ForSaleFeedFragment extends Fragment {
                             @Override
                             public void done(ParseUser parseUser, ParseException e) {
                                 if (e == null) {
+                                    Log.d("AVG", "PROCESSING AVG RATINGS");
                                     double rating = parseUser.getInt("rating");
                                     int numRatings = parseUser.getInt("numRatings");
 
                                     double average = rating / numRatings;
 
-                                    t.setParsedRating(average + "");
+                                    String toSet = average + "";
+                                    if (toSet.length() > 3) {
+                                        toSet = toSet.substring(0, 3);
+                                    }
+
+                                    t.setParsedRating(toSet);
 
                                 } else {
-                                    t.setParsedRating(4.5 + "");
+                                    t.setParsedRating("NaN");
                                 }
                             }
                         });
@@ -352,7 +364,8 @@ public class ForSaleFeedFragment extends Fragment {
                         t.setPosterName(fullName);
                         t.setPosterId(posterId);
                         t.setOpUsername(trans.getString("username"));
-                        t.setCreatedAt(trans.getCreatedAt());
+                        t.setCreatedAt(utcDate);
+                        t.setCity(city);
 
                         // used to calculate location distances on the cardview
                         t.setCurrentPoint(currentLocation);
@@ -361,12 +374,16 @@ public class ForSaleFeedFragment extends Fragment {
                         parsedA = pp.parseA(amountA + "", currencyA);
                         parsedB = pp.parseB(amountB + "", currencyB);
                         parsedDistance = pp.parseDistance(t);
+                        parsedTimeInterval = pp.parseTimeInterval(utcDate, currdate);
+                        parsedDetails = parsedTimeInterval + " " + Character.toString((char) 183) + " " +
+                                city;
 
 
                         t.setParsedName(parsedName);
                         t.setParsedA(parsedA);
                         t.setParsedB(parsedB);
                         t.setParsedDistance(parsedDistance);
+                        t.setParsedDetails(parsedDetails);
 
 
                         transactions.add(t);

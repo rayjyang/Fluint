@@ -12,13 +12,18 @@ import android.util.Log;
 import com.parse.ParseGeoPoint;
 
 import java.io.IOException;
+import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Raymond on 7/21/2015.
  */
 public class PostParser {
+
+    private static final long MILLISECONDS_IN_DAY = 86400000;
 
     private Context mContext;
 
@@ -81,43 +86,70 @@ public class PostParser {
             }
         }
 
-        String result = "" + (int) distance + " " + distPref;
+        String dist = distance + "";
 
-        return result;
+        String toReturn = dist + " " + distPref;
+
+        if (distance <= 1.0) {
+            toReturn = "1 " + distPref;
+            return toReturn;
+        } else {
+            if (dist.contains(".")) {
+                if (distance >= 100) {
+                    int d = (int) distance;
+                    dist = d + "";
+                } else if (distance < 100 && distance >= 10.0) {
+                    dist = dist.substring(0, 4);
+                } else {
+                    dist = dist.substring(0, 3);
+                }
+            }
+        }
+
+        toReturn = dist + " " + distPref;
+        return toReturn;
     }
 
-//    public void parseDetails(final Transaction trans, final Handler handler) {
-//        Thread t = new Thread() {
-//            @Override
-//            public void run() {
-//                Geocoder gcd = new Geocoder(mContext, Locale.getDefault());
-//                String result = null;
-//                ParseGeoPoint locationPoint = trans.getLocationPoint();
-//                try {
-//                    List<Address> addresses = gcd.getFromLocation(locationPoint.getLatitude(), locationPoint.getLongitude(), 1);
-//                    if (addresses != null && addresses.size() > 0) {
-//                        result = addresses.get(0).getLocality();
-//                    }
-//                } catch (IOException e) {
-//                    Log.e("FeedAdapterDetails", "Failed to connect to Geocoder", e);
-//                } finally {
-//                    Message msg = Message.obtain();
-//                    msg.setTarget(handler);
-//                    if (result != null) {
-//                        msg.what = 1;
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString("city", result);
-//                        msg.setData(bundle);
-//                    } else {
-//                        msg.what = 0;
-//                    }
-//                    msg.sendToTarget();
-//                }
-//
-//
-//            }
-//        };
-//        t.start();
-//    }
+    public String parseTimeInterval(Date dt1, Date dt2) {
+
+        String toReturn;
+
+        long interval = dt2.getTime() - dt1.getTime();
+
+        long diffInSeconds = TimeUnit.MILLISECONDS.toSeconds(interval);
+        long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(interval);
+        long diffInHours = TimeUnit.MILLISECONDS.toHours(interval);
+        long diffInDays = TimeUnit.MILLISECONDS.toDays(interval);
+
+        if (diffInHours >= 24) {
+            if (diffInHours < 48) {
+                toReturn = "1 day";
+            } else {
+                toReturn = diffInDays + " days";
+            }
+        } else {
+            if (diffInMinutes >= 60) {
+                if (diffInMinutes < 120) {
+                    toReturn = "1 hr";
+                } else {
+                    toReturn = diffInHours + " hrs";
+                }
+            } else {
+                if (diffInSeconds >= 60) {
+                    if (diffInSeconds <= 120) {
+                        toReturn = "1 min";
+                    } else {
+                        toReturn = diffInMinutes + " min";
+                    }
+                } else {
+                    if (diffInSeconds < 0) {
+                        diffInSeconds = 0;
+                    }
+                    toReturn = diffInSeconds + " sec";
+                }
+            }
+        }
+        return toReturn;
+    }
 
 }
